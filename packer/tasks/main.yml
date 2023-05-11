@@ -1,0 +1,9 @@
+---
+- name: Ensure packer is installed using distro's official package
+  package: name=packer state=present
+  when: ansible_os_family == "Debian" and ansible_lsb.major_release >= "12"
+  register: packer_distro_install
+  become: yes
+- name: Install packer using Packer release from HashiCorp
+  include_tasks: packer_release.yml
+  when: packer_distro_install is skipped
