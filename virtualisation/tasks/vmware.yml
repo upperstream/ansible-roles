@@ -1,0 +1,44 @@
+---
+- name: Create file pattern for VMware installer
+  set_fact:
+    pattern: "{{ role_path }}/dist_files/VMware-Workstation-*.bundle"
+- name: Determine VMware installer name
+  set_fact:
+    vmware_installer: "{{ pattern | fileglob | community.general.version_sort | last }}"
+  delegate_to: localhost
+- name: Ensure Copy VMware installer is copied to remote
+  copy: src="{{ vmware_installer }}" dest=/tmp/
+  register: remote_installer
+- block:
+  - name: Ensure VMware Workstation is installed
+    shell: sh {{ remote_installer.dest }}
+    become: yes
+    register: vmware_result
+    args:
+      creates: /usr/bin/vmware
+  - name: Ensure build essential is installed
+    package: name=build-essential state=present
+  - name: Ensure kernel headers are installed
+    package: name=linux-headers-{{ ansible_kernel }} state=present
+  - name: Gather stats of VMware modules
+    stat: name="{{ module }}"
+    register: module_stat
+    loop:
+      - "/usr/lib/modules/{{ ansible_kernel }}/misc/vmmon.ko"
+      - "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
+    loop_control:
+      loop_var: module
+    become: no
+  - name: Gather existance fact of VMware modules
+    set_fact:
+      module_existance: "{{ (module_existance | default([])) + [module.stat.exists] }}"
+    loop: "{{ module_stat.results }}"
+    loop_control:
+      loop_var: module
+    become: no
+  - name: Ensure VMware modules are installed
+    command:
+      cmd: vmware-modconfig --console --install-all
+      creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
+    when: vmware_result is changed or false in module_existance
+  become: yes

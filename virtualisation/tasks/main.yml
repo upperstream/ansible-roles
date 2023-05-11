@@ -1,0 +1,7 @@
+---
+- name: Ensure virtualisations are installed
+  include_tasks: "{{ virtualisation }}.yml"
+  loop: "{{ virtualisations }}"
+  loop_control:
+    loop_var: virtualisation
+
