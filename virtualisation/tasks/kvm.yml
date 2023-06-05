@@ -10,9 +10,13 @@
         - libvirt-daemon-system
         - libvirt-clients
         - bridge-utils
+        - cpu-checker
   - name: Ensure users are added to kvm and libvirt groups
     user:
-      name: "{{ kvm_users }}"
+      name: "{{ kvm_user }}"
       append: true
       groups: kvm, libvirt
+    loop: "{{ kvm_users }}"
+    loop_control:
+      loop_var: kvm_user
   become: yes
