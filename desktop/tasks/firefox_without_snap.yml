@@ -1,0 +1,28 @@
+---
+- block:
+  - name: Ensure PPA repo is preferred over snap
+    copy:
+      content: |
+        Package: *
+        Pin: release o=LP-PPA-mozillateam
+        Pin-Priority: 1001
+        
+        Package: firefox
+        Pin: version 1:1snap1-0ubuntu2
+        Pin-Priority: -1
+      dest: /etc/apt/preferences.d/mozilla-firefox
+  - name: Ensure Firefox PPA repo is added
+    apt_repository:
+      repo: ppa:mozillateam/ppa
+  - name: Ensure snap version of Firefox is uninstalled
+    community.general.snap:
+      name: firefox
+      state: absent
+  - name: Ensure Firefox is installed
+    package:
+      name: firefox
+  - name: Ensure unattended upgrade of snap version is disabled
+    copy:
+      content: 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:{{ ansible_lsb.id }}";'
+      dest: /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+  become: yes

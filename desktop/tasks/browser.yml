@@ -1,0 +1,13 @@
+---
+- block:
+  - name: Ensure web browser is installed
+    package: name={{ browsers | reject('search', 'chrome') | reject('search', 'firefox_without_snap') | list }} state=present
+  - name: Install non snap version of Firefox
+    include_tasks: firefox_without_snap.yml
+    when: "'firefox_without_snap' in browsers"
+  - name: Ensure Chrome is installed
+    apt:
+      deb: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      state: present
+    when: "'chrome' in browsers"
+  become: yes

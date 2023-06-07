@@ -1,0 +1,15 @@
+---
+- block:
+  - name: Ensure Desktop Environment is stalled
+    package: name={{ desktops }} state=present
+    when: desktops is defined
+  - name: Ensure mail client is installed
+    package: name={{ mailers }} state=present
+    when: mailers is defined
+  - name: Ensure web browser is installed
+    include_tasks: browser.yml
+    when: browsers is defined
+  - name: Ensure fonts are installed
+    package: name={{ fonts }} state=present
+    when: fonts is defined
+  become: yes
