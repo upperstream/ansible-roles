@@ -5,9 +5,14 @@
   - name: Install non snap version of Firefox
     include_tasks: firefox_without_snap.yml
     when: "'firefox_without_snap' in browsers"
+  - name: Check whether Chrome in installed
+    package: name=google-chrome-stable state=present
+    register: chrome_installed
+    check_mode: true
+    when: "'chrome' in browsers"
   - name: Ensure Chrome is installed
     apt:
       deb: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
       state: present
-    when: "'chrome' in browsers"
+    when: chrome_installed is false and "'chrome' in browsers"
   become: yes
