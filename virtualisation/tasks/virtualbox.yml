@@ -1,0 +1,18 @@
+---
+- block:
+  - name: Ensure VirtualBox dependencies are installed
+    package: name=openssl state=present
+  - name: Ensure Oracle's official GPG key is installed
+    shell: |
+      if [ ! -f /usr/share/keyrings/oracle-virtualbox-2016.gpg ]; then
+        curl -fsSL https://www.virtualbox.org/download/oracle_vbox_2016.asc | gpg --dearmor -o /usr/share/keyrings/oracle-virtualbox-2016.gpg
+      fi
+    args:
+      creates: /usr/share/keyrings/oracle-virtualbox-2016.gpg
+  - name: Ensure VirtualBox repo is registered
+    apt_repository:
+      repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/{{ ansible_os_family | lower }} {{ ansible_lsb.codename }} contrib"
+      filename: virtualbox
+  - name: Ensure VirtualBox is installed
+    package: name=virtualbox-7.0 state=present
+  become: yes

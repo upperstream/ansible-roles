@@ -5,6 +5,7 @@ Enable virtualisation features on the target host.
 List variable `virtualisations` must contain any of:
 
 * kvm
+* virtualbox
 * vmware
 
 ## KVM
@@ -13,12 +14,16 @@ List variable `virtualisations` must contain any of:
 the target host.  Specified user listed in `kvm_users` will be added to
 `kvm` and `libvirt` groups.
 
+## VirtualBox
+
+This task installs VirtualBox on the target host.
+
 ## VMware
 
 This task installs VMware Workstation on the target host.  You need to
 put VMware installer bundles in `dist_files` directory.  Although you
 can put bundles for several versions, the latest version will be
-automaticallyp picked up to install.
+automatically picked up to install.
 
 ## Limitations
 
