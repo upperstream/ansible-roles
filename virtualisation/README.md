@@ -5,6 +5,7 @@ Enable virtualisation features on the target host.
 List variable `virtualisations` must contain any of:
 
 * kvm
+* vagrant
 * virtualbox
 * vmware
 
@@ -13,6 +14,11 @@ List variable `virtualisations` must contain any of:
 `kvm` task enables KVM feature and installs libvirt related packages on
 the target host.  Specified user listed in `kvm_users` will be added to
 `kvm` and `libvirt` groups.
+
+## Vagrant
+
+This task installs Vagrant on the target host.  Vagrant Libvirt provider
+is also installed on Linux target host.
 
 ## VirtualBox
 
