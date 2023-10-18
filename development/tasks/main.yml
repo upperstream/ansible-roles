@@ -1,0 +1,29 @@
+---
+- block:
+  - name: Ensure development tools are installed
+    package:
+      name: "{{ development_tools | default([]) | difference(['gcm', 'gh']) | list }}"
+  - block:
+    - block:
+      - name: Check whether Git Credential Manager is installed
+        shell: apt list --installed | grep -q gcm
+        ignore_errors: yes
+        register: gcm_install_test
+      - name: Ensure Git Credential Manager dependencies are satisfied
+        package:
+          name:
+          - gpg
+          - pass
+          - gpg-agent
+          - pinentry-tty
+        when: ansible_system == "Linux"
+      - name: Optionally install Git Credential Manager
+        apt:
+          deb: https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.3.2/gcm-linux_amd64.2.3.2.deb
+        when: gcm_install_test.rc != 0
+      when: development_tools is defined and 'gcm' in development_tools
+    when: ansible_os_family == "Debian"
+  - name: Install GitHub CLI
+    include_tasks: github_cli.yml
+    when: development_tools is defined and 'gh' in development_tools
+  become: yes
