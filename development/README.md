@@ -2,13 +2,14 @@
 
 Enable development tools on the target host.
 
-This role contains the following features:
+This role can install the following tools if any is specified in `development_tools` variable:
 
+* gcm - Git Credential Manager
+* gh - GitHub CLI
 * git
-* Git Credential Manager
-* GitHub CLI
 * java - OpenJDK
 * markdown
+* repo
 
 ## Android SDK
 

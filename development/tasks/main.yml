@@ -2,7 +2,7 @@
 - block:
   - name: Ensure development tools are installed
     package:
-      name: "{{ development_tools | default([]) | difference(['gcm', 'gh', 'java']) | list }}"
+      name: "{{ development_tools | default([]) | difference(['gcm', 'gh', 'java', 'repo']) | list }}"
   - block:
     - block:
       - name: Check whether Git Credential Manager is installed
@@ -30,6 +30,37 @@
     package: name=openjdk-17-jdk
     when: "development_tools is defined and 'java' in development_tools"
   become: yes
+- block:
+  - name: Ensure repo dependencies are satisfied
+    package:
+      name:
+        - curl
+        - gnupg
+    become: yes
+  - block:
+    - name: Ensure ~/bin directory is created
+      file: name=/home/{{ remote_user }}/bin state=directory owner={{ remote_user }}
+    - name: Optionally install repo
+      shell: |
+        id
+        export REPO=$(mktemp /tmp/repo.XXXXXXXXX)
+        curl -o ${REPO} https://storage.googleapis.com/git-repo-downloads/repo
+        gpg --recv-keys 8BB9AD793E8E6153AF0F9A4416530D5E920F5C65
+        curl -s https://storage.googleapis.com/git-repo-downloads/repo.asc | gpg --verify - ${REPO} && install -m 755 ${REPO} /home/{{ remote_user }}/bin/repo && rm -rf ${REPO}
+      args:
+        creates: "/home/{{ remote_user }}/bin/repo"
+      register: repo_installed
+    - name: Print post-installation message for repo
+      debug:
+        msg:
+          - "repo is successfully installed as ~{{ remote_user }}/bin/repo."
+          - "Please make sure that:"
+          - "  - `/usr/bin/python` points to a correct python executable, and"
+          - "  - `~{{ remote_user }}/bin` is added to your `PATH` environment"
+      when: "repo_installed.changed == true"
+    become: yes
+    become_user: "{{ remote_user }}"
+  when: development_tools is defined and 'repo' in development_tools
 - name: Install development environment for Android
   include_tasks: android.yml
   when: android_tools is defined
