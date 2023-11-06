@@ -1,0 +1,66 @@
+---
+- name: Determine Cuttlefish install directory
+  set_fact:
+    cuttlefish_dir: "/home/{{ remote_user }}/android-cuttlefish"
+- name: Install necessary packages for Cuttlefish
+  package:
+    name:
+      - git
+      - devscripts
+      - config-package-dev
+      - debhelper-compat
+      - golang
+      - curl
+    state: present
+  become: yes
+- name: Test whether Cuttlefish base module is already installed
+  shell: apt list --installed "cuttlefish-base" "cuttlefish-user" | grep -Ec "cuttlefish-(base|user) || true"
+  register: installed_cuttlefish_modules
+- block:
+  - block:
+    - name: Check out Cuttlefish Git repository
+      git:
+        dest: "{{ cuttlefish_dir }}"
+        repo: https://github.com/google/android-cuttlefish
+    - name: Test whether Cuttlefish modules are already built
+      find:
+        path: "{{ cuttlefish_dir }}"
+        patterns:
+          - "cuttlefish-base_*_*64.deb"
+          - "cuttlefish-user_*_*64.deb"
+      register: cuttlefish_modules
+    - name: Build Cuttlefish modules
+      shell:
+        chdir: "{{ cuttlefish_dir }}"
+        cmd: for dir in base frontend; do cd $dir; debuild -i -us -uc -b -d; cd ..; done
+      when: "cuttlefish_modules.files | length < 2"
+    become: yes
+    become_user: "{{ remote_user }}"
+  - name: Ensure Cuttlefish modules are installed
+    shell: |
+      dpkg -i ./cuttlefish-base_*_*64.deb || apt-get install -f -y
+      dpkg -i ./cuttlefish-user_*_*64.deb || apt-get install -f -y
+    args:
+      chdir: "{{ cuttlefish_dir }}"
+    become: yes
+    register: cuttlefish_modules_modified
+  when: "installed_cuttlefish_modules.stdout_lines[0] | int < 2"
+- block:
+  - name: Ensure the user is added to relevant groups
+    user:
+      append: true
+      groups:
+        - kvm
+        - cvdnetwork
+        - render
+      name: "{{ remote_user }}"
+    register: user_update
+  - name: Ensure remote host is rebooted
+    reboot:
+    when: "(user_update.append == true) and (cuttlefish_modules_modified == 'changed')"
+  become: yes
+- name: Print out the completion message to Ansible Controller
+  debug:
+    msg:
+      - "Cuttlefish installation completed."
+      - "Please set up a virtual device by following the instruction of the step 2 of ''Launch Cuttlefish'' section and the rest at https://source.android.com/docs/setup/create/cuttlefish-use#launch"

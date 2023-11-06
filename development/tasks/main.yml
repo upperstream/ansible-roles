@@ -30,3 +30,6 @@
     package: name=openjdk-17-jdk
     when: "development_tools is defined and 'java' in development_tools"
   become: yes
+- name: Install development environment for Android
+  include_tasks: android.yml
+  when: android_tools is defined

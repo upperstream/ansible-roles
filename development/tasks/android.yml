@@ -1,0 +1,72 @@
+---
+- block:
+  - name: Android SDK directory
+    set_fact:
+      android_sdk_dir: "/home/{{ remote_user }}/android-sdk"
+  - name: Define default values for variables
+    set_fact:
+      default_android_sdk_cmdline_tools_version: "10406996_latest"
+      default_android_sdk_cmdline_tools_checksum: 8919e8752979db73d8321e9babe2caedcc393750817c1a5f56c128ec442fb540
+  - name: Android SDK command line tools version
+    set_fact:
+      cmdline_tools_version: "{{ (android_sdk_cmdline_tools_version | default(default_android_sdk_cmdline_tools_version) | split('_'))[0] }}"
+      cmdline_tools_archive_name: "commandlinetools-linux-{{ android_sdk_cmdline_tools_version | default(default_android_sdk_cmdline_tools_version) }}.zip"
+  - name: Android SDK command line tools directory
+    set_fact:
+      cmdline_tools_dir: "{{ android_sdk_dir }}/cmdline-tools/{{ cmdline_tools_version }}"
+  - name: Determine checksum for Android SDK command line tools
+    set_fact:
+      checksum_to_test: "{{ android_sdk_cmdline_tools_checksum | default(default_android_sdk_cmdline_tools_checksum) }}"
+  - name: Ensure unzip is installed
+    package: name=unzip
+    become: yes
+  - name: Check whether Android SDK command line tools has been downloaded to the Ansible Controller
+    stat: name=/tmp/{{ cmdline_tools_archive_name }} checksum_algorithm=sha256
+    register: sdk_tools_downloaded
+    delegate_to: localhost
+  - name: Download Android SDK command line tools to the Ansible Controller if not yet downloaded
+    get_url:
+      url: https://dl.google.com/android/repository/{{ cmdline_tools_archive_name }}
+      checksum: "sha256:{{ checksum_to_test }}"
+      decompress: false
+      dest: /tmp/
+    delegate_to: localhost
+    when: "(sdk_tools_downloaded.stat.exists == false) or (sdk_tools_downloaded.stat.checksum != checksum_to_test)"
+  - block:
+    - name: Ensure Android SDK directory is created
+      file: path="{{ android_sdk_dir }}" state=directory owner={{ remote_user }}
+    - name: Install Android SDK command line tools
+      unarchive:
+        dest: "{{ android_sdk_dir }}/"
+        src: /tmp/{{ cmdline_tools_archive_name }}
+    - name: List files in the installed command line tools directory
+      find:
+        file_type: any
+        path: "{{ android_sdk_dir }}/cmdline-tools"
+        excludes:
+          - "[0-9]*"
+          - "latest"
+      register: installed_files
+    - name: Ensure command line tools version directory is created
+      file: path="{{ cmdline_tools_dir }}/" state=directory
+    - name: Move command line tools files to the version specific directory
+      shell: mv "{{ item }}" "{{ cmdline_tools_dir }}/"
+      args:
+        creates: "{{ cmdline_tools_dir }}/{{ item | basename }}"
+        removes: "{{ item }}"
+      with_items: "{{ installed_files.files | map(attribute='path') | list }}"
+    - name: Ensure the `latest` points to the installed command line tools directory
+      file: path="{{ android_sdk_dir }}/cmdline-tools/latest" src="{{ cmdline_tools_dir }}" state=link
+    become: yes
+    become_user: "{{ remote_user }}"
+  when: "'sdktools' in android_tools"
+- name: Ensure Android SDK Platform Tools is installed
+  shell: "yes | {{ android_sdk_dir }}/cmdline-tools/latest/bin/sdkmanager --install platform-tools"
+  args:
+    creates: "{{ android_sdk_dir }}/platform-tools"
+  become: yes
+  become_user: "{{ remote_user }}"
+  when: "'platform-tools' in android_tools"
+- name: Ensure Cuttlefish is installed
+  include_tasks: android_cuttlefish.yml
+  when: "'cuttlefish' in android_tools"
