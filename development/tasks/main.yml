@@ -2,7 +2,7 @@
 - block:
   - name: Ensure development tools are installed
     package:
-      name: "{{ development_tools | default([]) | difference(['gcm', 'gh']) | list }}"
+      name: "{{ development_tools | default([]) | difference(['gcm', 'gh', 'java']) | list }}"
   - block:
     - block:
       - name: Check whether Git Credential Manager is installed
@@ -26,4 +26,7 @@
   - name: Install GitHub CLI
     include_tasks: github_cli.yml
     when: development_tools is defined and 'gh' in development_tools
+  - name: Optionally install OpenJDK
+    package: name=openjdk-17-jdk
+    when: "development_tools is defined and 'java' in development_tools"
   become: yes
