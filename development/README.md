@@ -2,7 +2,8 @@
 
 Enable development tools on the target host.
 
-This role can install the following tools if any is specified in `development_tools` variable:
+This role can install the following tools if any is specified in
+`development_tools` variable:
 
 * gcm - Git Credential Manager
 * gh - GitHub CLI
@@ -16,11 +17,17 @@ This role can install the following tools if any is specified in `development_to
 If a list `android_tools` is defined, this role also installs Android
 develop environment depending on its elements:
 
+* `aosp` - AOSP source code and tools
 * `cuttlefish` - Android Cuttlefish
 * `platform-tools` - Android SDK platform tools
 * `sdktools` - Android SDK command line tools
 
 Tools are installed in `remote_user`'s home directory.
+
+### AOSP
+
+If the variable `aosp_dir` is defined, it instructs the directory that
+AOSP source code is downloaded in.
 
 ### Android SDK command line tools
 

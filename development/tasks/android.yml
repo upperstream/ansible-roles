@@ -70,3 +70,41 @@
 - name: Ensure Cuttlefish is installed
   include_tasks: android_cuttlefish.yml
   when: "'cuttlefish' in android_tools"
+- block:
+  - name: Ensure AOSP dependencies are satisfied
+    package:
+      name:
+        - git-core
+        - gnupg
+        - flex
+        - bison
+        - build-essential
+        - zip
+        - curl
+        - zlib1g-dev
+        - libc6-dev-i386
+        - libncurses5
+        - lib32ncurses5-dev
+        - x11proto-core-dev
+        - libx11-dev
+        - lib32z1-dev
+        - libgl1-mesa-dev
+        - libxml2-utils
+        - xsltproc
+        - unzip
+        - fontconfig
+    become: yes
+  - block:
+    - name: Ensure AOSP directory is created
+      file: name={{ aosp_dir }} state=directory owner="{{ remote_user }}"
+    - name: Ensure AOSP source code is downloaded
+      shell: |
+        /home/{{ remote_user }}/bin/repo init -u https://android.googlesource.com/platform/manifest -b main --partial-clone --clone-filter=blob:limit=10M
+        /home/{{ remote_user }}/bin/repo sync -c -j8
+      args:
+        chdir: "{{ aosp_dir }}"
+        creates: "{{ aosp_dir }}/.repo"
+    when: (aosp_dir is defined) and (aosp_dir | length > 0)
+    become: yes
+    become_user: "{{ remote_user }}"
+  when: "'aosp' in android_tools"
