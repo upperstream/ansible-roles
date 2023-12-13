@@ -5,14 +5,16 @@
   - name: Install non snap version of Firefox
     include_tasks: firefox_without_snap.yml
     when: "'firefox_without_snap' in browsers"
-  - name: Check whether Chrome is installed
-    package: name=google-chrome-stable state=present
-    register: chrome_installed
-    check_mode: true
-    when: "'chrome' in browsers"
-  - name: Ensure Chrome is installed
-    apt:
-      deb: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      state: present
-    when: chrome_installed is false and "'chrome' in browsers"
+  - block:
+    - name: Check whether Chrome is installed
+      shell: apt list --installed | grep -q google-chrome-stable
+      register: chrome_install_test
+      ignore_errors: yes
+      when: "'chrome' in browsers"
+    - name: Ensure Chrome is installed
+      apt:
+        deb: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        state: present
+      when: chrome_install_test.rc != 0 and "'chrome' in browsers"
+    when: ansible_os_family == 'Debian'
   become: yes
