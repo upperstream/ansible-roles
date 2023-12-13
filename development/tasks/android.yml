@@ -108,3 +108,20 @@
     become: yes
     become_user: "{{ remote_user }}"
   when: "'aosp' in android_tools"
+- block:
+  - block:
+    - block:
+      - name: Ensure Android Studio PPA repository is enabled on Ubuntu
+        apt_repository: repo=ppa:maarten-fonville/android-studio
+      - name: Ensure Android Studio is installed on Ubuntu
+        package: name=android-studio-2023.2.1
+      become: true
+      when: ansible_distribution == 'Ubuntu'
+    - name: Instruct Android Studio installation
+      debug:
+        msg:
+          - "Download and install Android Studio following the instruction at"
+          - "https://developer.android.com/studio"
+      when: ansible_distribution != 'Ubuntu'
+    when: ansible_os_family == 'Debian'
+  when: "'android-studio' in android_tools"

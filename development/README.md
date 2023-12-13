@@ -12,17 +12,22 @@ This role can install the following tools if any is specified in
 * markdown
 * repo
 
-## Android SDK
+## Android development environment
 
 If a list `android_tools` is defined, this role also installs Android
 develop environment depending on its elements:
 
+* `android-studio` - Android Studio
 * `aosp` - AOSP source code and tools
 * `cuttlefish` - Android Cuttlefish
 * `platform-tools` - Android SDK platform tools
 * `sdktools` - Android SDK command line tools
 
 Tools are installed in `remote_user`'s home directory.
+
+### Android Studio
+
+Unattended installation is supported on Ubuntu only.
 
 ### AOSP
 
