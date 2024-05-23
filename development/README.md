@@ -11,6 +11,7 @@ This role can install the following tools if any is specified in
 * java - OpenJDK
 * markdown
 * repo
+* vscode
 
 ## Android development environment
 
