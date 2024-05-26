@@ -50,19 +50,12 @@
         curl -o ${REPO} https://storage.googleapis.com/git-repo-downloads/repo
         gpg --recv-keys 8BB9AD793E8E6153AF0F9A4416530D5E920F5C65
         curl -s https://storage.googleapis.com/git-repo-downloads/repo.asc | gpg --verify - ${REPO} && install -m 755 ${REPO} /home/{{ remote_user }}/bin/repo && rm -rf ${REPO}
+        chown {{ remote_user }} /home/{{ remote_user }}/bin/repo
       args:
         creates: "/home/{{ remote_user }}/bin/repo"
       register: repo_installed
-    - name: Print post-installation message for repo
-      debug:
-        msg:
-          - "repo is successfully installed as ~{{ remote_user }}/bin/repo."
-          - "Please make sure that:"
-          - "  - `/usr/bin/python` points to a correct python executable, and"
-          - "  - `~{{ remote_user }}/bin` is added to your `PATH` environment"
-      when: "repo_installed.changed == true"
+      notify: repo_post_installation_message
     become: yes
-    become_user: "{{ remote_user }}"
   when: development_tools is defined and 'repo' in development_tools
 - name: Install development environment for Android
   include_tasks: android.yml

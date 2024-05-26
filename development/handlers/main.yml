@@ -1,0 +1,8 @@
+---
+- name: repo_post_installation_message
+  debug:
+    msg:
+      - "repo is successfully installed as ~{{ remote_user }}/bin/repo."
+      - "Please make sure that:"
+      - "  - `/usr/bin/python` points to a correct python executable, and"
+      - "  - `~{{ remote_user }}/bin` is added to your `PATH` environment"
