@@ -1,7 +1,8 @@
 ---
-- name: Ensure Vagrant is installed
-  package: name=vagrant state=present
+- block:
+  - name: Ensure Vagrant is installed
+    package: name=vagrant state=present
+  - name: Ensure Vagrant Libvirt provider in installed on Linux
+    package: name=vagrant-libvirt state=present
+    when: ansible_system == "Linux"
   become: yes
-- name: Ensure Vagrant Libvirt provider in installed on Linux
-  package: name=vagrant-libvirt state=present
-  when: ansible_system == "Linux"
