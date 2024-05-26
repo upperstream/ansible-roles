@@ -1,17 +1,40 @@
 ---
 - block:
-  - name: Ensure HashiCorp PGP key is installed
-    get_url:
-      url: https://apt.releases.hashicorp.com/gpg
-      dest: /usr/share/keyrings/hashicorp-archive-keyring.gpg
-  - name: Get CPU architecture name
-    command: dpkg --print-architecture
-    register: arch
-    when: ansible_os_family == "Debian"
-  - name: Ensure Packer repo is registered on Debian family
-    apt_repository:
-      repo: "deb [arch={{ arch.stdout_lines[0] }}] https://apt.releases.hashicorp.com {{ ansible_lsb.codename }} main"
-      filename: hashicorp
+  - block:
+    - name: Ensure HashiCorp PGP key is installed
+      apt_key:
+        url: https://apt.releases.hashicorp.com/gpg
+        keyring: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    - name: Get CPU architecture name
+      command: dpkg --print-architecture
+      register: arch
+      check_mode: false
+    - block:
+      - name: Get Debian version
+        shell: cat /etc/debian_version | sed 's/^\([0-9][0-9]*\)\..*$/\1/'
+        register: debian_version
+        when: ansible_distribution_file_variety == "Debian"
+        check_mode: false
+      - name: Ensure Packer repo is registered on Devuan
+        apt_repository:
+          repo: "deb [arch={{ arch.stdout_lines[0] }} signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ codenames[debian_version.stdout_lines[0]] }} main"
+          filename: hashicorp
+        vars:
+          codenames: "{{ [
+            {'version': '14', 'codename': 'forky'},
+            {'version': '13', 'codename': 'trixie'},
+            {'version': '12', 'codename': 'bookworm'},
+            {'version': '11', 'codename': 'bullseye'},
+            {'version': '10', 'codename': 'buster'},
+            {'version': '9', 'codename': 'stretch'},
+            {'version': '8', 'codename': 'jessie'}
+          ]| items2dict(key_name='version', value_name='codename')}}"
+      when: ansible_distribution == 'Devuan'
+    - name: Ensure Packer repo is registered on Debian family
+      apt_repository:
+        repo: "deb [arch={{ arch.stdout_lines[0] }} signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_lsb.codename }} main"
+        filename: hashicorp
+      when: ansible_distribution != 'Devuan'
     when: ansible_os_family == "Debian"
   - name: Ensure Packer is installed
     package: name=packer state=present
