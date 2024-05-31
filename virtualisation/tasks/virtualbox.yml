@@ -40,5 +40,10 @@
       when: ansible_distribution != 'Devuan'
     when: ansible_os_family == "Debian"
   - name: Ensure VirtualBox is installed
-    package: name=virtualbox-7.0 state=present
+    package: name={{ virtualbox_package[ansible_os_family]}}
+    vars:
+      virtualbox_package: "{{ [
+        {'os_family': 'Debian', 'package': 'virtualbox-7.0'},
+        {'os_family': 'FreeBSD', 'package': 'virtualbox-ose'}
+      ]| items2dict(key_name='os_family', value_name='package')}}"
   become: yes

@@ -22,7 +22,8 @@ is also installed on Linux target host.
 
 ## VirtualBox
 
-This task installs VirtualBox on the target host.
+This task installs VirtualBox on the target host on Debian and its
+descendants, or FreeBSD.
 
 ## VMware
 
@@ -33,8 +34,9 @@ automatically picked up to install.
 
 ## Limitations
 
-This role assumes the target host is running either Debian or Ubuntu.
+This role assumes the target host is running either Debian or Ubuntu
+unless otherwise stated.
 
 ---
 
-Copyright &copy; 2023 Upperstream.
+Copyright &copy; 2023, 2024 Upperstream.
