@@ -36,6 +36,15 @@
         filename: hashicorp
       when: ansible_distribution != 'Devuan'
     when: ansible_os_family == "Debian"
-  - name: Ensure Packer is installed
+  - name: Ensure Packer is installed on Linux
     package: name=packer state=present
+    when: ansible_system == 'Linux'
+  - name: Ensure Packer is installed on FreeBSD
+    shell:
+      cmd: |
+        PACKER_RELEASE=$(curl -s https://api.github.com/repos/hashicorp/packer/releases/latest|grep tag_name|cut -d '"' -f 4|sed 's/v//')
+        curl https://releases.hashicorp.com/packer/${PACKER_RELEASE}/packer_${PACKER_RELEASE}_{{ ansible_os_family | lower }}_{{ ansible_architecture }}.zip | unzip -p - packer > /usr/local/bin/packer
+        chmod og+rx /usr/local/bin/packer
+      creates: /usr/local/bin/packer
+    when: ansible_os_family == "FreeBSD"
   become: yes
