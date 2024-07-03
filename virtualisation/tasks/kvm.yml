@@ -3,7 +3,7 @@
   shell:
     cmd: test $(egrep -c '(vmx|svm)' /proc/cpuinfo) -gt 0
 - block:
-  - name: Ensure KVM is installed
+  - name: Ensure KVM is installed on non-Arch Linux host
     package:
       name:
         - qemu-kvm
@@ -11,6 +11,31 @@
         - libvirt-clients
         - bridge-utils
         - cpu-checker
+    when: ansible_system == 'Linux' and ansible_os_family != 'Archlinux'
+    vars:
+      qemu_package: "{{ [
+        {'os_family': 'Debian', 'package': 'qemu-kvm'},
+        {'os_family': 'Archlinux', 'package': 'qemu-full'}
+      ]| items2dict(key_name='os_family', value_name='package')}}"
+  - block:
+    - name: Ensue QEMU is installed on Arch Linux
+      package:
+        name:
+          - qemu-full
+          - libvirt
+          - dnsmasq
+          - openbsd-netcat
+          - virt-manager
+          - virt-viewer
+          - plocate
+    - name: Ensure plocate is enabled and started on Arch Linux
+      service:
+        name: plocate-updatedb.timer
+        enabled: true
+        state: started
+    - name: Ensure lolcate database is updated on Arch Linux
+      command: updatedb
+    when: ansible_os_family == 'Archlinux'
   - name: Ensure users are added to kvm and libvirt groups
     user:
       name: "{{ kvm_user }}"
@@ -19,4 +44,9 @@
     loop: "{{ kvm_users }}"
     loop_control:
       loop_var: kvm_user
-  become: yes
+  - name: Ensure `kvmctl.sh` tool is installed
+    copy:
+      src: kvmctl.sh
+      dest: /usr/local/bin/kvmctl.sh
+      mode: 0755
+  become: true
