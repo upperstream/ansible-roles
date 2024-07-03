@@ -27,8 +27,8 @@ is also installed on Linux target host.
 
 ## VirtualBox
 
-This task installs VirtualBox on the target host on Debian and its
-descendants, or FreeBSD.
+This task installs VirtualBox on the target host running Debian and its
+descendants, Arch Linux, or FreeBSD.
 
 ## VMware
 
