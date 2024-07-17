@@ -4,6 +4,9 @@
     package:
       name: "{{ development_tools | default([]) | difference(['gcm', 'gh', 'java', 'repo', 'vscode']) | list }}"
   - block:
+    - name: Ensure essential build tools are installed on Debian host
+      package: name=build-essential
+      when: ansible_os_family == 'Debian'
     - block:
       - name: Check whether Git Credential Manager is installed
         shell: apt list --installed | grep -q gcm

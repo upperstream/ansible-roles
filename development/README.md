@@ -13,6 +13,10 @@ This role can install the following tools if any is specified in
 * repo
 * vscode
 
+Also the following tools are installed:
+
+* `build-essential` (on Debian and its descendants)
+
 ## Android development environment
 
 If a list `android_tools` is defined, this role also installs Android
