@@ -1,7 +1,7 @@
 ---
 - name: Determine Cuttlefish install directory
   set_fact:
-    cuttlefish_dir: "/home/{{ remote_user }}/android-cuttlefish"
+    cuttlefish_dir: "/home/{{ target_user }}/android-cuttlefish"
 - name: Install necessary packages for Cuttlefish
   package:
     name:
@@ -35,7 +35,7 @@
         cmd: for dir in base frontend; do cd $dir; debuild -i -us -uc -b -d; cd ..; done
       when: "cuttlefish_modules.files | length < 2"
     become: yes
-    become_user: "{{ remote_user }}"
+    become_user: "{{ target_user }}"
   - name: Ensure Cuttlefish modules are installed
     shell: |
       dpkg -i ./cuttlefish-base_*_*64.deb || apt-get install -f -y
@@ -53,7 +53,7 @@
         - kvm
         - cvdnetwork
         - render
-      name: "{{ remote_user }}"
+      name: "{{ target_user }}"
     register: user_update
   - name: Ensure remote host is rebooted
     reboot:

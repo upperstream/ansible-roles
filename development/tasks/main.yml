@@ -45,17 +45,17 @@
     become: yes
   - block:
     - name: Ensure ~/bin directory is created
-      file: name=/home/{{ remote_user }}/bin state=directory owner={{ remote_user }}
+      file: name=/home/{{ target_user }}/bin state=directory owner={{ target_user }}
     - name: Optionally install repo
       shell: |
         id
         export REPO=$(mktemp /tmp/repo.XXXXXXXXX)
         curl -o ${REPO} https://storage.googleapis.com/git-repo-downloads/repo
         gpg --recv-keys 8BB9AD793E8E6153AF0F9A4416530D5E920F5C65
-        curl -s https://storage.googleapis.com/git-repo-downloads/repo.asc | gpg --verify - ${REPO} && install -m 755 ${REPO} /home/{{ remote_user }}/bin/repo && rm -rf ${REPO}
-        chown {{ remote_user }} /home/{{ remote_user }}/bin/repo
+        curl -s https://storage.googleapis.com/git-repo-downloads/repo.asc | gpg --verify - ${REPO} && install -m 755 ${REPO} /home/{{ target_user }}/bin/repo && rm -rf ${REPO}
+        chown {{ target_user }} /home/{{ target_user }}/bin/repo
       args:
-        creates: "/home/{{ remote_user }}/bin/repo"
+        creates: "/home/{{ target_user }}/bin/repo"
       register: repo_installed
       notify: repo_post_installation_message
     become: yes

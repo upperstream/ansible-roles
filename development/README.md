@@ -28,7 +28,7 @@ develop environment depending on its elements:
 * `platform-tools` - Android SDK platform tools
 * `sdktools` - Android SDK command line tools
 
-Tools are installed in `remote_user`'s home directory.
+Tools are installed in `target_user`'s home directory.
 
 ### Android Studio
 

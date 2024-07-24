@@ -2,7 +2,7 @@
 - block:
   - name: Android SDK directory
     set_fact:
-      android_sdk_dir: "/home/{{ remote_user }}/android-sdk"
+      android_sdk_dir: "/home/{{ target_user }}/android-sdk"
   - name: Define default values for variables
     set_fact:
       default_android_sdk_cmdline_tools_version: "10406996_latest"
@@ -34,7 +34,7 @@
     when: "(sdk_tools_downloaded.stat.exists == false) or (sdk_tools_downloaded.stat.checksum != checksum_to_test)"
   - block:
     - name: Ensure Android SDK directory is created
-      file: path="{{ android_sdk_dir }}" state=directory owner={{ remote_user }}
+      file: path="{{ android_sdk_dir }}" state=directory owner={{ target_user }}
     - name: Install Android SDK command line tools
       unarchive:
         dest: "{{ android_sdk_dir }}/"
@@ -58,14 +58,14 @@
     - name: Ensure the `latest` points to the installed command line tools directory
       file: path="{{ android_sdk_dir }}/cmdline-tools/latest" src="{{ cmdline_tools_dir }}" state=link
     become: yes
-    become_user: "{{ remote_user }}"
+    become_user: "{{ target_user }}"
   when: "'sdktools' in android_tools"
 - name: Ensure Android SDK Platform Tools is installed
   shell: "yes | {{ android_sdk_dir }}/cmdline-tools/latest/bin/sdkmanager --install platform-tools"
   args:
     creates: "{{ android_sdk_dir }}/platform-tools"
   become: yes
-  become_user: "{{ remote_user }}"
+  become_user: "{{ target_user }}"
   when: "'platform-tools' in android_tools"
 - name: Ensure Cuttlefish is installed
   include_tasks: android_cuttlefish.yml
@@ -96,17 +96,17 @@
     become: yes
   - block:
     - name: Ensure AOSP directory is created
-      file: name={{ aosp_dir }} state=directory owner="{{ remote_user }}"
+      file: name={{ aosp_dir }} state=directory owner="{{ target_user }}"
     - name: Ensure AOSP source code is downloaded
       shell: |
-        /home/{{ remote_user }}/bin/repo init -u https://android.googlesource.com/platform/manifest -b main --partial-clone --clone-filter=blob:limit=10M
-        /home/{{ remote_user }}/bin/repo sync -c -j8
+        /home/{{ target_user }}/bin/repo init -u https://android.googlesource.com/platform/manifest -b main --partial-clone --clone-filter=blob:limit=10M
+        /home/{{ target_user }}/bin/repo sync -c -j8
       args:
         chdir: "{{ aosp_dir }}"
         creates: "{{ aosp_dir }}/.repo"
     when: (aosp_dir is defined) and (aosp_dir | length > 0)
     become: yes
-    become_user: "{{ remote_user }}"
+    become_user: "{{ target_user }}"
   when: "'aosp' in android_tools"
 - block:
   - block:
