@@ -1,0 +1,19 @@
+---
+- block:
+  - name: Ensure groups exist on the target host
+    group:
+      name: "{{ item.name }}"
+    with_items:
+      - "{{ groups_to_create }}"
+    when: groups_to_create is defined
+  - name: Ensure users exist on the target host
+    user:
+      name: "{{ item.name }}"
+      password: "{{ item.password }}"
+      group: "{{ item.group | default(omit) }}"
+      groups: "{{ item.groups }}"
+      append: "{{ item.append }}"
+    with_items:
+      - "{{ users_to_create }}"
+    when: users_to_create is defined
+  become: true
