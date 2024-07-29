@@ -32,10 +32,9 @@
   - name: Optionally install OpenJDK
     package: name=openjdk-17-jdk
     when: "development_tools is defined and 'java' in development_tools"
-  - name: Optionally install Visual Studio Code on Debian
-    apt: deb=https://update.code.visualstudio.com/latest/linux-deb-x64/stable
+  - name: Optionally install Visual Studio Code
+    include_tasks: vscode.yml
     when: ansible_os_family == 'Debian' and (development_tools is defined and 'vscode' in development_tools)
-  become: yes
 - block:
   - name: Ensure repo dependencies are satisfied
     package:

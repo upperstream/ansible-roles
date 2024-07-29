@@ -11,7 +11,7 @@ This role can install the following tools if any is specified in
 * java - OpenJDK
 * markdown
 * repo
-* vscode
+* vscode - Visual Studio Code (on Debian and its descendants)
 
 Also the following tools are installed:
 
