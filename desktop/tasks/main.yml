@@ -12,4 +12,4 @@
   - name: Ensure fonts are installed
     package: name={{ fonts }} state=present
     when: fonts is defined
-  become: yes
+  become: true

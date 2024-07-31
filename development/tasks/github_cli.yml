@@ -18,4 +18,4 @@
     package:
       name: gh
   when: ansible_os_family == "Debian"
-  become: yes
+  become: true

@@ -5,4 +5,4 @@
   - name: Ensure Vagrant Libvirt provider in installed on Linux
     package: name=vagrant-libvirt state=present
     when: ansible_system == "Linux"
-  become: yes
+  become: true

@@ -9,7 +9,7 @@
     - name: Check whether Chrome is installed
       shell: apt list --installed | grep -q google-chrome-stable
       register: chrome_install_test
-      ignore_errors: yes
+      ignore_errors: true
       when: "'chrome' in browsers"
     - name: Ensure Chrome is installed
       apt:
@@ -17,4 +17,4 @@
         state: present
       when: chrome_install_test.rc != 0 and "'chrome' in browsers"
     when: ansible_os_family == 'Debian'
-  become: yes
+  become: true

@@ -47,4 +47,4 @@
         chmod og+rx /usr/local/bin/packer
       creates: /usr/local/bin/packer
     when: ansible_os_family == "FreeBSD"
-  become: yes
+  become: true

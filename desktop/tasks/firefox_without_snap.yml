@@ -25,4 +25,4 @@
     copy:
       content: 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:{{ ansible_lsb.id }}";'
       dest: /etc/apt/apt.conf.d/51unattended-upgrades-firefox
-  become: yes
+  become: true

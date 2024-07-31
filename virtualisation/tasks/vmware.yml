@@ -12,7 +12,7 @@
 - block:
   - name: Ensure VMware Workstation is installed
     shell: sh {{ remote_installer.dest }}
-    become: yes
+    become: true
     register: vmware_result
     args:
       creates: /usr/bin/vmware
@@ -41,4 +41,4 @@
       cmd: vmware-modconfig --console --install-all
       creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
     when: vmware_result is changed or false in module_existance
-  become: yes
+  become: true

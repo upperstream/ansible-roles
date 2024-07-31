@@ -47,4 +47,4 @@
         {'os_family': 'Archlinux', 'package': 'virtualbox'},
         {'os_family': 'FreeBSD', 'package': 'virtualbox-ose'}
       ]| items2dict(key_name='os_family', value_name='package')}}"
-  become: yes
+  become: true

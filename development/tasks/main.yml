@@ -10,7 +10,7 @@
     - block:
       - name: Check whether Git Credential Manager is installed
         shell: apt list --installed | grep -q gcm
-        ignore_errors: yes
+        ignore_errors: true
         register: gcm_install_test
       - name: Ensure Git Credential Manager dependencies are satisfied
         package:
@@ -41,7 +41,7 @@
       name:
         - curl
         - gnupg
-    become: yes
+    become: true
   - block:
     - name: Ensure ~/bin directory is created
       file: name=/home/{{ target_user }}/bin state=directory owner={{ target_user }}
@@ -57,7 +57,7 @@
         creates: "/home/{{ target_user }}/bin/repo"
       register: repo_installed
       notify: repo_post_installation_message
-    become: yes
+    become: true
   when: development_tools is defined and 'repo' in development_tools
 - name: Install development environment for Android
   include_tasks: android.yml

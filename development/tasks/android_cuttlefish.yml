@@ -12,7 +12,7 @@
       - golang
       - curl
     state: present
-  become: yes
+  become: true
 - name: Test whether Cuttlefish base module is already installed
   shell: apt list --installed "cuttlefish-base" "cuttlefish-user" | grep -Ec "cuttlefish-(base|user) || true"
   register: installed_cuttlefish_modules
@@ -34,7 +34,7 @@
         chdir: "{{ cuttlefish_dir }}"
         cmd: for dir in base frontend; do cd $dir; debuild -i -us -uc -b -d; cd ..; done
       when: "cuttlefish_modules.files | length < 2"
-    become: yes
+    become: true
     become_user: "{{ target_user }}"
   - name: Ensure Cuttlefish modules are installed
     shell: |
@@ -42,7 +42,7 @@
       dpkg -i ./cuttlefish-user_*_*64.deb || apt-get install -f -y
     args:
       chdir: "{{ cuttlefish_dir }}"
-    become: yes
+    become: true
     register: cuttlefish_modules_modified
   when: "installed_cuttlefish_modules.stdout_lines[0] | int < 2"
 - block:
@@ -58,7 +58,7 @@
   - name: Ensure remote host is rebooted
     reboot:
     when: "(user_update.append == true) and (cuttlefish_modules_modified == 'changed')"
-  become: yes
+  become: true
 - name: Print out the completion message to Ansible Controller
   debug:
     msg:
