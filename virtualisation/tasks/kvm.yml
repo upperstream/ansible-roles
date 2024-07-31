@@ -38,12 +38,12 @@
     when: ansible_os_family == 'Archlinux'
   - name: Ensure users are added to kvm and libvirt groups
     user:
-      name: "{{ kvm_user }}"
+      name: "{{ kvm_users }}"
       append: true
       groups: kvm, libvirt
-    loop: "{{ kvm_users }}"
-    loop_control:
-      loop_var: kvm_user
+  - name: Ensure `locate` command in installed on Debian
+    package: name=locate
+    when: ansible_os_family == 'Debian'
   - name: Ensure `kvmctl.sh` tool is installed
     copy:
       src: kvmctl.sh
