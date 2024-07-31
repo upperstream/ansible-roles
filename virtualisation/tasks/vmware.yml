@@ -28,14 +28,14 @@
       - "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
     loop_control:
       loop_var: module
-    become: no
+    become: false
   - name: Gather existance fact of VMware modules
     set_fact:
       module_existance: "{{ (module_existance | default([])) + [module.stat.exists] }}"
     loop: "{{ module_stat.results }}"
     loop_control:
       loop_var: module
-    become: no
+    become: false
   - name: Ensure VMware modules are installed
     command:
       cmd: vmware-modconfig --console --install-all
