@@ -26,15 +26,16 @@
         when: gcm_install_test.rc != 0
       when: development_tools is defined and 'gcm' in development_tools
     when: ansible_os_family == "Debian"
-  - name: Install GitHub CLI
-    include_tasks: github_cli.yml
-    when: development_tools is defined and 'gh' in development_tools
   - name: Optionally install OpenJDK
     package: name=openjdk-17-jdk
     when: "development_tools is defined and 'java' in development_tools"
-  - name: Optionally install Visual Studio Code
-    include_tasks: vscode.yml
-    when: ansible_os_family == 'Debian' and (development_tools is defined and 'vscode' in development_tools)
+  become: true
+- name: Install GitHub CLI
+  include_tasks: github_cli.yml
+  when: development_tools is defined and 'gh' in development_tools
+- name: Optionally install Visual Studio Code
+  include_tasks: vscode.yml
+  when: ansible_os_family == 'Debian' and (development_tools is defined and 'vscode' in development_tools)
 - block:
   - name: Ensure repo dependencies are satisfied
     package:
