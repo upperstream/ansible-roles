@@ -7,7 +7,7 @@
   - name: Ensure Visual Studio Code repo is installed on Debian
     apt_repository:
       repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
-      filename: vscode.list
+      filename: vscode
   - name: Ensure Visual Studio Code is installed on Debian
     package: name=code
   when: ansible_os_family == 'Debian' and (development_tools is defined and 'vscode' in development_tools)
