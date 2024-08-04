@@ -1,0 +1,35 @@
+---
+- block:
+  - block:
+    - name: Ensure ZFS dependencies are satisfied on Linux host
+      package:
+        name:
+          - linux-headers-{{ ansible_kernel }}
+          - kmod
+    - name: Ensure ZFS packages are installed on Linux host
+      package:
+        name:
+          - zfsutils-linux
+          - zfs-initramfs
+          - zfs-dkms
+          - zfs-zed
+    - name: Ensure ZFS kernel module is loaded on Linux host
+      modprobe:
+        name: zfs
+    when: ansible_system == 'Linux'
+  - block:
+    - block:
+      - name: Ensure ZFS encryption key loader is installed on host with Systemd
+        copy:
+          src: zfs-load-key@.service
+          dest: /etc/systemd/system/
+          mode: 0755
+      - name: Ensure ZFS loads encryption keys at boot on host with Systemd
+        systemd_service:
+          name: "zfs-load-keys@{{ item | regex_replace('/', '-') }}.service"
+          daemon_reload: true
+        with_items:
+          - "{{ zfs_load_keys }}"
+      when: ansible_service_mgr == "systemd"
+    when: zfs_load_keys is defined
+  become: true

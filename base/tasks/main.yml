@@ -17,3 +17,6 @@
       - "{{ users_to_create }}"
     when: users_to_create is defined
   become: true
+- name: Set up ZFS on Linux
+  include_tasks: zfs_on_linux.yml
+  when: ansible_system == "Linux" and (base is defined and "zfs" in base)
