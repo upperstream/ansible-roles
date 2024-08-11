@@ -7,8 +7,8 @@ The `base` role configures the basic features of the target host.
 ## Variables
 
 * `base` - List of basic capabilities of the target host:
-  * `zfs` - Install ZFS utilities to mount ZFS file systems (Only Linux
-    host is supported.)
+  * `zfs` - Install ZFS utilities to mount ZFS file systems (FreeBSD
+    host and Systemd-enabled Linux host are supported.)
 * `users_to_create` - Create users on the target host with the
   following attributes:
   * `name` - Login name of this user.
@@ -22,9 +22,10 @@ The `base` role configures the basic features of the target host.
     in accordance to the remote host's password specification.  See
     _[How do I generate encrypted passwords for the user module][]_ for
     details.
-* `zfs_load_keys`- List of ZFS file systems to load encryption keys for
-  at boot.  `/` character in the file system name will be automatically
-  escaped. (Only Linux host with Systemd is supported.)
+* `zfs_load_keys`- List of ZFS dataset to load encryption keys for
+  at boot.  On FreeBSD host, this variable is a dictionary of dataset
+  to key location pairs.  On Linux host, this variable is a list of
+  dataset.
 
 [How do I generate encrypted passwords for the user module]:
   https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-generate-encrypted-passwords-for-the-user-module

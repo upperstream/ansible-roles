@@ -1,0 +1,16 @@
+---
+- block:
+  - name: Ensure ZFS is enabled on FreeBSD
+    service: name=zfs enabled=true state=started
+    when: ansible_system == 'FreeBSD' and (base is defined and 'zfs' in base)
+  - block:
+    - name: Ensure ZFS loads encryption keys at boot on FreeBSD
+      service:
+        name: zfskeys
+        enabled: true
+        state: started
+        arguments: "{{ item.key }} {{ item.value }}"
+      with_items:
+        - "{{ zfs_load_keys | dict2items }}"
+  when: zfs_load_keys is defined
+  become: true
