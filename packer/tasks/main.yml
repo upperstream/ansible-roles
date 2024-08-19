@@ -35,7 +35,15 @@
         repo: "deb [arch={{ arch.stdout_lines[0] }} signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_lsb.codename }} main"
         filename: hashicorp
       when: ansible_distribution != 'Devuan'
-    when: ansible_os_family == "Debian"
+    when: ansible_os_family == 'Debian'
+  - block:
+    - name: Ensure dnf plugins is installed on Fedora
+      package: name=dnf-plugins-core
+    - name: Ensure HashiCorp repository is installed on Fedora
+      command:
+        cmd: dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+        creates: /etc/yum.repos.d/hashicorp.repo
+    when: ansible_distribution == 'Fedora'
   - name: Ensure Packer is installed on Linux
     package: name=packer state=present
     when: ansible_system == 'Linux'
@@ -46,5 +54,5 @@
         curl https://releases.hashicorp.com/packer/${PACKER_RELEASE}/packer_${PACKER_RELEASE}_{{ ansible_os_family | lower }}_{{ ansible_architecture }}.zip | unzip -p - packer > /usr/local/bin/packer
         chmod og+rx /usr/local/bin/packer
       creates: /usr/local/bin/packer
-    when: ansible_os_family == "FreeBSD"
+    when: ansible_os_family == 'FreeBSD'
   become: true
