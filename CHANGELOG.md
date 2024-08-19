@@ -8,3 +8,4 @@
 
 * Changed
   * [packer](packer/README.md): Add support for Fedora host
+  * [desktop](desktop/README.md): Add more documentation of the module

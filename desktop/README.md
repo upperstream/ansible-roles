@@ -16,18 +16,26 @@ compiled from its source code with applying patches listed in
 
 * Choice of mail clients
 
+Set the variable `mailers` to contain package names of email clients to install.
+
 ## Web browser
 
 * Choice of web browsers (OS/distribution's packages)
-* Firefox without Snap
-* Google Chrome
+* [Firefox][] without Snap
+* [Google Chrome][]
+
+Set the variable `browsers` to contain package names of web browsers to install.
 
 ## Font
 
 * Choice of fonts
 
+Set the variable `fonts` to contain package names of fonts to install.
+
 [dmenu]: https://tools.suckless.org/dmenu/
 [dwm]: https://dwm.suckless.org/
+[Firefox]: https://www.mozilla.org/firefox/
+[Google Chrome]: https://www.google.com/chrome/
 [st]: https://st.suckless.org/
 
 - - -
