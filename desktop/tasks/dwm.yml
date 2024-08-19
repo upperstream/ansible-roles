@@ -1,0 +1,72 @@
+---
+- block:
+  - block:
+    - name: Ensure build essential tools are installed
+      vars:
+        build_essential_packages: "{{ [
+          {'os_family': 'Debian', 'packages': ['build-essential']},
+          {'os_family': 'Archlinux', 'packages': ['base-devel']},
+          {'os_family': 'RedHat', 'packages': ['@C Development Tools and Libraries', '@Development Tools']},
+        ] | items2dict(key_name='os_family', value_name='packages') }}"
+      package: name="{{ item }}"
+      with_items: "{{ build_essential_packages[ansible_os_family] | list }}"
+    - name: Ensure X11 headers and libraries are installed
+      vars:
+        x11_packages: "{{ [
+          {'os_family': 'Debian', 'packages': ['libx11-dev', 'libxft-dev', 'libxinerama-dev']},
+          {'os_family': 'Archlinux', 'packages': ['libx11', 'libxft', 'libxinerama']},
+          {'os_family': 'RedHat', 'packages': ['libX11-devel', 'libXft-devel', 'libXinerama-devel']},
+        ] | items2dict(key_name='os_family', value_name='packages') }}"
+      package: name="{{ x11_packages[ansible_os_family] | list }}"
+    become: true
+  - name: Ensure dwm source tarball is downloaded
+    get_url: url=https://dl.suckless.org/dwm/dwm-6.5.tar.gz dest="{{ playbook_dir }}/distfiles"
+    delegate_to: localhost
+    register: get_url
+  - name: Ensure dwm patches are downloaded
+    get_url: url={{ item }} dest="{{ playbook_dir }}/distfiles"
+    delegate_to: localhost
+    with_items: "{{ dwm_patches }}"
+    register: downloaded_dwm_patches
+  - name: Ensure dwm source files are extracted
+    unarchive: src="{{ get_url.dest }}" dest=/tmp
+    register: unarchive
+  - name: Detemine dwm source directory
+    set_fact: dwm_directory="{{ unarchive.dest }}/dwm-6.5"
+  - name: Ensure dwm patches are applied
+    ansible.posix.patch: src="{{ item.dest }}" basedir="{{ dwm_directory }}" strip=1
+    with_items: "{{ downloaded_dwm_patches.results }}"
+  - name: Ensure dwm is compiled
+    make: chdir="{{ dwm_directory }}"
+  - name: Ensure dwm is installed
+    make: chdir="{{ dwm_directory }}" target=install
+    become: true
+  when: dwm_patches is defined
+- block:
+  - name: Ensure dmenu is installed
+    package: name=dmenu
+  - block:
+    - name: Ensure dwm is installed on non- Arch Linux hosts
+      package: name=dwm
+      when: ansible_os_family != 'Archlinux'
+    - name: Ensure dwm is installed on Arch Linux
+      pacman:
+        name: dwm
+        executable: yay
+        extra_args: --builddir /var/cache/yay --answerdiff None --answerclean All
+      when: ansible_os_family == 'Archlinux'
+    when: dwm_patches is not defined
+  - name: Ensure st is installed on non- Arch Linux hosts
+    vars:
+      st_package: "{{ [
+        {'os_family': 'Debian', 'package': 'stterm'}
+      ]| items2dict(key_name='os_family', value_name='package')}}"
+    package: name="{{ st_package[ansible_os_family] | default('st') }}"
+    when: ansible_os_family != 'Archlinux'
+  - name: Ensure st is installed on Arch Linux
+    pacman:
+      name: st
+      executable: yay
+      extra_args: --builddir /var/cache/yay --answerdiff None --answerclean All
+    when: ansible_os_family == 'Archlinux'
+  become: true
