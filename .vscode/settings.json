@@ -4,9 +4,11 @@
         "AOSP",
         "armhf",
         "cmdline",
+        "firewalld",
         "sdktools",
         "Upperstream",
         "virtualbox",
-        "vmware"
+        "vmware",
+        "xrdp"
     ]
 }

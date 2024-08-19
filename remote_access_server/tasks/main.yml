@@ -1,0 +1,19 @@
+---
+- block:
+  - name: Ensure remote access server components are installed
+    package: name={{ remote_access_servers }} state=present
+  - block:
+    - name: Ensure xrdp service is running on Red Hat hosts
+      systemd_service: enabled=true name=xrdp state=started
+    - name: Check whether firewalld is running on Red Hat hosts
+      systemd_service: name=firewalld
+      register: firewalld_status
+    - name: Ensure firewall allows incoming connection to RDP port on Red Hat hosts
+      firewalld:
+        port: 3389/tcp
+        permanent: true
+        immediate: true
+        state: enabled
+      when: firewalld_status.status.ActiveState == 'active'
+    when: ansible_os_family == 'RedHat' and (remote_access_servers is defined and 'xrdp' in remote_access_servers)
+  become: true
