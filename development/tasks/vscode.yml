@@ -1,14 +1,30 @@
 ---
 - block:
-  - name: Ensure Microsoft PGP key in installed on Debian
+  - name: Ensure Microsoft PGP key is installed on Debian hosts
     apt_key:
       url: https://packages.microsoft.com/keys/microsoft.asc
       keyring: /etc/apt/keyrings/packages.microsoft.gpg
-  - name: Ensure Visual Studio Code repo is installed on Debian
+  - name: Ensure Visual Studio Code repo is installed on Debian hosts
     apt_repository:
       repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
       filename: vscode
-  - name: Ensure Visual Studio Code is installed on Debian
+  - name: Ensure Visual Studio Code is installed on Debian hosts
     package: name=code
   when: ansible_os_family == 'Debian' and (development_tools is defined and 'vscode' in development_tools)
+  become: true
+- block:
+  - name: Ensure Microsoft PGP key is installed on Red Hat hosts
+    rpm_key: key=https://packages.microsoft.com/keys/microsoft.asc
+  - name: Ensure Microsoft yum repository is installed on Red Hat hosts
+    yum_repository:
+      name: code
+      file: vscode
+      description: Visual Studio Code
+      baseurl: https://packages.microsoft.com/yumrepos/vscode
+      gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+      enabled: true
+      gpgcheck: true
+  - name: Ensure Visual Studio Code is installed on Red Hat hosts
+    package: name=code
+  when: ansible_os_family == 'RedHat' and (development_tools is defined and 'vscode' in development_tools)
   become: true

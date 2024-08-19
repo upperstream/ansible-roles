@@ -11,11 +11,13 @@ This role can install the following tools if any is specified in
 * java - OpenJDK
 * markdown
 * repo
-* vscode - Visual Studio Code (on Debian and its descendants)
+* vscode - [Visual Studio Code][] on Debian hosts and Red Hat hosts
 
 Also the following tools are installed:
 
 * `build-essential` (on Debian and its descendants)
+
+[Visual Studio Code]: https://code.visualstudio.com/
 
 ## Android development environment
 
