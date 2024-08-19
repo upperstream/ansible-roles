@@ -38,13 +38,28 @@
         repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/{{ ansible_os_family | lower }} {{ ansible_lsb.codename }} contrib"
         filename: virtualbox
       when: ansible_distribution != 'Devuan'
-    when: ansible_os_family == "Debian"
+    when: ansible_os_family == 'Debian'
+  - block:
+    - name: Ensure kernel headers are installed on Red Hat hosts
+      package: name="kernel-devel-{{ ansible_kernel }}"
+    - name: Ensure Oracle GPG key is installed on Red Hat hosts
+      rpm_key: key=https://www.virtualbox.org/download/oracle_vbox_2016.asc
+    - name: Ensure VirtualBox repository is installed on Fedora
+      command:
+        cmd: dnf config-manager --add-repo https://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
+        creates: /etc/yum.repos.d/virtualbox.repo
+    when: ansible_os_family == 'RedHat'
   - name: Ensure VirtualBox is installed
     package: name={{ virtualbox_package[ansible_os_family]}}
     vars:
       virtualbox_package: "{{ [
         {'os_family': 'Debian', 'package': 'virtualbox-7.0'},
+        {'os_family': 'RedHat', 'package': 'VirtualBox-7.0'},
         {'os_family': 'Archlinux', 'package': 'virtualbox'},
         {'os_family': 'FreeBSD', 'package': 'virtualbox-ose'}
       ]| items2dict(key_name='os_family', value_name='package')}}"
+  - name: Ensure VirtualBox kernel modules are compiled
+    command:
+      cmd: /sbin/vboxconfig
+      creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vboxdrv.ko"
   become: true

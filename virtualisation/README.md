@@ -31,8 +31,9 @@ is also installed on Linux target host.
 
 ## VirtualBox
 
-This task installs VirtualBox on the target host running Debian and its
-descendants, Arch Linux, or FreeBSD.
+This task installs [VirtualBox](https://www.virtualbox.org/) on the
+target host running Debian descendants, Red Hat descendants, Arch Linux
+descendants, or FreeBSD hosts.
 
 ## VMware
 
