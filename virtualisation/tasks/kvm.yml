@@ -3,7 +3,7 @@
   shell:
     cmd: test $(egrep -c '(vmx|svm)' /proc/cpuinfo) -gt 0
 - block:
-  - name: Ensure KVM is installed on non-Arch Linux host
+  - name: Ensure KVM is installed on Debian hosts
     package:
       name:
         - qemu-kvm
@@ -11,12 +11,15 @@
         - libvirt-clients
         - bridge-utils
         - cpu-checker
-    when: ansible_system == 'Linux' and ansible_os_family != 'Archlinux'
+    when: ansible_os_family == 'Debian'
     vars:
       qemu_package: "{{ [
         {'os_family': 'Debian', 'package': 'qemu-kvm'},
         {'os_family': 'Archlinux', 'package': 'qemu-full'}
       ]| items2dict(key_name='os_family', value_name='package')}}"
+  - name: Ensure KVM is installed on Red Hat hosts
+    package: name='@virtualization'
+    when: ansible_os_family == 'RedHat'
   - block:
     - name: Ensue QEMU is installed on Arch Linux
       package:
@@ -33,14 +36,15 @@
         name: plocate-updatedb.timer
         enabled: true
         state: started
-    - name: Ensure lolcate database is updated on Arch Linux
+    - name: Ensure locate database is updated on Arch Linux
       command: updatedb
     when: ansible_os_family == 'Archlinux'
   - name: Ensure users are added to kvm and libvirt groups
     user:
-      name: "{{ kvm_users }}"
+      name: "{{ item }}"
       append: true
       groups: kvm, libvirt
+    with_items: "{{ kvm_users }}"
   - name: Ensure `locate` command in installed on Debian
     package: name=locate
     when: ansible_os_family == 'Debian'

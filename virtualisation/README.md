@@ -9,16 +9,20 @@ List variable `virtualisations` must contain any of:
 * virtualbox
 * vmware
 
+virtualisation solution to install.
+
 ## KVM
 
-This task enables KVM feature and installs libvirt related packages on
-the target host.  Specified user listed in `kvm_users` will be added to
-`kvm` and `libvirt` groups.
+This task enables [KVM](https://www.linux-kvm.org/page/Main_Page)
+feature and installs [libvirt](https://libvirt.org/) related packages
+on the target host.  Specified user listed in `kvm_users` will be added
+to `kvm` and `libvirt` groups.
 
 This also installs a utility shell script `kvmctl.sh` on the target
-host, which temporarily enables/disables KVM feature.
+host, which temporarily enables or disables KVM feature.
 
-In addition to Debian descendants, this task also supports Arch Linux.
+This task supports installing KVM and libvirt on Debian descendants,
+Red Hat descendants, and Arch Linux descendants.
 
 ## Vagrant
 

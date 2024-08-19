@@ -5,6 +5,7 @@
 * Add
   * Add `CHANGELOG.md` file
   * [desktop](desktop/README.md): Add support for dwm installation with applying patches
+  * [virtualisation](virtualisation/README.md): Add support for installation of KVM to Red Hat hosts
 
 * Changed
   * [desktop](desktop/README.md): Add more documentation of the module
