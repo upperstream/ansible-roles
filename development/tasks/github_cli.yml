@@ -1,5 +1,5 @@
 ---
-- block:
+- block: # Need privileged operation
   - name: Ensure GitHub CLI keyring is installed
     get_url:
       url: https://cli.github.com/packages/githubcli-archive-keyring.gpg
@@ -14,8 +14,13 @@
     apt_repository:
       repo: deb [arch={{ arch.stdout_lines[0] | regex_replace('^x86_64$', 'amd64')}} signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main
       filename: github-cli
-  - name: Ensure GitHub CLI is installed
-    package:
-      name: gh
   when: ansible_os_family == "Debian"
+  become: true
+- name: Ensure GitHub CLI is installed
+  vars:
+    gh_package: "{{ [
+      {'os_family': 'Archlinux', 'package': 'github-cli'},
+      {'os_family': 'Artix Linux', 'package': 'github-cli'},
+    ]| items2dict(key_name='os_family', value_name='package')}}"
+  package: "name={{ gh_package[ansible_os_family] | default('gh') }}"
   become: true

@@ -3,6 +3,8 @@
 ## [Unreleased][]
 
 * Add
+  * [development](development/README.md): Add support for GitHub CLI
+    installation Arch Linux hosts
   * [packer](packer/README.md): Add support for Packer installation on
     Arch Linux hosts
 
