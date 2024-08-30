@@ -2,7 +2,7 @@
 - name: Ensure hardware virtualisation is supported
   shell:
     cmd: test $(egrep -c '(vmx|svm)' /proc/cpuinfo) -gt 0
-- block:
+- block: # Need privileged operation
   - name: Ensure KVM is installed on Debian hosts
     package:
       name:
@@ -20,8 +20,8 @@
   - name: Ensure KVM is installed on Red Hat hosts
     package: name='@virtualization'
     when: ansible_os_family == 'RedHat'
-  - block:
-    - name: Ensue QEMU is installed on Arch Linux
+  - block: # Install KVM and QEMU on Arch Linux hosts
+    - name: Ensue QEMU is installed on Arch Linux hosts
       package:
         name:
           - qemu-full
@@ -31,14 +31,22 @@
           - virt-manager
           - virt-viewer
           - plocate
-    - name: Ensure plocate is enabled and started on Arch Linux
+    - name: Ensure plocate is enabled and started on Arch Linux hosts with systemd
       service:
         name: plocate-updatedb.timer
         enabled: true
         state: started
+      when: ansible_service_mgr == 'systemd'
+    - name: Ensure updatedb daily runs on Arch Linux hosts without systemd
+      cron:
+        name: daily update locate database
+        job: updatedb
+        minute: "5"
+        hour: "0"
+      when: ansible_service_mgr != 'systemd'
     - name: Ensure locate database is updated on Arch Linux
       command: updatedb
-    when: ansible_os_family == 'Archlinux'
+    when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
   - name: Ensure users are added to kvm and libvirt groups
     user:
       name: "{{ item }}"

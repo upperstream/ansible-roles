@@ -21,8 +21,11 @@ to `kvm` and `libvirt` groups.
 This also installs a utility shell script `kvmctl.sh` on the target
 host, which temporarily enables or disables KVM feature.
 
-This task supports installing KVM and libvirt on Debian descendants,
-Red Hat descendants, and Arch Linux descendants.
+This task supports installing KVM and libvirt on:
+
+* Arch Linux and Artix Linux,
+* Debian and its descendants, or
+* Red Hat descendants.
 
 ## Vagrant
 
@@ -46,7 +49,3 @@ automatically picked up to install.
 
 This role assumes the target host is running either Debian or Ubuntu
 unless otherwise stated.
-
----
-
-Copyright &copy; 2023, 2024 Upperstream.

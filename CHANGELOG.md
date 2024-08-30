@@ -7,6 +7,8 @@
     installation Arch Linux hosts
   * [packer](packer/README.md): Add support for Packer installation on
     Arch Linux hosts
+  * [virtualisation](virtualisation/README.md): Add support
+    for enabling KVM on Artix Linux host
 
 ## [20240819][]
 
