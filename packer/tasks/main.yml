@@ -1,6 +1,6 @@
 ---
-- block:
-  - block:
+- block: # Need privileged operation
+  - block: # Add Packer repo on Debian hosts
     - name: Ensure HashiCorp PGP key is installed
       apt_key:
         url: https://apt.releases.hashicorp.com/gpg
@@ -9,7 +9,7 @@
       command: dpkg --print-architecture
       register: arch
       check_mode: false
-    - block:
+    - block: # Determine Devuan codename
       - name: Get Debian version
         shell: cat /etc/debian_version | sed 's/^\([0-9][0-9]*\)\..*$/\1/'
         register: debian_version
@@ -36,7 +36,7 @@
         filename: hashicorp
       when: ansible_distribution != 'Devuan'
     when: ansible_os_family == 'Debian'
-  - block:
+  - block: # Add Packer respoitory on Fedora
     - name: Ensure dnf plugins is installed on Fedora
       package: name=dnf-plugins-core
     - name: Ensure HashiCorp repository is installed on Fedora
@@ -44,8 +44,40 @@
         cmd: dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
         creates: /etc/yum.repos.d/hashicorp.repo
     when: ansible_distribution == 'Fedora'
-  - name: Ensure Packer is installed on Linux
-    package: name=packer state=present
+  - block: # Install Packer on Linux hosts
+    - block: # Install Packer on Arch Linux hosts
+      - name: Ensure GNU stow is installed on Arch Linux hosts
+        package: name=stow
+      - name: Ensire Packer directory is created on Arch Linux hosts
+        file:
+          path: /usr/local/share/packer-{{ archlinux_packer_version }}/{{ item }}
+          recurse: true
+          state: directory
+        with_items:
+          - bin
+          - doc
+      - name: Ensure Packer is downloaded on Arch Linux hosts
+        unarchive:
+          src: https://releases.hashicorp.com/packer/{{ archlinux_packer_version }}/packer_{{ archlinux_packer_version }}_linux_amd64.zip
+          dest: /usr/local/share/packer-{{ archlinux_packer_version }}
+          remote_src: true
+      - name: Ensure Packer binary is moved into bin directory on Arch Linux hosts
+        command: mv /usr/local/share/packer-{{ archlinux_packer_version }}/packer /usr/local/share/packer-{{ archlinux_packer_version }}/bin/
+        args:
+          creates: /usr/local/share/packer-{{ archlinux_packer_version }}/bin/packer
+      - name: Ensure Packer document is moved into doc directory on Arch Linux hosts
+        command: mv /usr/local/share/packer-{{ archlinux_packer_version }}/LICENSE.txt /usr/local/share/packer-{{ archlinux_packer_version }}/doc/
+        args:
+          creates: /usr/local/share/packer-{{ archlinux_packer_version }}/doc/LICENSE.txt
+      - name: Ensure packer is available on Arch Linux hosts
+        command: stow -d /usr/local/share -t /usr/local packer-{{ archlinux_packer_version }}
+        args:
+          creates: /usr/local/bin/packer
+      when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+      become: true
+    - name: Ensure Packer is installed on non- Arch Linux hosts
+      package: name=packer state=present
+      when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
     when: ansible_system == 'Linux'
   - name: Ensure Packer is installed on FreeBSD
     shell:

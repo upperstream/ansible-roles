@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased][]
+
+* Add
+  * [packer](packer/README.md): Add support for Packer installation on
+    Arch Linux hosts
+
 ## [20240819][]
 
 * Add
@@ -19,4 +25,5 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
+[Unreleased]: https://github.com/upperstream/ansible-roles/compare/20240819...HEAD
 [20240819]: https://github.com/upperstream/ansible-roles/releases/tag/20240819
