@@ -11,6 +11,8 @@
     installation Arch Linux hosts
   * [packer](packer/README.md): Add support for Packer installation on
     Arch Linux hosts
+  * [remote_access_server](remote_access_server/README.md): Add support
+    for installation of xrdp on Arch Linux hosts
   * [virtualisation](virtualisation/README.md): Add support
     for enabling KVM on Artix Linux host
 

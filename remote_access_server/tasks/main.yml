@@ -1,8 +1,17 @@
 ---
-- block:
+- block: # Install xrdp
+  - name: Ensure xrdp is installed on Arch Linux hosts
+    kewlfft.aur.aur: name=xrdp
+    when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+  - name: Ensure xrdp is installed on non- Arch Linux hosts
+    package: name=xrdp
+    when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
+    become: true
+  when: remote_access_servers is defined and 'xrdp' in remote_access_servers
+- block: # Need privileged operations
   - name: Ensure remote access server components are installed
-    package: name={{ remote_access_servers }} state=present
-  - block:
+    package: "name={{ remote_access_servers | reject('search', 'xrdp') | list }}"
+  - block: # Post-install configuration of xrdp on Red Hat hosts
     - name: Ensure xrdp service is running on Red Hat hosts
       systemd_service: enabled=true name=xrdp state=started
     - name: Check whether firewalld is running on Red Hat hosts
