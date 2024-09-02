@@ -16,7 +16,7 @@
   * [virtualisation](virtualisation/README.md):
     * Add support on Artix Linux host for
       * enabling KVM
-      * installation of Vagrant
+      * installation of Vagrant and VirtualBox
     * Add support for installation of VMware workstation on Arch Linux
       hosts
 

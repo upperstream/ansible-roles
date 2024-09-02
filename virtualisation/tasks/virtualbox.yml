@@ -56,10 +56,12 @@
         {'os_family': 'Debian', 'package': 'virtualbox-7.0'},
         {'os_family': 'RedHat', 'package': 'VirtualBox-7.0'},
         {'os_family': 'Archlinux', 'package': 'virtualbox'},
+        {'os_family': 'Artix Linux', 'package': 'virtualbox'},
         {'os_family': 'FreeBSD', 'package': 'virtualbox-ose'}
       ]| items2dict(key_name='os_family', value_name='package')}}"
-  - name: Ensure VirtualBox kernel modules are compiled
+  - name: Ensure VirtualBox kernel modules are compiled on non- Arch Linux hosts
     command:
       cmd: /sbin/vboxconfig
       creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vboxdrv.ko"
+    when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
   become: true
