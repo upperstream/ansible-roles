@@ -1,25 +1,47 @@
 ---
-- name: Create file pattern for VMware installer
-  set_fact:
-    pattern: "{{ role_path }}/dist_files/VMware-Workstation-*.bundle"
-- name: Determine VMware installer name
-  set_fact:
-    vmware_installer: "{{ pattern | fileglob | community.general.version_sort | last }}"
-  delegate_to: localhost
-- name: Ensure Copy VMware installer is copied to remote
-  copy: src="{{ vmware_installer }}" dest=/tmp/
-  register: remote_installer
-- block:
-  - name: Ensure VMware Workstation is installed
-    shell: sh {{ remote_installer.dest }}
+- block: # Install VMware on Arh Linux hosts
+  - name: Ensure VMware dependencies are installed on Arch Linux hosts
+    package: name=linux-headers
+  - name: Ensure VMware Workstation is installed on Arch Linux hosts with Systemd
+    kewlfft.aur.aur: name=vmware-workstation
+    when: ansible_service_mgr == 'Systemd'
+  - name: Ensure VMware Workstation is installed on Arch Linux hosts without Systemd
+    kewlfft.aur.aur: name="vmware-workstation-{{ ansible_service_mgr }}"
+    when: ansible_service_mgr != 'Systemd'
+  - block: # Need privileged operations
+    - name: Ensure VMware Network Configuration service is started on Arch Linux hosts
+      service: name=vmware-networks-configuration state=started
+    - name: Ensure VMware services are started on Arch Linux hosts
+      service: name="{{ item }}" state=started
+      with_items:
+        - vmware-networks
+        - vmware-usbarbitrator
+    - name: Ensure VMware modules are loaded on Arch Linux hosts
+      command: modprobe -a vmw_vmci vmmon
     become: true
-    register: vmware_result
-    args:
-      creates: /usr/bin/vmware
-  - name: Ensure build essential is installed
-    package: name=build-essential state=present
-  - name: Ensure kernel headers are installed
-    package: name=linux-headers-{{ ansible_kernel }} state=present
+  when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+- block: # Install VMware on non- Arch Linux hosts
+  - name: Create file pattern for VMware installer
+    set_fact:
+      pattern: "{{ role_path }}/dist_files/VMware-Workstation-*.bundle"
+  - name: Determine VMware installer name
+    set_fact:
+      vmware_installer: "{{ pattern | fileglob | community.general.version_sort | last }}"
+    delegate_to: localhost
+  - name: Ensure Copy VMware installer is copied to remote
+    copy: src="{{ vmware_installer }}" dest=/tmp/
+    register: remote_installer
+  - block: # Need privileged operation
+    - name: Ensure VMware Workstation is installed
+      shell: sh {{ remote_installer.dest }}
+      register: vmware_result
+      args:
+        creates: /usr/bin/vmware
+    - name: Ensure build essential is installed
+      package: name=build-essential state=present
+    - name: Ensure kernel headers are installed
+      package: name=linux-headers-{{ ansible_kernel }} state=present
+    become: true
   - name: Gather stats of VMware modules
     stat: name="{{ module }}"
     register: module_stat
@@ -28,17 +50,16 @@
       - "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
     loop_control:
       loop_var: module
-    become: false
-  - name: Gather existance fact of VMware modules
+  - name: Gather existence fact of VMware modules
     set_fact:
-      module_existance: "{{ (module_existance | default([])) + [module.stat.exists] }}"
+      module_existence: "{{ (module_existence | default([])) + [module.stat.exists] }}"
     loop: "{{ module_stat.results }}"
     loop_control:
       loop_var: module
-    become: false
   - name: Ensure VMware modules are installed
     command:
       cmd: vmware-modconfig --console --install-all
       creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
-    when: vmware_result is changed or false in module_existance
-  become: true
+    when: vmware_result is changed or false in module_existence
+    become: true
+  when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
