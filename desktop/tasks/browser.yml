@@ -9,10 +9,7 @@
     include_tasks: firefox_without_snap.yml
     when: "'firefox_without_snap' in browsers"
   - name: Ensure Chrome is installed on Arch Linux hosts
-    pacman:
-      name: google-chrome
-      executable: yay
-      extra_args: --builddir /var/cache/yay --answerdiff None --answerclean All
+    kewlfft.aur.aur: name=google-chrome
     become: false
     when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
   - block: # Install Chrome on Debian hosts

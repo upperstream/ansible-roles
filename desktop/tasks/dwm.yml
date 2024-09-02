@@ -47,17 +47,9 @@
 - block: # Need privileged ooperations
   - name: Ensure dmenu is installed
     package: name=dmenu
-  - block: # Install dwm without patches
-    - name: Ensure dwm is installed on non- Arch Linux hosts
-      package: name=dwm
-      when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
-    - name: Ensure dwm is installed on Arch Linux
-      pacman:
-        name: dwm
-        executable: yay
-        extra_args: --builddir /var/cache/yay --answerdiff None --answerclean All
-      when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
-    when: dwm_patches is not defined
+  - name: Ensure dwm is installed on non- Arch Linux hosts
+    package: name=dwm
+    when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
   - name: Ensure st is installed on non- Arch Linux hosts
     vars:
       st_package: "{{ [
@@ -65,10 +57,10 @@
       ]| items2dict(key_name='os_family', value_name='package')}}"
     package: name="{{ st_package[ansible_os_family] | default('st') }}"
     when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
-  - name: Ensure st is installed on Arch Linux hosts
-    pacman:
-      name: st-git
-      executable: yay
-      extra_args: --builddir /var/cache/yay --answerdiff None --answerclean All
-    when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
   become: true
+- name: Ensure dwm is installed on Arch Linux hosts
+  kewlfft.aur.aur: name=dwm
+  when: "ansible_os_family in ['Archlinux', 'Artix Linux'] and dwm_patches is not defined"
+- name: Ensure st is installed on Arch Linux hosts
+  kewlfft.aur.aur: name=st-git
+  when: "ansible_os_family in ['Archlinux', 'Artix Linux']"

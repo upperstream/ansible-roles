@@ -14,6 +14,11 @@
   * [virtualisation](virtualisation/README.md): Add support
     for enabling KVM on Artix Linux host
 
+* Changed:
+  * [desktop](desktop/README.md): Use
+    [kewlfft.aur.aur](https://github.com/kewlfft/ansible-aur) Ansible
+    module to install tools on Arch Linux hosts
+
 ## [20240819][]
 
 * Added
