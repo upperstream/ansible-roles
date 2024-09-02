@@ -9,10 +9,10 @@
   - name: Ensure mail client is installed
     package: name={{ mailers }} state=present
     when: mailers is defined
-  - name: Ensure web browser is installed
-    include_tasks: browser.yml
-    when: browsers is defined
   - name: Ensure fonts are installed
     package: name={{ fonts }} state=present
     when: fonts is defined
   become: true
+- name: Install web browsers
+  include_tasks: browser.yml
+  when: browsers is defined

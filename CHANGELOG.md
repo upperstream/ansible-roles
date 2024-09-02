@@ -5,6 +5,8 @@
 * Added
   * [base](base/README.md): Add support for installation of AUR helper
     on Arch Linux hosts
+  * [desktop](desktop/README.md): Add support for installation of
+    desktop tools and web browsers on Artix Linux host
   * [development](development/README.md): Add support for GitHub CLI
     installation Arch Linux hosts
   * [packer](packer/README.md): Add support for Packer installation on

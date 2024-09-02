@@ -1,11 +1,12 @@
 ---
-- block:
-  - block:
+- block: # Install dwm with patches
+  - block: # Need privileged operations
     - name: Ensure build essential tools are installed
       vars:
         build_essential_packages: "{{ [
           {'os_family': 'Debian', 'packages': ['build-essential']},
           {'os_family': 'Archlinux', 'packages': ['base-devel']},
+          {'os_family': 'Artix Linux', 'packages': ['base-devel']},
           {'os_family': 'RedHat', 'packages': ['@C Development Tools and Libraries', '@Development Tools']},
         ] | items2dict(key_name='os_family', value_name='packages') }}"
       package: name="{{ item }}"
@@ -15,6 +16,7 @@
         x11_packages: "{{ [
           {'os_family': 'Debian', 'packages': ['libx11-dev', 'libxft-dev', 'libxinerama-dev']},
           {'os_family': 'Archlinux', 'packages': ['libx11', 'libxft', 'libxinerama']},
+          {'os_family': 'Artix Linux', 'packages': ['libx11', 'libxft', 'libxinerama']},
           {'os_family': 'RedHat', 'packages': ['libX11-devel', 'libXft-devel', 'libXinerama-devel']},
         ] | items2dict(key_name='os_family', value_name='packages') }}"
       package: name="{{ x11_packages[ansible_os_family] | list }}"
@@ -42,19 +44,19 @@
     make: chdir="{{ dwm_directory }}" target=install
     become: true
   when: dwm_patches is defined
-- block:
+- block: # Need privileged ooperations
   - name: Ensure dmenu is installed
     package: name=dmenu
-  - block:
+  - block: # Install dwm without patches
     - name: Ensure dwm is installed on non- Arch Linux hosts
       package: name=dwm
-      when: ansible_os_family != 'Archlinux'
+      when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
     - name: Ensure dwm is installed on Arch Linux
       pacman:
         name: dwm
         executable: yay
         extra_args: --builddir /var/cache/yay --answerdiff None --answerclean All
-      when: ansible_os_family == 'Archlinux'
+      when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
     when: dwm_patches is not defined
   - name: Ensure st is installed on non- Arch Linux hosts
     vars:
@@ -62,11 +64,11 @@
         {'os_family': 'Debian', 'package': 'stterm'}
       ]| items2dict(key_name='os_family', value_name='package')}}"
     package: name="{{ st_package[ansible_os_family] | default('st') }}"
-    when: ansible_os_family != 'Archlinux'
-  - name: Ensure st is installed on Arch Linux
+    when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
+  - name: Ensure st is installed on Arch Linux hosts
     pacman:
-      name: st
+      name: st-git
       executable: yay
       extra_args: --builddir /var/cache/yay --answerdiff None --answerclean All
-    when: ansible_os_family == 'Archlinux'
+    when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
   become: true

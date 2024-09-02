@@ -1,0 +1,11 @@
+---
+- name: Ensure Chromium browser is installed on Arch Linux hosts
+  pacman:
+    name: chromium-snapshot-bin
+    executable: yay
+    extra_args: --builddir /var/cache/yay --answerdiff None --answerclean All
+  when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+- name: Ensure Chromium browser is installed on non- Arch Linux hosts
+  package: name=chromium
+  when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
+  become: true

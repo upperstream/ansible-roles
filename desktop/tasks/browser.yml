@@ -1,11 +1,21 @@
 ---
-- block:
+- name: Install Chromium browser
+  include_tasks: chromium.yml
+  when: "'chromium' in browsers"
+- block: # Need privileged operation
   - name: Ensure web browser is installed
-    package: name={{ browsers | reject('search', 'chrome') | reject('search', 'firefox_without_snap') | list }} state=present
+    package: name={{ browsers | difference(['chrome', 'chromium', 'firefox_without_snap']) | list }} state=present
   - name: Install non snap version of Firefox
     include_tasks: firefox_without_snap.yml
     when: "'firefox_without_snap' in browsers"
-  - block:
+  - name: Ensure Chrome is installed on Arch Linux hosts
+    pacman:
+      name: google-chrome
+      executable: yay
+      extra_args: --builddir /var/cache/yay --answerdiff None --answerclean All
+    become: false
+    when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+  - block: # Install Chrome on Debian hosts
     - name: Check whether Chrome is installed
       shell: apt list --installed | grep -q google-chrome-stable
       register: chrome_install_test
