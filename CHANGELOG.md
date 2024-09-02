@@ -14,7 +14,9 @@
   * [remote_access_server](remote_access_server/README.md): Add support
     for installation of xrdp on Arch Linux hosts
   * [virtualisation](virtualisation/README.md):
-    * Add support for enabling KVM on Artix Linux host
+    * Add support on Artix Linux host for
+      * enabling KVM
+      * installation of Vagrant
     * Add support for installation of VMware workstation on Arch Linux
       hosts
 

@@ -2,7 +2,10 @@
 - block:
   - name: Ensure Vagrant is installed
     package: name=vagrant state=present
-  - name: Ensure Vagrant Libvirt provider in installed on Linux
+  - name: Ensure Vagrant Libvirt provider in installed on non- Arch Linux hosts
     package: name=vagrant-libvirt state=present
-    when: ansible_system == "Linux"
+    when: "ansible_system == 'Linux' and ansible_os_family not in ['Archlinux', 'Artix Linux']"
   become: true
+- name: Ensure Vagrant Libvirt provider in installed on Arch Linux hosts
+  command: vagrant plugin install vagrant-libvirt
+  when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
