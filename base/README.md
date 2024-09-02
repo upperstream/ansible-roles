@@ -9,6 +9,8 @@ The `base` role configures the basic features of the target host.
 * `base` - List of basic capabilities of the target host:
   * `zfs` - Install ZFS utilities to mount ZFS file systems (FreeBSD
     host and Systemd-enabled Linux host are supported.)
+* `archlinux_pacman_wrapper` - AUR helper to install on Arch Linux
+  target hosts.  See the main [README.md](../README.md) for details.
 * `users_to_create` - Create users on the target host with the
   following attributes:
   * `name` - Login name of this user.

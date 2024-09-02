@@ -23,3 +23,6 @@
 - name: Set up ZFS on Linux
   include_tasks: zfs_on_linux.yml
   when: ansible_system == 'Linux' and (base is defined and 'zfs' in base)
+- name: Ensure basic configuration is made on Arch Linux
+  include_tasks: archlinux.yml
+  when: "ansible_os_family in ['Archlinux', 'Artix Linux']"

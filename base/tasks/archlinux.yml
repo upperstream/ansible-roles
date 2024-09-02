@@ -1,0 +1,36 @@
+---
+- name: Initilalisation of tasks
+  set_fact:
+    wrappers: "{{ [
+      {'name': 'aura', 'value': {'PKGBUILD': 'https://aur.archlinux.org/aura.git', 'dependencies': ['rust']}},
+      {'name': 'aurman', 'value': {'PKGBUILD': 'https://aur.archlinux.org/aurman.git', 'dependencies': ['python', 'expac', 'python-regex', 'python-dateutil', 'python-feedparser']}},
+      {'name': 'pacaur', 'value': {'PKGBUILD': 'https://aur.archlinux.org/pacaur.git', 'dependencies': []}},
+      {'name': 'pakku', 'value': {'PKGBUILD': 'https://aur.archlinux.org/pakku.git', 'dependencies': ['asciidoc', 'curl', 'nim', 'pcre']}},
+      {'name': 'paru', 'value': {'PKGBUILD': 'https://aur.archlinux.org/paru.git', 'dependencies': ['rust']}},
+      {'name': 'pikaur', 'value': {'PKGBUILD': 'https://aur.archlinux.org/pikaur.git', 'dependencies': ['python']}},
+      {'name': 'trizen', 'value': {'PKGBUILD': 'https://aur.archlinux.org/trizen.git', 'dependencies': ['perl']}},
+      {'name': 'yay', 'value': {'PKGBUILD': 'https://aur.archlinux.org/yay.git', 'dependencies': ['go']}},
+    ] | items2dict(key_name='name', value_name='value') }}"
+- name: Ensure AUR helper dependencies are satisfied
+  package: name="{{ ['git', wrappers[archlinux_pacman_wrapper]['dependencies']] | flatten }}"
+  become: true
+- name: Ensure PKGBUILD file for AUR helper tool is downloaded
+  git: dest="~/build/{{ archlinux_pacman_wrapper }}" repo="{{ wrappers[archlinux_pacman_wrapper]['PKGBUILD'] }}"
+- name: Ensure AUR helper is build
+  shell: yes | makepkg
+  args:
+    chdir: "~/build/{{ archlinux_pacman_wrapper }}"
+    creates: "~/build/{{ archlinux_pacman_wrapper }}/pkg/{{ archlinux_pacman_wrapper }}/usr/bin/{{ archlinux_pacman_wrapper }}"
+- name: Get AUR package name
+  find:
+    paths: "~/build/{{ archlinux_pacman_wrapper }}"
+    patterns:
+      - "{{ archlinux_pacman_wrapper }}-[0-9]*-{{ ansible_architecture }}.pkg.tar.zst"
+      - "{{ archlinux_pacman_wrapper }}-[0-9]*-any.pkg.tar.zst"
+  register: packages
+- name: Ensure AUR helper in installed
+  shell: "yes | pacman -U {{ (packages.files | map(attribute='path') | community.general.version_sort | list)[-1] }}"
+  args:
+    chdir: "~{{ ansible_user }}/build/{{ archlinux_pacman_wrapper }}"
+    creates: /usr/bin/{{ archlinux_pacman_wrapper }}
+  become: true

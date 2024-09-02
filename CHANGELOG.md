@@ -2,7 +2,9 @@
 
 ## [Unreleased][]
 
-* Add
+* Added
+  * [base](base/README.md): Add support for installation of AUR helper
+    on Arch Linux hosts
   * [development](development/README.md): Add support for GitHub CLI
     installation Arch Linux hosts
   * [packer](packer/README.md): Add support for Packer installation on
@@ -12,7 +14,7 @@
 
 ## [20240819][]
 
-* Add
+* Added
   * Add `CHANGELOG.md` file
   * Add [remote_access_server](remote_access_server/README.md) module
     to install remote access servers such as `xrdp`
