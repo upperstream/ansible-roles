@@ -20,12 +20,14 @@
       * installation of Vagrant and VirtualBox
     * Add support for installation of VMware workstation on Arch Linux
       hosts
+    * Add support for [Proxmox VE][] installation on Debian host
 * Changed:
   * [desktop](desktop/README.md): Use [kewlfft.aur.aur][] Ansible
     module to install tools on Arch Linux hosts
 
 [Game of Trees]: https://gameoftrees.org/index.html
 [kewlfft.aur.aur]: https://github.com/kewlfft/ansible-aur
+[Proxmox VE]: https://www.proxmox.com/en/proxmox-virtual-environment/overview
 
 ## [20240819][]
 

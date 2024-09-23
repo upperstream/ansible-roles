@@ -4,10 +4,11 @@ Enable virtualisation features on the target host.
 
 List variable `virtualisations` must contain any of:
 
-* kvm
-* vagrant
-* virtualbox
-* vmware
+* `kvm`
+* `proxmox`
+* `vagrant`
+* `virtualbox`
+* `vmware`
 
 virtualisation solution to install.
 
@@ -26,6 +27,11 @@ This task supports installing KVM and libvirt on:
 * Arch Linux and Artix Linux,
 * Debian and its descendants, or
 * Red Hat descendants.
+
+## Proxmox
+
+This task installs [Proxmox VE](https://www.proxmox.com/en/proxmox-virtual-environment/overview)
+on Debian host.
 
 ## Vagrant
 

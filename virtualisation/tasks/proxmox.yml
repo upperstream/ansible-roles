@@ -1,0 +1,52 @@
+---
+- name: Ensure target host to install Proxmox is a Debian host
+  fail:
+    msg: "Proxmox VE can only be installed on Debian hosts"
+  when: ansible_distribution != 'Debian'
+- name: Get CPU architecture name
+  command: dpkg --print-architecture
+  changed_when: false
+  register: arch
+  check_mode: false
+- block:
+  - name: Ensure GnuPG is installed
+    package: name=gnupg
+  - name: Ensure Proxmox keyring is installed
+    apt_key:
+      url: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release }}.gpg"
+      keyring: "/etc/apt/trusted.gpg.d/proxmox-release-{{ ansible_distribution_release }}.gpg"
+  - name: Ensure proxmox repo is registered
+    apt_repository:
+      repo: "deb [arch={{ arch.stdout_lines[0] | regex_replace('^x86_64$', 'amd64')}}] http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-no-subscription"
+      state: present
+      update_cache: yes
+  - name: Ensure Proxmox kernel is installed
+    package: name=proxmox-default-kernel
+    register: proxmox_kernel_installed
+  - name: Ensure target host is rebooted
+    reboot:
+    when: proxmox_kernel_installed.changed
+  - name: Ensure Proxmox VE dependencies are installed
+    package: name="{{ item }}"
+    with_items:
+      - postfix
+      - open-iscsi
+      - chrony
+  - name: Ensure Proxmox VE is installed
+    package: name=proxmox-ve
+    register: proxmox_installed
+  - name: Ensure Proxmox VE installation is notified
+    assert: { that: true, quiet: true }
+    changed_when: proxmox_installed.failed == false
+    notify: Proxmox installed
+  - name: Ensure Debian kernel is removed
+    apt:
+      name: "{{ item }}"
+      state: absent
+    with_items:
+      - linux-image-amd64
+      - linux-image-6.1*
+  - name: Ensure grub is updated
+    command: update-grub
+  when: ansible_os_family == 'Debian'
+  become: true
