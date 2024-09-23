@@ -6,3 +6,12 @@
       - "Please make sure that:"
       - "  - `/usr/bin/python` points to a correct python executable, and"
       - "  - `~{{ target_user }}/bin` is added to your `PATH` environment"
+- name: restart gotd
+  service: name=gotd state=restarted
+  become: true
+- name: restart gotwebd
+  service: name=gotwebd state=restarted
+  become: true
+- name: restart httpd
+  service: name=httpd state=restarted
+  become: true

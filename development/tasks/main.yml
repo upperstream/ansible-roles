@@ -2,7 +2,7 @@
 - block:
   - name: Ensure development tools are installed
     package:
-      name: "{{ development_tools | default([]) | difference(['gcm', 'gh', 'java', 'repo', 'vscode']) | list }}"
+      name: "{{ development_tools | default([]) | difference(['gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
   - block:
     - name: Ensure essential build tools are installed on Debian host
       package: name=build-essential
@@ -63,3 +63,38 @@
 - name: Install development environment for Android
   include_tasks: android.yml
   when: android_tools is defined
+- block:
+  - name: Ensure Game of Trees daemon is installed
+    package: name=gotd
+  - name: Ensure Game of Trees daemon is configured
+    blockinfile:
+      path: /etc/gotd.conf
+      create: true
+      block: "{{ lookup('file', 'files/{{ ansible_hostname }}/gotd.conf', errors='ignore') }}"
+    notify: restart gotd
+  - name: Ensure Game Of Trees daemon is enabled
+    service: name=gotd enabled=yes
+  when: ansible_os_family == 'OpenBSD' and (development_tools is defined and 'gotd' in development_tools)
+  become: true
+- block:
+  - name: Ensure Game of Trees web daemon is installed
+    package: name=gotwebd
+  - name: Ensure HTTPd is configured for gotwebd
+    blockinfile:
+      path: /etc/httpd.conf
+      create: true
+      block: "{{ lookup('file', 'files/{{ ansible_hostname }}/gotwebd_httpd.conf', errors='ignore') }}"
+    notify: restart httpd
+  - name: Ensure HTTPd and Game Of Trees web daemon are enabled
+    service: name="{{ item }}" enabled=yes
+    with_items:
+      - httpd
+      - gotwebd
+  - name: Ensure Game of Trees web daemon is configured
+    blockinfile:
+      path: /etc/gotwebd.conf
+      create: true
+      block: "{{ lookup('file', 'files/{{ ansible_hostname }}/gotwebd.conf', errors='ignore') }}"
+    notify: restart gotwebd
+  when: ansible_os_family == 'OpenBSD' and (development_tools is defined and 'gotwebd' in development_tools)
+  become: true

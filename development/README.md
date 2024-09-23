@@ -5,19 +5,36 @@ Enable development tools on the target host.
 This role can install the following tools if any is specified in
 `development_tools` variable:
 
-* gcm - Git Credential Manager
-* gh - GitHub CLI
-* git
-* java - OpenJDK
-* markdown
-* repo
-* vscode - [Visual Studio Code][] on Debian hosts and Red Hat hosts
+* `gcm` - Git Credential Manager
+* `gh` - GitHub CLI
+* `git` - Git
+* `got` - [Game of Trees][]
+* `java` - OpenJDK
+* `markdown` - Markdown parser
+* `repo` - The [Multiple Git Repository Tool][]
+* `vscode` - [Visual Studio Code][] on Debian hosts and Red Hat hosts
 
 Also the following tools are installed:
 
 * `build-essential` (on Debian and its descendants)
 
+[Game of Trees]: https://gameoftrees.org/index.html
+[Multiple Git Repository Tool]: https://gerrit.googlesource.com/git-repo/
 [Visual Studio Code]: https://code.visualstudio.com/
+
+## Game of Trees daemons
+
+If the target host is OpenBSD and `development_tools` variable contains
+any of:
+
+* `gotd` - Game of Trees Git repository server
+* `gotwebd` - Game of Trees repository web frontend
+
+daemons are installed and enabled on the target host.  You may need to
+provide configuration files (`files/{{ ansible_hostname }}/gotd.conf`
+for `gotd`) and (`files/{{ ansible_hostname }}/gotwebd.conf` for
+`gotwebd`).  You may also need HTTPd configuration file
+(`files/{{ ansible_hostname }}/gotwebd_httpd.conf`) when you set up `gotwebd`.
 
 ## Android development environment
 

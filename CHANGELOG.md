@@ -7,8 +7,9 @@
     on Arch Linux hosts
   * [desktop](desktop/README.md): Add support for installation of
     desktop tools and web browsers on Artix Linux host
-  * [development](development/README.md): Add support for GitHub CLI
-    installation Arch Linux hosts
+  * [development](development/README.md):
+    * Add support for GitHub CLI installation Arch Linux hosts
+    * Add support for [Game of Trees][] installation on OpenBSD host
   * [packer](packer/README.md): Add support for Packer installation on
     Arch Linux hosts
   * [remote_access_server](remote_access_server/README.md): Add support
@@ -19,11 +20,12 @@
       * installation of Vagrant and VirtualBox
     * Add support for installation of VMware workstation on Arch Linux
       hosts
-
 * Changed:
-  * [desktop](desktop/README.md): Use
-    [kewlfft.aur.aur](https://github.com/kewlfft/ansible-aur) Ansible
+  * [desktop](desktop/README.md): Use [kewlfft.aur.aur][] Ansible
     module to install tools on Arch Linux hosts
+
+[Game of Trees]: https://gameoftrees.org/index.html
+[kewlfft.aur.aur]: https://github.com/kewlfft/ansible-aur
 
 ## [20240819][]
 
@@ -37,7 +39,6 @@
     installation of KVM to Red Hat hosts
   * [virtualisation](virtualisation/README.md): Add support for
     installation of VirtualBox to Red Hat hosts
-
 * Changed
   * [desktop](desktop/README.md): Add more documentation of the module
   * [development](development/README.md): Add support for installation

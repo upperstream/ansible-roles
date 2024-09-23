@@ -8,6 +8,8 @@
         "aurman",
         "cmdline",
         "firewalld",
+        "gotd",
+        "gotwebd",
         "kewlfft",
         "pacaur",
         "pacman",
