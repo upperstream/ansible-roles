@@ -49,7 +49,7 @@
     package: name=dmenu
   - name: Ensure dwm is installed on non- Arch Linux hosts
     package: name=dwm
-    when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
+    when: dwm_patches is not defined and "ansible_os_family not in ['Archlinux', 'Artix Linux']"
   - name: Ensure st is installed on non- Arch Linux hosts
     vars:
       st_package: "{{ [

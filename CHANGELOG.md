@@ -1,5 +1,14 @@
 # Changelog
 
+## [Unreleased][]
+
+* Changed
+  * [desktop](desktop/README.md): [dwm][] was installed using
+    distribution package even if another version built from source code
+    was installed
+
+[dwm]: https://dwm.suckless.org/
+
 ## [20241002][]
 
 * Added
@@ -50,5 +59,6 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
+[Unreleased]: https://github.com/upperstream/ansible-roles/compare/20241002...HEAD
 [20241002]: https://github.com/upperstream/ansible-roles/compare/20240819...20241002
 [20240819]: https://github.com/upperstream/ansible-roles/releases/tag/20240819
