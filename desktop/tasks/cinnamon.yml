@@ -1,0 +1,38 @@
+---
+- block: # Need privileged operation
+  - name: "Set up Xorg on {{ ansible_os_family }}"
+    include_tasks: xorg_{{ ansible_os_family }}.yml
+  - name: Ensure Cinnamon is installed
+    vars:
+      cinnamon_package: "{{ [
+        {'os_family': 'FreeBSD', 'package': 'cinnamon'},
+      ] | items2dict(key_name='os_family', value_name='package') }}"
+    package: name="{{ item }}"
+    with_items: "{{ cinnamon_package[ansible_os_family] | default('cinnamon') }}"
+  - block: # FreeBSD specific tasks
+    - name: Ensure proc filesystem is mounted
+      ansible.posix.mount:
+        name: /proc
+        src: proc
+        fstype: procfs
+        state: mounted
+        dump: 0
+        passno: 0
+    - name: Ensure dbus is enabled
+      service: name=dbus enabled=yes
+    - name: Ensure SLiM is installed
+      package: name=slim,slim-themes
+    - name: Ensure SLiM is enabled
+      service: name=slim enabled=yes
+    - name: Ensure .xinitrc is updated
+      lineinfile:
+        create: true
+        line: exec dbus-launch --exit-with-x11 ck-launch-session cinnamon-session
+        path: /home/{{ item }}/.xinitrc
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: '0644'
+      with_items:
+        - "{{ users }}"
+    when: ansible_os_family == 'FreeBSD'
+  become: true

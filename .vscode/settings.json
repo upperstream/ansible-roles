@@ -14,6 +14,7 @@
         "gotd",
         "gotwebd",
         "kewlfft",
+        "linuxmint",
         "pacaur",
         "pacman",
         "pakku",
@@ -22,6 +23,7 @@
         "sdktools",
         "trizen",
         "Upperstream",
+        "vars",
         "virtualbox",
         "vmware",
         "xrdp"

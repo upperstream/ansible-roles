@@ -5,6 +5,7 @@ This task installs the following software for desktop use.
 ## Desktop environment
 
 * Choice of desktop environments
+  * `cinnamon` - Cinnamon
 * [dwm][] with [st][] and [dmenu][]
 
 Set the variable `desktops` to contain desktop environment packages to

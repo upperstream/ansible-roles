@@ -2,11 +2,16 @@
 
 ## [Unreleased][]
 
+* Added
+  * [desktop](desktop/README.md): Add support for installation of
+    [Cinnamon][] desktop on FreeBSD host
 * Changed
   * [desktop](desktop/README.md): [dwm][] was installed using
     distribution package even if another version built from source code
     was installed
 
+[Cinnamon]: https://projects.linuxmint.com/cinnamon/
+    "Linux Mint Projects by linuxmint"
 [dwm]: https://dwm.suckless.org/
 
 ## [20241002][]

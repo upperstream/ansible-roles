@@ -1,10 +1,13 @@
 ---
+- name: Set up Cinnamon
+  include_tasks: cinnamon.yml
+  when: desktops is defined and 'cinnamon' in desktops
 - name: Set up dwm
   include_tasks: dwm.yml
   when: desktops is defined and 'dwm' in desktops
 - block:
   - name: Ensure Desktop Environment is installed
-    package: name={{ desktops | reject('search', 'dwm') | list }}
+    package: name={{ desktops | difference(['cinnamon', 'dwm') | list }}
     when: desktops is defined
   - name: Ensure mail client is installed
     package: name={{ mailers }} state=present

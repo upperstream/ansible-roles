@@ -1,0 +1,16 @@
+---
+- block: # Need privileged operations
+  - name: Ensure Xorg is installed on FreeBSD
+    package: name=xorg-minimal
+  - name: Ensure kld_list is updated on FreeBSD
+    community.general.sysrc: name=kld_list value='i915kms' state=value_present
+  - name: Ensure boot loader is configured for Xorg on FreeBSD
+    lineinfile:
+      path: /boot.loader.conf
+      regex: ^kern\.vty
+      line: kern.vty=vt
+      create: true
+  - name: Ensure user is a member of video and wheel on FreeBSD
+    user: name={{ item }} groups=video,wheel append=true
+    loop: "{{ users }}"
+  become: true
