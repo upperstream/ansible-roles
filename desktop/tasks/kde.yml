@@ -1,0 +1,38 @@
+---
+- block: # Need privileged operation
+  - name: "Set up Xorg on {{ ansible_os_family }}"
+    include_tasks: xorg_{{ ansible_os_family }}.yml
+  - name: Ensure KDE is installed
+    vars:
+      kde_package: "{{ [
+        {'os_family': 'FreeBSD', 'package': 'kde5'},
+      ] | items2dict(key_name='os_family', value_name='package') }}"
+    package: name="{{ item }}"
+    with_items: "{{ kde_package[ansible_os_family] | default('kde') }}"
+  - block: # FreeBSD specific tasks
+    - name: Ensure dbus is enabled
+      service: name=dbus enabled=yes
+    - name: Increase message sizes
+      ansible.posix.sysctl:
+        name: "{{ item.name}}"
+        value: "{{ item.value }}"
+        state: present
+      with_items:
+        - {'name': 'net.local.stream.recvspace', 'value': 65536}
+        - {'name': 'net.local.stream.sendspace', 'value': 65536}
+    - name: Ensure sddm is installed
+      package: name=sddm
+    - name: Ensure sddm is enabled
+      service: name=sddm enabled=yes
+    - name: Ensure .xinitrc is updated
+      lineinfile:
+        create: true
+        line: exec dbus-launch --exit-with-x11 ck-launch-session startplasma-x11
+        path: /home/{{ item }}/.xinitrc
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: '0644'
+      with_items:
+        - "{{ users }}"
+    when: ansible_os_family == 'FreeBSD'
+  become: true

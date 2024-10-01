@@ -5,9 +5,12 @@
 - name: Set up dwm
   include_tasks: dwm.yml
   when: desktops is defined and 'dwm' in desktops
+- name: Set up kde
+  include_tasks: kde.yml
+  when: desktops is defined and 'kde' in desktops
 - block:
   - name: Ensure Desktop Environment is installed
-    package: name={{ desktops | difference(['cinnamon', 'dwm') | list }}
+    package: name={{ desktops | difference(['cinnamon', 'dwm', 'kde']) | list }}
     when: desktops is defined
   - name: Ensure mail client is installed
     package: name={{ mailers }} state=present

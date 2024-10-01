@@ -6,6 +6,7 @@ This task installs the following software for desktop use.
 
 * Choice of desktop environments
   * `cinnamon` - Cinnamon
+  * `kde` - KDE Plasma
 * [dwm][] with [st][] and [dmenu][]
 
 Set the variable `desktops` to contain desktop environment packages to

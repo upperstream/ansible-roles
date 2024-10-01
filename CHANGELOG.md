@@ -4,7 +4,7 @@
 
 * Added
   * [desktop](desktop/README.md): Add support for installation of
-    [Cinnamon][] desktop on FreeBSD host
+    [Cinnamon][] desktop and [KDE Plasma][] desktop on FreeBSD host
 * Changed
   * [desktop](desktop/README.md): [dwm][] was installed using
     distribution package even if another version built from source code
@@ -13,6 +13,7 @@
 [Cinnamon]: https://projects.linuxmint.com/cinnamon/
     "Linux Mint Projects by linuxmint"
 [dwm]: https://dwm.suckless.org/
+[KDE Plasma]: https://kde.org/plasma-desktop/ "KDE Plasma Desktop"
 
 ## [20241002][]
 
