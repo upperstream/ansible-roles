@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][]
+## [20241002][]
 
 * Added
   * [base](base/README.md): Add support for installation of AUR helper
@@ -10,6 +10,8 @@
   * [development](development/README.md):
     * Add support for GitHub CLI installation Arch Linux hosts
     * Add support for [Game of Trees][] installation on OpenBSD host
+    * Add support for [Visual Studio Code][] installation on FreeBSD
+      host
   * [packer](packer/README.md): Add support for Packer installation on
     Arch Linux hosts
   * [remote_access_server](remote_access_server/README.md): Add support
@@ -28,6 +30,7 @@
 [Game of Trees]: https://gameoftrees.org/index.html
 [kewlfft.aur.aur]: https://github.com/kewlfft/ansible-aur
 [Proxmox VE]: https://www.proxmox.com/en/proxmox-virtual-environment/overview
+[Visual Studio Code]: https://code.visualstudio.com/
 
 ## [20240819][]
 
@@ -47,5 +50,5 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
-[Unreleased]: https://github.com/upperstream/ansible-roles/compare/20240819...HEAD
+[20241002]: https://github.com/upperstream/ansible-roles/compare/20240819...20241002
 [20240819]: https://github.com/upperstream/ansible-roles/releases/tag/20240819

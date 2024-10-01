@@ -1,5 +1,5 @@
 ---
-- block:
+- block: # Debian hosts
   - name: Ensure Microsoft PGP key is installed on Debian hosts
     apt_key:
       url: https://packages.microsoft.com/keys/microsoft.asc
@@ -12,7 +12,7 @@
     package: name=code
   when: ansible_os_family == 'Debian' and (development_tools is defined and 'vscode' in development_tools)
   become: true
-- block:
+- block: # Red Hat hosts
   - name: Ensure Microsoft PGP key is installed on Red Hat hosts
     rpm_key: key=https://packages.microsoft.com/keys/microsoft.asc
   - name: Ensure Microsoft yum repository is installed on Red Hat hosts

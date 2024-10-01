@@ -36,6 +36,10 @@
 - name: Optionally install Visual Studio Code
   include_tasks: vscode.yml
   when: ansible_os_family in ['Debian', 'RedHat'] and (development_tools is defined and 'vscode' in development_tools)
+- name: Ensure Visual Studio Code is installed on FreeBSD
+  package: name=vscode
+  when: ansible_os_family == 'FreeBSD' and (development_tools is defined and 'vscode' in development_tools)
+  become: true
 - block:
   - name: Ensure repo dependencies are satisfied
     package:

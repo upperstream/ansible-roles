@@ -12,7 +12,8 @@ This role can install the following tools if any is specified in
 * `java` - OpenJDK
 * `markdown` - Markdown parser
 * `repo` - The [Multiple Git Repository Tool][]
-* `vscode` - [Visual Studio Code][] on Debian hosts and Red Hat hosts
+* `vscode` - [Visual Studio Code][] on FreeBSD, Debian hosts, and Red
+  Hat hosts
 
 Also the following tools are installed:
 
