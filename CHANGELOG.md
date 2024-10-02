@@ -3,6 +3,8 @@
 ## [Unreleased][]
 
 * Added
+  * [base](base/README.md): Add support for arbitrary packages
+    installation
   * [desktop](desktop/README.md): Add support for installation of
     [Cinnamon][] desktop and [KDE Plasma][] desktop on FreeBSD host
 * Changed

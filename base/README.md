@@ -28,6 +28,7 @@ The `base` role configures the basic features of the target host.
   at boot.  On FreeBSD host, this variable is a dictionary of dataset
   to key location pairs.  On Linux host, this variable is a list of
   dataset.
+* `misc_tools` - List of miscellaneous packages to install.
 
 [How do I generate encrypted passwords for the user module]:
   https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-generate-encrypted-passwords-for-the-user-module
