@@ -7,13 +7,30 @@
     package: name=xrdp
     when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
     become: true
+  - name: Ensure xrdp is enabled and started
+    service: name="{{ item }}" state=started enabled=true
+    with_items:
+      - xrdp
+      - xrdp-sesman
+    become: true
+  - name: Ensure startwm.sh is installed if supplied for the target hosts
+    copy:
+      src: "{{ lookup('ansible.builtin.first_found', params) }}"
+      dest: "/home/{{ item }}/startwm.sh"
+      owner: "{{ item }}"
+      group: "{{ item }}"
+      mode: '0755'
+    vars:
+      - params:
+        - files:
+          - "{{ inventory_hostname }}/startwm.sh"
+    become: true
+    with_items: "{{ users }}"
   when: remote_access_servers is defined and 'xrdp' in remote_access_servers
 - block: # Need privileged operations
   - name: Ensure remote access server components are installed
     package: "name={{ remote_access_servers | reject('search', 'xrdp') | list }}"
   - block: # Post-install configuration of xrdp on Red Hat hosts
-    - name: Ensure xrdp service is running on Red Hat hosts
-      systemd_service: enabled=true name=xrdp state=started
     - name: Check whether firewalld is running on Red Hat hosts
       systemd_service: name=firewalld
       register: firewalld_status

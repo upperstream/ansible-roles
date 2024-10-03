@@ -11,6 +11,10 @@
   * [desktop](desktop/README.md): [dwm][] was installed using
     distribution package even if another version built from source code
     was installed
+  * [remote_access_server](remote_access_server/README.md): Copy
+    `startwm.sh` script into every target user's home directory on the
+    target host if the script exists in `files/{{ target_host }}
+    directory
 
 [Cinnamon]: https://projects.linuxmint.com/cinnamon/
     "Linux Mint Projects by linuxmint"
