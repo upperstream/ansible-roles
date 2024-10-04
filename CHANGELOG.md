@@ -15,11 +15,14 @@
     `startwm.sh` script into every target user's home directory on the
     target host if the script exists in `files/{{ target_host }}
     directory
+  * [virtualisation](virtualisation/README.md): Skip compilation of
+    [VirtualBox][] kernel driver on non- Linux hosts
 
 [Cinnamon]: https://projects.linuxmint.com/cinnamon/
     "Linux Mint Projects by linuxmint"
 [dwm]: https://dwm.suckless.org/
 [KDE Plasma]: https://kde.org/plasma-desktop/ "KDE Plasma Desktop"
+[VirtualBox]: https://www.virtualbox.org/ "Oracle VirtualBox"
 
 ## [20241002][]
 

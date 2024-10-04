@@ -63,5 +63,5 @@
     command:
       cmd: /sbin/vboxconfig
       creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vboxdrv.ko"
-    when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
+    when: "ansible_system == 'Linux' and ansible_os_family not in ['Archlinux', 'Artix Linux']"
   become: true
