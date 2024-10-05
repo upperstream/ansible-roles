@@ -1,0 +1,22 @@
+---
+- block: # Need privileged operations
+  - block: # Set up NFS client on FreeBSD
+    - name: Ensure NFS client is enabled on FreeBSD host
+      community.general.sysrc:
+        name: "{{ item.name }}"
+        value: "{{ item.value}}"
+      with_items:
+        - { 'name': 'nfs_client_enable', 'value': 'YES' }
+        - { 'name': 'nfs_client_flags', 'value': '-n 4' }
+        - { 'name': 'nfsuserd_enable', 'value': 'YES' }
+        - { 'name': 'nfsuserd_flags', 'value': "-domain {{ nfsuserd_domain }}" }
+    - name: Ensure NFS client service is running on FreeBSD host
+      service:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      with_items:
+        - nfsclient
+        - nfsuserd
+    when: ansible_os_family == 'FreeBSD'
+  become: true

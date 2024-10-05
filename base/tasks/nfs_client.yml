@@ -1,0 +1,18 @@
+---
+- block: # Need privileged operations
+  - name: Ensure NFS client functionality is set on Linux hosts
+    package: name=nfs-common state=present
+    when: ansible_system == 'Linux'
+  - name: Set up NFS client on FreeBSD hosts
+    include_tasks: nfs_client_on_freebsd.yml
+    when: ansible_os_family == 'FreeBSD'
+  - name: Mount NFS server exports
+    ansible.posix.mount:
+      path: "{{ item.path }}"
+      src: "{{ item.src }}"
+      fstype: "{{ item.fstype }}"
+      opts: "{{ item.opts }}"
+      state: "{{ item.state }}"
+    loop:
+      "{{ mountpoints }}"
+  become: true

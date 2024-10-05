@@ -7,6 +7,8 @@ The `base` role configures the basic features of the target host.
 ## Variables
 
 * `base` - List of basic capabilities of the target host:
+  * `nfs_client` - Set up NFS client functionality and mount NFS server
+    exports (FreeBSD and Linux hosts are supported.)
   * `zfs` - Install ZFS utilities to mount ZFS file systems (FreeBSD
     host and Systemd-enabled Linux host are supported.)
 * `archlinux_pacman_wrapper` - AUR helper to install on Arch Linux

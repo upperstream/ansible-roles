@@ -3,8 +3,9 @@
 ## [Unreleased][]
 
 * Added
-  * [base](base/README.md): Add support for arbitrary packages
-    installation
+  * [base](base/README.md): Add support for:
+    * arbitrary packages installation
+    * configuring NFS client functionality on FreeBSD and Linux hosts
   * [desktop](desktop/README.md): Add support for installation of
     [Cinnamon][] desktop and [KDE Plasma][] desktop on FreeBSD host
 * Changed
