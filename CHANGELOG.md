@@ -11,6 +11,8 @@
   * [desktop](desktop/README.md): [dwm][] was installed using
     distribution package even if another version built from source code
     was installed
+  * [packer](packer/README.md): Use binary package of [Packer][] on
+    FreeBSD host instead of the official package from Packer website
   * [remote_access_server](remote_access_server/README.md): Copy
     `startwm.sh` script into every target user's home directory on the
     target host if the script exists in `files/{{ target_host }}`
@@ -22,6 +24,7 @@
     "Linux Mint Projects by linuxmint"
 [dwm]: https://dwm.suckless.org/
 [KDE Plasma]: https://kde.org/plasma-desktop/ "KDE Plasma Desktop"
+[Packer]: https://www.packer.io/ "Packer by HashiCorp"
 [VirtualBox]: https://www.virtualbox.org/ "Oracle VirtualBox"
 
 ## [20241002][]
