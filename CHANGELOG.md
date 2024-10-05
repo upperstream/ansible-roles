@@ -13,7 +13,7 @@
     was installed
   * [remote_access_server](remote_access_server/README.md): Copy
     `startwm.sh` script into every target user's home directory on the
-    target host if the script exists in `files/{{ target_host }}
+    target host if the script exists in `files/{{ target_host }}`
     directory
   * [virtualisation](virtualisation/README.md): Skip compilation of
     [VirtualBox][] kernel driver on non- Linux hosts
