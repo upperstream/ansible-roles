@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][]
+## [20241108][]
 
 * Added
   * [base](base/README.md): Add support for:
@@ -78,6 +78,6 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
-[Unreleased]: https://github.com/upperstream/ansible-roles/compare/20241002...HEAD
+[20241108]: https://github.com/upperstream/ansible-roles/compare/20241002...20241108
 [20241002]: https://github.com/upperstream/ansible-roles/compare/20240819...20241002
 [20240819]: https://github.com/upperstream/ansible-roles/releases/tag/20240819

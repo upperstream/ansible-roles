@@ -15,7 +15,7 @@
     become: true
   - name: Ensure startwm.sh is installed if supplied for the target hosts
     copy:
-      src: "{{ lookup('ansible.builtin.first_found', params) }}"
+      src: "{{ startwm_sh_file }}"
       dest: "/home/{{ item }}/startwm.sh"
       owner: "{{ item }}"
       group: "{{ item }}"
@@ -24,6 +24,8 @@
       - params:
         - files:
           - "{{ inventory_hostname }}/startwm.sh"
+      - startwm_sh_file: "{{ lookup('first_found', params, errors='ignore') | default('', true) }}"
+    when: startwm_sh_file != ''
     become: true
     with_items: "{{ users }}"
   when: remote_access_servers is defined and 'xrdp' in remote_access_servers
