@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased][]
+
+* Added
+  * Add [cuda](cuda/README.md) role to install CUDA on Debian hosts
+
 ## [20241108][]
 
 * Added
@@ -78,6 +83,7 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
+[Unreleased]: https://github.com/upperstream/ansible-roles/compare/20241108...HEAD
 [20241108]: https://github.com/upperstream/ansible-roles/compare/20241002...20241108
 [20241002]: https://github.com/upperstream/ansible-roles/compare/20240819...20241002
 [20240819]: https://github.com/upperstream/ansible-roles/releases/tag/20240819

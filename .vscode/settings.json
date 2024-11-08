@@ -8,6 +8,8 @@
         "aurman",
         "chrony",
         "cmdline",
+        "contrib",
+        "CUDA",
         "dpkg",
         "firewalld",
         "gnupg",

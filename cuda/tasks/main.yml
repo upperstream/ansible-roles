@@ -1,0 +1,50 @@
+- name: Check for NVIDIA graphics card
+  shell: lspci | grep -E -i "(3d|display|vga)" | grep -i nvidia
+  register: nvidia_installed
+  ignore_errors: true
+
+- name: Fail if no NVIDIA graphics card is found
+  fail:
+    msg: "This role supports only target hosts with NVIDIA graphics cards."
+  when: nvidia_installed.rc != 0
+
+- name: Ensure target host is Debian or its descendants
+  fail:
+    msg: "This role supports only Debian or its descendants."
+  when: ansible_os_family != 'Debian'
+
+- block: # Need privileged operations
+
+  - name: Ensure Linux healers headers are installed
+    package:
+      name: "{{ item }}"
+    with_items:
+      - "linux-headers-{{ ansible_kernel }}"
+      - pve-headers
+    ignore_errors: true
+
+  - name: Ensure "contrib", "non-free", and "non-free-firmware" components are enabled
+    apt_repository:
+      repo: "deb http://deb.debian.org/debian {{ ansible_distribution_release }} contrib non-free non-free-firmware"
+
+  - name: Ensure NVIDIA driver is installed
+    package: name=nvidia-driver
+    register: nvidia_driver_installed
+
+  - name: Ensure target host is rebooted if NVIDIA driver has been newly installed
+    reboot:
+    when: nvidia_driver_installed.changed
+
+  - name: Ensure cuda-keyring is installed
+    apt:
+      deb: "https://developer.download.nvidia.com/compute/cuda/repos/{{ ansible_distribution | lower }}{{ ansible_distribution_major_version }}/{{ ansible_architecture }}/cuda-keyring_1.1-1_all.deb"
+
+  - name: Ensure CUDA SDK is installed
+    package: name=nvidia-cuda-toolkit
+    register: cuda_toolkit_installed
+
+  - name: Ensure the target host is rebooted if CUDA SDK has been newly installed
+    reboot:
+    when: cuda_toolkit_installed.changed
+
+  become: true
