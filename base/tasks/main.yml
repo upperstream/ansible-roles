@@ -35,3 +35,7 @@
 - name: Ensure basic configuration is made on Arch Linux
   include_tasks: archlinux.yml
   when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+- name: Ensure hostname is set
+  hostname: name="{{ base.hostname }}"
+  when: base is defined and base.hostname is defined
+  become: true

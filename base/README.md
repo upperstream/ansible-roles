@@ -7,6 +7,7 @@ The `base` role configures the basic features of the target host.
 ## Variables
 
 * `base` - List of basic capabilities of the target host:
+  * `hostname` - Set the hostname of the target host if defined
   * `nfs_client` - Set up NFS client functionality and mount NFS server
     exports (FreeBSD and Linux hosts are supported.)
   * `zfs` - Install ZFS utilities to mount ZFS file systems (FreeBSD
