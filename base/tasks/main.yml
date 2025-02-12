@@ -31,7 +31,7 @@
   with_items:
    - "{{ misc_tools | list }}"
   when: misc_tools is defined
-  become: true
+  become: "{{ false_for_macos }}"
 - name: Ensure basic configuration is made on Arch Linux
   include_tasks: archlinux.yml
   when: "ansible_os_family in ['Archlinux', 'Artix Linux']"

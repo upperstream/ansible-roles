@@ -1,14 +1,15 @@
 ---
+- name: Ensure Cinnamon is installed
+  vars:
+    cinnamon_package: "{{ [
+      {'os_family': 'FreeBSD', 'package': 'cinnamon'},
+    ] | items2dict(key_name='os_family', value_name='package') }}"
+  package: name="{{ item }}"
+  with_items: "{{ cinnamon_package[ansible_os_family] | default('cinnamon') }}"
+  become: "{{ false_for_macos }}"
 - block: # Need privileged operation
   - name: "Set up Xorg on {{ ansible_os_family }}"
     include_tasks: xorg_{{ ansible_os_family }}.yml
-  - name: Ensure Cinnamon is installed
-    vars:
-      cinnamon_package: "{{ [
-        {'os_family': 'FreeBSD', 'package': 'cinnamon'},
-      ] | items2dict(key_name='os_family', value_name='package') }}"
-    package: name="{{ item }}"
-    with_items: "{{ cinnamon_package[ansible_os_family] | default('cinnamon') }}"
   - block: # FreeBSD specific tasks
     - name: Ensure proc filesystem is mounted
       ansible.posix.mount:

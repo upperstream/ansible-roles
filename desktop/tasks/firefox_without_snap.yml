@@ -21,6 +21,7 @@
   - name: Ensure Firefox is installed
     package:
       name: firefox
+    become: "{{ false_for_macos }}"
   - name: Ensure unattended upgrade of snap version is disabled
     copy:
       content: 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:{{ ansible_lsb.id }}";'

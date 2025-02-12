@@ -18,7 +18,7 @@
   - name: Ensure fonts are installed
     package: name={{ fonts }} state=present
     when: fonts is defined
-  become: true
+  become: "{{ false_for_macos }}"
 - name: Install web browsers
   include_tasks: browser.yml
   when: browsers is defined

@@ -23,4 +23,4 @@
       {'os_family': 'Artix Linux', 'package': 'github-cli'},
     ]| items2dict(key_name='os_family', value_name='package')}}"
   package: "name={{ gh_package[ansible_os_family] | default('gh') }}"
-  become: true
+  become: "{{ false_for_macos }}"

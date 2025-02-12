@@ -6,6 +6,15 @@
   * Add [cuda](cuda/README.md) role to install CUDA on Debian hosts
   * Add [docker_host](docker_host/README.md) role to set up docker host
     on Debian hosts
+  * Add support for executing roles on macOS.  This introduces a
+    variable `false_for_macos`, which should be set to `false` when
+    roles are executed against macOS hosts.  This ensures that package
+    installation is performed by a normal user on macOS, where the
+    `ansible.builtin.package` module relies on [Homebrew][] for package
+    management.
+
+[Homebrew]: https://brew.sh/
+    "Homebrew — The Missing Package Manager for macOS (or Linux)"
 
 ## [20241108][]
 

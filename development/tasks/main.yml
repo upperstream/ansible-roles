@@ -1,5 +1,5 @@
 ---
-- block:
+- block: # Need privileged operations
   - name: Ensure development tools are installed
     package:
       name: "{{ development_tools | default([]) | difference(['gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
@@ -7,7 +7,7 @@
     - name: Ensure essential build tools are installed on Debian host
       package: name=build-essential
       when: ansible_os_family == 'Debian'
-    - block:
+    - block: # development_tools is defined and 'gcm' in development_tools
       - name: Check whether Git Credential Manager is installed
         shell: apt list --installed | grep -q gcm
         ignore_errors: true
@@ -29,7 +29,7 @@
   - name: Optionally install OpenJDK
     package: name=openjdk-17-jdk
     when: "development_tools is defined and 'java' in development_tools"
-  become: true
+  become: "{{ false_for_macos }}"
 - name: Install GitHub CLI
   include_tasks: github_cli.yml
   when: development_tools is defined and 'gh' in development_tools
@@ -40,13 +40,13 @@
   package: name=vscode
   when: ansible_os_family == 'FreeBSD' and (development_tools is defined and 'vscode' in development_tools)
   become: true
-- block:
+- block: # development_tools is defined and 'repo' in development_tools
   - name: Ensure repo dependencies are satisfied
     package:
       name:
         - curl
         - gnupg
-    become: true
+    become: "{{ false_for_macos }}"
   - block:
     - name: Ensure ~/bin directory is created
       file: name=/home/{{ target_user }}/bin state=directory owner={{ target_user }}
@@ -67,7 +67,7 @@
 - name: Install development environment for Android
   include_tasks: android.yml
   when: android_tools is defined
-- block:
+- block: # ansible_os_family == 'OpenBSD' and (development_tools is defined and 'gotd' in development_tools)
   - name: Ensure Game of Trees daemon is installed
     package: name=gotd
   - name: Ensure Game of Trees daemon is configured
@@ -80,7 +80,7 @@
     service: name=gotd enabled=yes
   when: ansible_os_family == 'OpenBSD' and (development_tools is defined and 'gotd' in development_tools)
   become: true
-- block:
+- block: # ansible_os_family == 'OpenBSD' and (development_tools is defined and 'gotwebd' in development_tools)
   - name: Ensure Game of Trees web daemon is installed
     package: name=gotwebd
   - name: Ensure HTTPd is configured for gotwebd

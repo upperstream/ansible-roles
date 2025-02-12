@@ -12,6 +12,12 @@ Some role definitions refer to variables.  You need to supply actual
 values for them using such as `host_vars` or `group_vars` files.  See
 `README.md` file in each role for further information.
 
+The variable `false_for_macos` should be set to `false` when executing
+roles against macOS hosts and `true` for other OS families.  This
+variable controls whether the `ansible.builtin.package` module installs
+packages as a privileged user.  On macOS, it uses [Homebrew](https://brew.sh/)
+for package management, which should be executed by a normal user.
+
 ## Note for Arch Linux and descendants
 
 In order for Arch Linux family to use AUR as well as the official
