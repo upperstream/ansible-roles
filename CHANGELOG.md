@@ -4,6 +4,8 @@
 
 * Added
   * Add [cuda](cuda/README.md) role to install CUDA on Debian hosts
+  * Add [docker_host](docker_host/README.md) role to set up docker host
+    on Debian hosts
 
 ## [20241108][]
 
