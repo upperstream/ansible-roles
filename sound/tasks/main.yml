@@ -1,0 +1,15 @@
+---
+- block: # require privileged operations
+  - name: Ensure audio players are installed
+    package:
+      name: "{{ item }}"
+      state: present
+    with_items: "{{ sound.players}}"
+    when: sound.players is defined
+  - name: Ensure CD ripping software is installed
+    package: name="{{ sound.cd_ripper }}"
+    when: sound.cd_ripper is defined
+  - name: Ensure tag editor software is installed
+    package: name="{{ sound.tag_editor}}"
+    when: sound.tag_editor is defined
+  become: true
