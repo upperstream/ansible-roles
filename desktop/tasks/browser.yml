@@ -1,27 +1,22 @@
 ---
-- name: Install Chromium browser
-  include_tasks: chromium.yml
-  when: "'chromium' in browsers"
-- block: # Need privileged operation
+- block: # browser is defined
+  - name: Install Chromium browser
+    include_tasks: chromium.yml
+    when: "'chromium' in browsers"
+  - name: Install Google Chrome
+    include_tasks: chrome.yml
+    when: "'chrome' in browsers"
   - name: Ensure web browser is installed
-    package: name={{ browsers | difference(['chrome', 'chromium', 'firefox_without_snap']) | list }} state=present
+    package: name={{ item }} state=present
+    with_items:
+      "{{ browsers | difference(['chrome', 'chromium', 'edge', 'firefox_without_snap']) | list }}"
+    become: "{{ false_for_macos }}"
   - name: Install non snap version of Firefox
     include_tasks: firefox_without_snap.yml
     when: "'firefox_without_snap' in browsers"
-  - name: Ensure Chrome is installed on Arch Linux hosts
-    kewlfft.aur.aur: name=google-chrome
-    become: false
-    when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
-  - block: # Install Chrome on Debian hosts
-    - name: Check whether Chrome is installed
-      shell: apt list --installed | grep -q google-chrome-stable
-      register: chrome_install_test
-      ignore_errors: true
-      when: "'chrome' in browsers"
-    - name: Ensure Chrome is installed
-      apt:
-        deb: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        state: present
-      when: chrome_install_test.rc != 0 and "'chrome' in browsers"
-    when: ansible_os_family == 'Debian'
-  become: "{{ false_for_macos }}"
+  - name: Ensure Microsoft Edge is installed on macOS hosts
+    homebrew_cask:
+      name: microsoft-edge
+      sudo_password: "{{ ansible_become_pass }}"
+    when: "'edge' in browsers and ansible_system == 'Darwin'"
+  when: browsers is defined

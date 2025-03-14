@@ -1,0 +1,23 @@
+---
+- block: # 'chrome' in browsers
+  - name: Ensure Chrome is installed on Arch Linux hosts
+    kewlfft.aur.aur: name=google-chrome
+    when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+  - block: # Install Chrome on Debian family hosts with privileged operations
+    - name: Check whether Chrome is installed
+      shell: apt list --installed | grep -q google-chrome-stable
+      register: chrome_install_test
+      ignore_errors: true
+    - name: Ensure Chrome is installed on Debian family hosts
+      apt:
+        deb: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        state: present
+      when: chrome_install_test.rc != 0 and "'chrome' in browsers"
+    when: ansible_os_family == 'Debian'
+    become: true
+  - name: Ensure Chrome is installed on macOS hosts
+    homebrew_cask:
+      name: google-chrome
+      sudo_password: "{{ ansible_become_pass }}"
+    when: ansible_system == 'Darwin'
+  when: "'chrome' in browsers"

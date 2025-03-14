@@ -7,6 +7,8 @@
   * [base](base/README.md) Add tasks for macOS:
     * to bootstrap configuration
     * to install miscellaneous GUI tools
+  * [desktop](desktop/README.md): Add support for installing web
+    browsers on macOS
   * [development](development/README.md): Add support for installing
     tools on macOS:
     * [Android SDK][] command line tools

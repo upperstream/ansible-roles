@@ -28,7 +28,9 @@ install, or specific browsers in the following list:
 
 * `chrome` - [Google Chrome][]
 * `chromium` - [Chromium][] browser
-* `firefox_without_snap` - [Firefox][] without Snap
+* `edge` - [Microsoft Edge][]
+* `firefox` - [Firefox][]
+* `firefox_without_snap` - Firefox without Snap
 
 ## Font
 
@@ -41,4 +43,5 @@ Set the variable `fonts` to contain package names of fonts to install.
 [dwm]: https://dwm.suckless.org/
 [Firefox]: https://www.mozilla.org/firefox/
 [Google Chrome]: https://www.google.com/chrome/
+[Microsoft Edge]: https://www.microsoft.com/edge/
 [st]: https://st.suckless.org/

@@ -1,29 +1,37 @@
 ---
-- block:
-  - name: Ensure PPA repo is preferred over snap
-    copy:
-      content: |
-        Package: *
-        Pin: release o=LP-PPA-mozillateam
-        Pin-Priority: 1001
-        
-        Package: firefox
-        Pin: version 1:1snap1-0ubuntu2
-        Pin-Priority: -1
-      dest: /etc/apt/preferences.d/mozilla-firefox
-  - name: Ensure Firefox PPA repo is added
-    apt_repository:
-      repo: ppa:mozillateam/ppa
-  - name: Ensure snap version of Firefox is uninstalled
-    community.general.snap:
-      name: firefox
-      state: absent
-  - name: Ensure Firefox is installed
-    package:
-      name: firefox
-    become: "{{ false_for_macos }}"
-  - name: Ensure unattended upgrade of snap version is disabled
-    copy:
-      content: 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:{{ ansible_lsb.id }}";'
-      dest: /etc/apt/apt.conf.d/51unattended-upgrades-firefox
-  become: true
+- block: # firefox_without_snap
+  - block: # Install Firefox without snap on Debian family with privileged operations
+    - name: Ensure PPA repo is preferred over snap on Debian family hosts
+      copy:
+        content: |
+          Package: *
+          Pin: release o=LP-PPA-mozillateam
+          Pin-Priority: 1001
+          
+          Package: firefox
+          Pin: version 1:1snap1-0ubuntu2
+          Pin-Priority: -1
+        dest: /etc/apt/preferences.d/mozilla-firefox
+    - name: Ensure Firefox PPA repo is added on Debian family hosts
+      apt_repository:
+        repo: ppa:mozillateam/ppa
+    - name: Ensure snap version of Firefox is uninstalled on Debian family hosts
+      community.general.snap:
+        name: firefox
+        state: absent
+    - name: Ensure Firefox is installed on Debian family hosts
+      package:
+        name: firefox
+      become: "{{ false_for_macos }}"
+    - name: Ensure unattended upgrade of snap version is disabled on Debian family hosts
+      copy:
+        content: 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:{{ ansible_lsb.id }}";'
+        dest: /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+    when: ansible_os_family == 'Debian'
+    become: true
+  - name: Ensure Firefox is installed on macOS hosts
+    homebrew_cask:
+      name: firefox@esr
+      sudo_password: "{{ ansible_become_pass }}"
+    when: browsers is defined and ansible_system == 'Darwin'
+  when: "'firefox_without_snap' in browsers"
