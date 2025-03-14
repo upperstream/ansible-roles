@@ -28,3 +28,12 @@
     package: name=code
   when: ansible_os_family == 'RedHat' and (development_tools is defined and 'vscode' in development_tools)
   become: true
+- name: Ensure Visual Studio Code is installed on FreeBSD
+  package: name=vscode
+  when: ansible_os_family == 'FreeBSD' and (development_tools is defined and 'vscode' in development_tools)
+  become: true
+- name: Ensure Visual Studio Code is installed on macOS
+  homebrew_cask:
+    name: visual-studio-code
+    sudo_password: "{{ ansible_become_pass }}"
+  when: ansible_os_family == 'Darwin' and (development_tools is defined and 'vscode' in development_tools)

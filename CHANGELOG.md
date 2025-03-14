@@ -5,6 +5,10 @@
 * Added
   * Add `sound` role for configuring audio playback features
   * [base](base/README.md) Add tasks to bootstrap macOS configuration
+  * [development](development/README.md): Add support for installing
+    [Visual Studio Code][] on macOS
+
+[Visual Studio Code]: https://code.visualstudio.com/
 
 ## [20250212][]
 
@@ -82,7 +86,6 @@
 [Game of Trees]: https://gameoftrees.org/index.html
 [kewlfft.aur.aur]: https://github.com/kewlfft/ansible-aur
 [Proxmox VE]: https://www.proxmox.com/en/proxmox-virtual-environment/overview
-[Visual Studio Code]: https://code.visualstudio.com/
 
 ## [20240819][]
 
