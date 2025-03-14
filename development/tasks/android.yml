@@ -1,25 +1,32 @@
 ---
 - block:
   - name: Android SDK directory
+    vars:
+      home_root: "{{ [
+        {'os': 'Linux', 'dir': '/home'},
+        {'os': 'Darwin', 'dir': '/Users'}
+        ] | items2dict(key_name='os', value_name='dir') }}"
     set_fact:
-      android_sdk_dir: "/home/{{ target_user }}/android-sdk"
-  - name: Define default values for variables
-    set_fact:
-      default_android_sdk_cmdline_tools_version: "10406996_latest"
-      default_android_sdk_cmdline_tools_checksum: 8919e8752979db73d8321e9babe2caedcc393750817c1a5f56c128ec442fb540
+      android_sdk_dir: "{{ home_root[ansible_system] }}/{{ target_user }}/android-sdk"
   - name: Android SDK command line tools version
+    vars:
+      android_sdk_os: "{{ [
+        {'os': 'Linux', 'dir': 'linux'},
+        {'os': 'Darwin', 'dir': 'mac'}
+        ] | items2dict(key_name='os', value_name='dir') }}"
     set_fact:
-      cmdline_tools_version: "{{ (android_sdk_cmdline_tools_version | default(default_android_sdk_cmdline_tools_version) | split('_'))[0] }}"
-      cmdline_tools_archive_name: "commandlinetools-linux-{{ android_sdk_cmdline_tools_version | default(default_android_sdk_cmdline_tools_version) }}.zip"
+      cmdline_tools_version: "{{ (android_sdk_cmdline_tools_version | split('_'))[0] }}"
+      cmdline_tools_archive_name: "commandlinetools-{{ android_sdk_os[ansible_system] }}-{{ android_sdk_cmdline_tools_version }}.zip"
   - name: Android SDK command line tools directory
     set_fact:
       cmdline_tools_dir: "{{ android_sdk_dir }}/cmdline-tools/{{ cmdline_tools_version }}"
   - name: Determine checksum for Android SDK command line tools
     set_fact:
-      checksum_to_test: "{{ android_sdk_cmdline_tools_checksum | default(default_android_sdk_cmdline_tools_checksum) }}"
+      checksum_to_test: "{{ android_sdk_cmdline_tools_checksum }}"
   - name: Ensure unzip is installed
     package: name=unzip
     become: true
+    when: ansible_os_family != 'Darwin'
   - name: Check whether Android SDK command line tools has been downloaded to the Ansible Controller
     stat: name=/tmp/{{ cmdline_tools_archive_name }} checksum_algorithm=sha256
     register: sdk_tools_downloaded
@@ -109,8 +116,11 @@
     become_user: "{{ target_user }}"
   when: "'aosp' in android_tools"
 - block:
+  # Install Android Studio
   - block:
+    # Debian family
     - block:
+      # Ubuntu
       - name: Ensure Android Studio PPA repository is enabled on Ubuntu
         apt_repository: repo=ppa:maarten-fonville/android-studio
       - name: Ensure Android Studio is installed on Ubuntu
@@ -124,4 +134,9 @@
           - "https://developer.android.com/studio"
       when: ansible_distribution != 'Ubuntu'
     when: ansible_os_family == 'Debian'
+  - name: Ensure Android Studio is installed on macOS
+    homebrew_cask:
+      name: android-studio
+      sudo_password: "{{ ansible_become_pass }}"
+    when: ansible_system == 'Darwin'
   when: "'android-studio' in android_tools"

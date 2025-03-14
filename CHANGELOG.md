@@ -6,11 +6,16 @@
   * Add `sound` role for configuring audio playback features
   * [base](base/README.md) Add tasks to bootstrap macOS configuration
   * [development](development/README.md): Add support for installing
-    [Visual Studio Code][] on macOS
-  * development: Add OpenJDK installation support for macOS
+    tools on macOS:
+    * [Android SDK][] command line tools
+    * [Android Studio][]
+    * OpenJDK
+    * [Visual Studio Code][]
 * Changed
   * development: Refactory for [Game of Trees][] configuration
 
+[Android SDK]: https://developer.android.com/tools
+[Android Studio]: https://developer.android.com/studio
 [Game of Trees]: https://gameoftrees.org/index.html
 [Visual Studio Code]: https://code.visualstudio.com/
 

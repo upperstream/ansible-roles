@@ -47,17 +47,22 @@ for others, specifies the package name to install.
 If a list `android_tools` is defined, this role also installs Android
 develop environment depending on its elements:
 
-* `android-studio` - Android Studio
-* `aosp` - AOSP source code and tools
-* `cuttlefish` - Android Cuttlefish
-* `platform-tools` - Android SDK platform tools
+* `android-studio` - [Android Studio][]
+* `aosp` - [AOSP][] source code and tools
+* `cuttlefish` - [Android Cuttlefish][]
+* `platform-tools` - [Android SDK][] platform tools
 * `sdktools` - Android SDK command line tools
 
 Tools are installed in `target_user`'s home directory.
 
+[Android Cuttlefish]: https://source.android.com/docs/devices/cuttlefish
+[Android SDK]: https://developer.android.com/tools
+[Android Studio]: https://developer.android.com/studio
+[AOSP]: https://source.android.com/
+
 ### Android Studio
 
-Unattended installation is supported on Ubuntu only.
+Unattended installation is supported on Ubuntu and macOS only.
 
 ### AOSP
 

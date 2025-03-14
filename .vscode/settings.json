@@ -9,6 +9,7 @@
         "buildx",
         "chrony",
         "cmdline",
+        "commandlinetools",
         "containerd",
         "contrib",
         "CUDA",
