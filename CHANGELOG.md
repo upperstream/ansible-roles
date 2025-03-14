@@ -4,7 +4,9 @@
 
 * Added
   * Add `sound` role for configuring audio playback features
-  * [base](base/README.md) Add tasks to bootstrap macOS configuration
+  * [base](base/README.md) Add tasks for macOS:
+    * to bootstrap configuration
+    * to install miscellaneous GUI tools
   * [development](development/README.md): Add support for installing
     tools on macOS:
     * [Android SDK][] command line tools

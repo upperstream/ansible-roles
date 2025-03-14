@@ -32,6 +32,8 @@ The `base` role configures the basic features of the target host.
   to key location pairs.  On Linux host, this variable is a list of
   dataset.
 * `misc_tools` - List of miscellaneous packages to install.
+* `misc_gui_tools` - List of miscellaneous GUI packages to install with
+  `brew install --cask`, for macOS hosts only.
 * `shell_profile` - See next section.
 
 ## Bootstrap for macOS hosts

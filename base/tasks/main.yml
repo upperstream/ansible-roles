@@ -35,6 +35,14 @@
    - "{{ misc_tools | list }}"
   when: misc_tools is defined
   become: "{{ false_for_macos }}"
+- name: Set up miscellaneous GUI tools on macOS
+  homebrew_cask:
+    name: "{{ item }}"
+    sudo_password: "{{ ansible_become_pass }}"
+  with_items:
+    - "{{ misc_gui_tools | list }}"
+  when: misc_gui_tools is defined and ansible_system == 'Darwin'
+  become: "{{ false_for_macos }}"
 - name: Ensure basic configuration is made on Arch Linux
   include_tasks: archlinux.yml
   when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
