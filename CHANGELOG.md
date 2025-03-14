@@ -7,6 +7,7 @@
   * [base](base/README.md) Add tasks to bootstrap macOS configuration
   * [development](development/README.md): Add support for installing
     [Visual Studio Code][] on macOS
+  * development: Add OpenJDK installation support for macOS
 * Changed
   * development: Refactory for [Game of Trees][] configuration
 

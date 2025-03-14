@@ -27,8 +27,13 @@
       when: development_tools is defined and 'gcm' in development_tools
     when: ansible_os_family == "Debian"
   - name: Optionally install OpenJDK
-    package: name=openjdk-17-jdk
-    when: "development_tools is defined and 'java' in development_tools"
+    package: name="{{ jdk }}"
+    when: development_tools is defined and 'java' in development_tools and ansible_system != "Darwin"
+  - name: Optionally install OpenJDK (Eclipse Temurin) on macOS
+    homebrew_cask:
+      name: "{{ jdk | default('temurin') }}"
+      sudo_password: "{{ ansible_become_pass }}"
+    when: development_tools is defined and 'java' in development_tools and ansible_system == "Darwin"
   become: "{{ false_for_macos }}"
 - name: Install GitHub CLI
   include_tasks: github_cli.yml

@@ -37,6 +37,11 @@ for `gotd`) and (`files/{{ ansible_hostname }}/gotwebd.conf` for
 `gotwebd`).  You may also need HTTPd configuration file
 (`files/{{ ansible_hostname }}/gotwebd_httpd.conf`) when you set up `gotwebd`.
 
+## OpenJDK
+
+The variable `jdk`, defaults to `temurin` for macOS or `openjdk-17-jdk`
+for others, specifies the package name to install.
+
 ## Android development environment
 
 If a list `android_tools` is defined, this role also installs Android
