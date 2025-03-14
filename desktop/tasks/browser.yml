@@ -9,11 +9,11 @@
   - name: Ensure web browser is installed
     package: name={{ item }} state=present
     with_items:
-      "{{ browsers | difference(['chrome', 'chromium', 'edge', 'firefox_without_snap']) | list }}"
+      "{{ browsers | difference(['chrome', 'chromium', 'edge', 'firefox']) | list }}"
     become: "{{ false_for_macos }}"
   - name: Install non snap version of Firefox
-    include_tasks: firefox_without_snap.yml
-    when: "'firefox_without_snap' in browsers"
+    include_tasks: firefox.yml
+    when: "'firefox' in browsers"
   - name: Ensure Microsoft Edge is installed on macOS hosts
     homebrew_cask:
       name: microsoft-edge

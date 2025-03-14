@@ -17,10 +17,14 @@
     * [repo][]
     * [Visual Studio Code][]
 * Changed
+  * desktop: Change variable name for [Firefox][] without Snap from
+    `firefox_without_snap` to `firefox`.  This implies that the role
+    prefers non- Snap version on Firefox over Snap version.
   * development: Refactory for [Game of Trees][] configuration
 
 [Android SDK]: https://developer.android.com/tools
 [Android Studio]: https://developer.android.com/studio
+[Firefox]: https://www.mozilla.org/firefox/
 [Game of Trees]: https://gameoftrees.org/index.html
 [repo]: https://gerrit.googlesource.com/git-repo/
 [Visual Studio Code]: https://code.visualstudio.com/

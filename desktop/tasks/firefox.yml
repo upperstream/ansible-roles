@@ -1,5 +1,5 @@
 ---
-- block: # firefox_without_snap
+- block: # firefox
   - block: # Install Firefox without snap on Debian family with privileged operations
     - name: Ensure PPA repo is preferred over snap on Debian family hosts
       copy:
@@ -34,4 +34,4 @@
       name: firefox@esr
       sudo_password: "{{ ansible_become_pass }}"
     when: browsers is defined and ansible_system == 'Darwin'
-  when: "'firefox_without_snap' in browsers"
+  when: "'firefox' in browsers"

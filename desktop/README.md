@@ -30,7 +30,7 @@ install, or specific browsers in the following list:
 * `chromium` - [Chromium][] browser
 * `edge` - [Microsoft Edge][]
 * `firefox` - [Firefox][]
-* `firefox_without_snap` - Firefox without Snap
+* `firefox` - Firefox without Snap
 
 ## Font
 
