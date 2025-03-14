@@ -1,9 +1,10 @@
 ---
 - block: # Need privileged operations
   - name: Ensure development tools are installed
-    package:
-      name: "{{ development_tools | default([]) | difference(['gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
-  - block:
+    package: name="{{ item }}"
+    with_items:
+      - "{{ development_tools | default([]) | difference(['gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
+  - block: # Debian family
     - name: Ensure essential build tools are installed on Debian host
       package: name=build-essential
       when: ansible_os_family == 'Debian'
@@ -41,29 +42,8 @@
 - name: Optionally install Visual Studio Code
   include_tasks: vscode.yml
   when: development_tools is defined and 'vscode' in development_tools
-- block: # development_tools is defined and 'repo' in development_tools
-  - name: Ensure repo dependencies are satisfied
-    package:
-      name:
-        - curl
-        - gnupg
-    become: "{{ false_for_macos }}"
-  - block:
-    - name: Ensure ~/bin directory is created
-      file: name=/home/{{ target_user }}/bin state=directory owner={{ target_user }}
-    - name: Optionally install repo
-      shell: |
-        id
-        export REPO=$(mktemp /tmp/repo.XXXXXXXXX)
-        curl -o ${REPO} https://storage.googleapis.com/git-repo-downloads/repo
-        gpg --recv-keys 8BB9AD793E8E6153AF0F9A4416530D5E920F5C65
-        curl -s https://storage.googleapis.com/git-repo-downloads/repo.asc | gpg --verify - ${REPO} && install -m 755 ${REPO} /home/{{ target_user }}/bin/repo && rm -rf ${REPO}
-        chown {{ target_user }} /home/{{ target_user }}/bin/repo
-      args:
-        creates: "/home/{{ target_user }}/bin/repo"
-      register: repo_installed
-      notify: repo_post_installation_message
-    become: true
+- name: Optionally install repo
+  include_tasks: repo.yml
   when: development_tools is defined and 'repo' in development_tools
 - name: Install development environment for Android
   include_tasks: android.yml

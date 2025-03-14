@@ -10,6 +10,7 @@
     * [Android SDK][] command line tools
     * [Android Studio][]
     * OpenJDK
+    * [repo][]
     * [Visual Studio Code][]
 * Changed
   * development: Refactory for [Game of Trees][] configuration
@@ -17,6 +18,7 @@
 [Android SDK]: https://developer.android.com/tools
 [Android Studio]: https://developer.android.com/studio
 [Game of Trees]: https://gameoftrees.org/index.html
+[repo]: https://gerrit.googlesource.com/git-repo/
 [Visual Studio Code]: https://code.visualstudio.com/
 
 ## [20250212][]

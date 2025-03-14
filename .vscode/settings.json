@@ -23,6 +23,7 @@
         "kewlfft",
         "lineinfile",
         "linuxmint",
+        "mktemp",
         "mountpoints",
         "nfsclient",
         "nfsuserd",
