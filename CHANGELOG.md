@@ -3,7 +3,8 @@
 ## [Unreleased][]
 
 * Added
-  * Add sound role for configuring audio playback features
+  * Add `sound` role for configuring audio playback features
+  * [base](base/README.md) Add tasks to bootstrap macOS configuration
 
 ## [20250212][]
 

@@ -1,4 +1,7 @@
 ---
+- name: Bootstrap for macOS target host
+  include_tasks: macos.yml
+  when: ansible_system == 'Darwin'
 - block:
   - name: Ensure groups exist on the target host
     group:

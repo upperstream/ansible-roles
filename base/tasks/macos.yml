@@ -1,0 +1,31 @@
+---
+- block: # macOS hosts
+
+    - name: --ask-become-pass
+      pause:
+          prompt: "BECOME password:"
+          echo: false
+      register: password
+    - name: set become password
+      set_fact:
+          ansible_become_pass: "{{ password.user_input }}"
+
+    - name: Check if Homebrew is installed
+      stat:
+          path: "{{ homebrew_location[ansible_architecture] }}"
+      register: homebrew_installed
+    - name: Ensure Homebrew is installed
+      shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      args:
+          creates: homebrew_location[ansible_architecture]
+      when: not homebrew_installed.stat.exists
+    - name: Add Homebrew to PATH
+      lineinfile:
+          path: /Users/{{ target_user }}/{{ shell_profile }}
+          line: 'eval "$({{ homebrew_location[ansible_architecture] }} shellenv)"'
+          insertafter: '^# Ansible managed: Do not edit this line'
+          create: yes
+    - name: Ensure Homebrew is in the current shell environment
+      shell: eval "$("{{ homebrew_location[ansible_architecture] }}" shellenv)"
+
+  when: ansible_system == 'Darwin'

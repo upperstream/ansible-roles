@@ -32,6 +32,27 @@ The `base` role configures the basic features of the target host.
   to key location pairs.  On Linux host, this variable is a list of
   dataset.
 * `misc_tools` - List of miscellaneous packages to install.
+* `shell_profile` - See next section.
 
+## Bootstrap for macOS hosts
+
+* When `base` role is assigned to macOS hosts, [macos](tasks/macos.yml)
+  tasks will be automatically executed.  This ensures that:
+
+  * [Homebrew][] is installed on the target host.
+  * Update the file that a variable `shell_profile` points to so that
+    PATH includes the location of Homebrew commands.
+  * Interactively ask the operator for BECOME password.  This will
+    define [`ansible_become_password`][] variable and set it to the
+    user provided password, which can be used as the `sudo_password`
+    for [`community.general.homebrew_cask`][] module.
+
+[`ansible_become_password`]: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_privilege_escalation.html#become-connection-variables
+    "Understanding privilege escalation: become"
+[`community.general.homebrew_cask`]: https://docs.ansible.com/ansible/latest/collections/community/general/homebrew_cask_module.html
+    "community.general.homebrew_cask module &ndash; Install and uninstall homebrew casks"
 [How do I generate encrypted passwords for the user module]:
   https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-generate-encrypted-passwords-for-the-user-module
+    "How do I generate encrypted passwords for the user module?"
+[Homebrew]: https://brew.sh/
+    "Homebrew &mdash; The Missing Package Manager for macOS (or Linux)"
