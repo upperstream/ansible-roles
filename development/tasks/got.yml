@@ -1,0 +1,37 @@
+---
+- block: # Install Game of Tree daemon with privileged operations
+  - name: Ensure Game of Trees daemon is installed
+    package: name=gotd
+  - name: Ensure Game of Trees daemon is configured
+    blockinfile:
+      path: /etc/gotd.conf
+      create: true
+      block: "{{ lookup('file', 'files/{{ ansible_hostname }}/gotd.conf', errors='ignore') }}"
+    notify: restart gotd
+  - name: Ensure Game Of Trees daemon is enabled
+    service: name=gotd enabled=yes
+  when: ansible_os_family == 'OpenBSD' and (development_tools is defined and 'gotd' in development_tools)
+  become: true
+
+- block: # Game of Trees web daemon with privileged operations
+  - name: Ensure Game of Trees web daemon is installed
+    package: name=gotwebd
+  - name: Ensure HTTPd is configured for gotwebd
+    blockinfile:
+      path: /etc/httpd.conf
+      create: true
+      block: "{{ lookup('file', 'files/{{ ansible_hostname }}/gotwebd_httpd.conf', errors='ignore') }}"
+    notify: restart httpd
+  - name: Ensure HTTPd and Game Of Trees web daemon are enabled
+    service: name="{{ item }}" enabled=yes
+    with_items:
+      - httpd
+      - gotwebd
+  - name: Ensure Game of Trees web daemon is configured
+    blockinfile:
+      path: /etc/gotwebd.conf
+      create: true
+      block: "{{ lookup('file', 'files/{{ ansible_hostname }}/gotwebd.conf', errors='ignore') }}"
+    notify: restart gotwebd
+  when: ansible_os_family == 'OpenBSD' and (development_tools is defined and 'gotwebd' in development_tools)
+  become: true

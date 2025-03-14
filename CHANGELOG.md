@@ -7,7 +7,10 @@
   * [base](base/README.md) Add tasks to bootstrap macOS configuration
   * [development](development/README.md): Add support for installing
     [Visual Studio Code][] on macOS
+* Changed
+  * development: Refactory for [Game of Trees][] configuration
 
+[Game of Trees]: https://gameoftrees.org/index.html
 [Visual Studio Code]: https://code.visualstudio.com/
 
 ## [20250212][]
@@ -83,7 +86,6 @@
   * [desktop](desktop/README.md): Use [kewlfft.aur.aur][] Ansible
     module to install tools on Arch Linux hosts
 
-[Game of Trees]: https://gameoftrees.org/index.html
 [kewlfft.aur.aur]: https://github.com/kewlfft/ansible-aur
 [Proxmox VE]: https://www.proxmox.com/en/proxmox-virtual-environment/overview
 
