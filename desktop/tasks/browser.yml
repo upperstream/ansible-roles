@@ -24,4 +24,4 @@
         state: present
       when: chrome_install_test.rc != 0 and "'chrome' in browsers"
     when: ansible_os_family == 'Debian'
-  become: true
+  become: "{{ false_for_macos }}"
