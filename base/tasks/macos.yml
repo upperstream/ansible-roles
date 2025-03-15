@@ -10,6 +10,11 @@
       set_fact:
           ansible_become_pass: "{{ password.user_input }}"
 
+    - name: Determine Homebrew location
+      set_fact:
+          homebrew_location:
+              arm64: /opt/homebrew/bin/brew
+              x86_64: /usr/local/bin/brew
     - name: Check if Homebrew is installed
       stat:
           path: "{{ homebrew_location[ansible_architecture] }}"
