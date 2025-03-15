@@ -5,3 +5,5 @@
   loop_control:
     loop_var: virtualisation
 
+- name: Install Vagrant plugins
+  include_tasks: vagrant_plugins.yml

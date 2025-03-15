@@ -1,6 +1,6 @@
 ---
-- block:
-  - block:
+- block: # Install VirtualBox on non- macOS hosts with privileged operations
+  - block: # Debian family
     - name: Ensure VirtualBox dependencies are installed
       package: name=openssl state=present
     - name: Ensure Oracle's official GPG key is installed
@@ -10,7 +10,7 @@
         fi
       args:
         creates: /usr/share/keyrings/oracle-virtualbox-2016.gpg
-    - block:
+    - block: # Devuan
       - name: Get Debian version
         shell: cat /etc/debian_version | sed 's/^\([0-9][0-9]*\)\..*$/\1/'
         register: debian_version
@@ -39,7 +39,7 @@
         filename: virtualbox
       when: ansible_distribution != 'Devuan'
     when: ansible_os_family == 'Debian'
-  - block:
+  - block: # Red Had family
     - name: Ensure kernel headers are installed on Red Hat hosts
       package: name="kernel-devel-{{ ansible_kernel }}"
     - name: Ensure Oracle GPG key is installed on Red Hat hosts
@@ -59,9 +59,21 @@
         {'os_family': 'Artix Linux', 'package': 'virtualbox'},
         {'os_family': 'FreeBSD', 'package': 'virtualbox-ose'}
       ]| items2dict(key_name='os_family', value_name='package')}}"
+    register: virtualbox_install_test
   - name: Ensure VirtualBox kernel modules are compiled on non- Arch Linux hosts
     command:
       cmd: /sbin/vboxconfig
       creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vboxdrv.ko"
     when: "ansible_system == 'Linux' and ansible_os_family not in ['Archlinux', 'Artix Linux']"
+  when: ansible_system != 'Darwin'
   become: true
+- name: Ensure VirtualBox is installed on macOS hosts
+  homebrew_cask:
+    name: virtualbox
+    sudo_password: "{{ ansible_become_pass }}"
+  register: virtualbox_install_test
+  when: ansible_system == 'Darwin'
+- name: Test if VirtualBox is installed
+  set_fact:
+    virtualbox_installed: true
+  changed_when: virtualbox_install_test.failed == false

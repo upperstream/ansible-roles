@@ -1,0 +1,28 @@
+---
+- name: Install Vagrant Parallels plugin
+  command: vagrant plugin install vagrant-parallels
+  when: vagrant_installed is defined and vagrant_installed == true and parallels_installed is defined and parallels_installed == true
+
+- name: Install Vagrant Libvirt plugin
+  package: name=vagrant-libvirt
+  become: true
+  when: vagrant_installed is defined and vagrant_installed == true and kvm_installed is defined and kvm_installed == true
+
+- name: Install Vagrant VMware plugin
+  block:
+    - name: Ensure Vagrant VMware plugin is installed on non-macOS hosts
+      package: name=vagrant-vmware-utility
+      become: true
+      when: ansible_system != 'Darwin'
+    - block: # macOS hosts
+      - name: Ensure Rosetta2 is installed on macOS hosts
+        command: /usr/sbin/softwareupdate --install-rosetta --agree-to-license
+        become: true
+      - name: Ensure Vagrant VMware plugin is installed on macOS hosts
+        homebrew_cask:
+          name: vagrant-vmware-utility
+          sudo_password: "{{ ansible_become_pass }}"
+      when: ansible_system == 'Darwin'
+    - name: Ensure Vagrant VMware plugin is installed
+      command: vagrant plugin install vagrant-vmware-desktop
+  when: vagrant_installed is defined and vagrant_installed == true and vmware_installed is defined and vmware_installed == true

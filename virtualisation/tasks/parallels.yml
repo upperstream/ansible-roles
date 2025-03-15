@@ -1,0 +1,15 @@
+---
+- name: Ensure Parallels is being installed on macOS hosts
+  fail:
+    msg: "Parallels installation is supported on macOS hosts only"
+  when: ansible_system != 'Darwin'
+- name: Ensure Parallels is installed on macOS hosts
+  homebrew_cask:
+    name: parallels
+    sudo_password: "{{ ansible_become_pass }}"
+  register: parallels_install_test
+  when: ansible_system == 'Darwin'
+- name: Test if Parallels is installed
+  set_fact:
+    parallels_installed: true
+  changed_when: parallels_install_test.failed == false

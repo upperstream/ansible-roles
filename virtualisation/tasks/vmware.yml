@@ -1,14 +1,19 @@
 ---
-- block: # Install VMware on Arh Linux hosts
-  - name: Ensure VMware dependencies are installed on Arch Linux hosts
-    package: name=linux-headers
-  - name: Ensure VMware Workstation is installed on Arch Linux hosts with Systemd
-    kewlfft.aur.aur: name=vmware-workstation
-    when: ansible_service_mgr == 'Systemd'
-  - name: Ensure VMware Workstation is installed on Arch Linux hosts without Systemd
-    kewlfft.aur.aur: name="vmware-workstation-{{ ansible_service_mgr }}"
-    when: ansible_service_mgr != 'Systemd'
-  - block: # Need privileged operations
+- block: # Install VMware on Linux hosts with privileged operations
+  - name: Ensure VMware is installed
+    package: name=vmware-workstation state=present
+    register: vmware_install_test
+  - name: Ensure VMware modules are loaded
+    command: modprobe -a vmw_vmci vmmon
+  - block: # Install VMware on Arch Linux hosts
+    - name: Ensure VMware dependencies are installed on Arch Linux hosts
+      package: name=linux-headers
+    - name: Ensure VMware Workstation is installed on Arch Linux hosts with Systemd
+      kewlfft.aur.aur: name=vmware-workstation
+      when: ansible_service_mgr == 'Systemd'
+    - name: Ensure VMware Workstation is installed on Arch Linux hosts without Systemd
+      kewlfft.aur.aur: name="vmware-workstation-{{ ansible_service_mgr }}"
+      when: ansible_service_mgr != 'Systemd'
     - name: Ensure VMware Network Configuration service is started on Arch Linux hosts
       service: name=vmware-networks-configuration state=started
     - name: Ensure VMware services are started on Arch Linux hosts
@@ -18,20 +23,18 @@
         - vmware-usbarbitrator
     - name: Ensure VMware modules are loaded on Arch Linux hosts
       command: modprobe -a vmw_vmci vmmon
-    become: true
-  when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
-- block: # Install VMware on non- Arch Linux hosts
-  - name: Create file pattern for VMware installer
-    set_fact:
-      pattern: "{{ role_path }}/dist_files/VMware-Workstation-*.bundle"
-  - name: Determine VMware installer name
-    set_fact:
-      vmware_installer: "{{ pattern | fileglob | community.general.version_sort | last }}"
-    delegate_to: localhost
-  - name: Ensure Copy VMware installer is copied to remote
-    copy: src="{{ vmware_installer }}" dest=/tmp/
-    register: remote_installer
-  - block: # Need privileged operation
+    when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+  - block: # Install VMware on non- Arch Linux hosts
+    - name: Create file pattern for VMware installer
+      set_fact:
+        pattern: "{{ role_path }}/dist_files/VMware-Workstation-*.bundle"
+    - name: Determine VMware installer name
+      set_fact:
+        vmware_installer: "{{ pattern | fileglob | community.general.version_sort | last }}"
+      delegate_to: localhost
+    - name: Ensure Copy VMware installer is copied to remote
+      copy: src="{{ vmware_installer }}" dest=/tmp/
+      register: remote_installer
     - name: Ensure VMware Workstation is installed
       shell: sh {{ remote_installer.dest }}
       register: vmware_result
@@ -41,25 +44,35 @@
       package: name=build-essential state=present
     - name: Ensure kernel headers are installed
       package: name=linux-headers-{{ ansible_kernel }} state=present
-    become: true
-  - name: Gather stats of VMware modules
-    stat: name="{{ module }}"
-    register: module_stat
-    loop:
-      - "/usr/lib/modules/{{ ansible_kernel }}/misc/vmmon.ko"
-      - "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
-    loop_control:
-      loop_var: module
-  - name: Gather existence fact of VMware modules
-    set_fact:
-      module_existence: "{{ (module_existence | default([])) + [module.stat.exists] }}"
-    loop: "{{ module_stat.results }}"
-    loop_control:
-      loop_var: module
-  - name: Ensure VMware modules are installed
-    command:
-      cmd: vmware-modconfig --console --install-all
-      creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
-    when: vmware_result is changed or false in module_existence
-    become: true
-  when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
+    - name: Gather stats of VMware modules
+      stat: name="{{ module }}"
+      register: module_stat
+      loop:
+        - "/usr/lib/modules/{{ ansible_kernel }}/misc/vmmon.ko"
+        - "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
+      loop_control:
+        loop_var: module
+    - name: Gather existence fact of VMware modules
+      set_fact:
+        module_existence: "{{ (module_existence | default([])) + [module.stat.exists] }}"
+      loop: "{{ module_stat.results }}"
+      loop_control:
+        loop_var: module
+    - name: Ensure VMware modules are installed
+      command:
+        cmd: vmware-modconfig --console --install-all
+        creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vmnet.ko"
+      when: vmware_result is changed or false in module_existence
+    when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
+  become: true
+  when: ansible_system == 'Linux'
+- name: Ensure VMware Fusion is installed on macOS hosts
+  homebrew_cask:
+    name: vmware-fusion
+    sudo_password: "{{ ansible_become_pass }}"
+  register: vmware_install_test
+  when: ansible_system == 'Darwin'
+- name: Test if VMware is installed
+  set_fact:
+    vmware_installed: true
+  changed_when: vmware_install_test.failed == false

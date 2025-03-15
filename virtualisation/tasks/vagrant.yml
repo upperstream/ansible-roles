@@ -1,11 +1,23 @@
 ---
-- block:
+- block: # Install Vagrant on non- macOS hosts with privileged operations
   - name: Ensure Vagrant is installed
     package: name=vagrant state=present
+    register: vagrant_install_test
   - name: Ensure Vagrant Libvirt provider in installed on non- Arch Linux hosts
     package: name=vagrant-libvirt state=present
     when: "ansible_system == 'Linux' and ansible_os_family not in ['Archlinux', 'Artix Linux']"
+  when: ansible_system != 'Darwin'
   become: true
+- name: Ensure Vagrant is installed on macOS hosts
+  homebrew_cask:
+    name: vagrant
+    sudo_password: "{{ ansible_become_pass }}"
+  register: vagrant_install_test
+  when: ansible_system == 'Darwin'
 - name: Ensure Vagrant Libvirt provider in installed on Arch Linux hosts
   command: vagrant plugin install vagrant-libvirt
   when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+- name: Test if Vagrant is installed
+  set_fact:
+    vagrant_installed: true
+  changed_when: vagrant_install_test.failed == false

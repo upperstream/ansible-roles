@@ -1,4 +1,8 @@
 ---
+- name: Ensure this role is for Linux hosts
+  fail:
+    msg: This role is only for Linux hosts
+  when: ansible_system != 'Linux'
 - name: Ensure hardware virtualisation is supported
   shell:
     cmd: test $(egrep -c '(vmx|svm)' /proc/cpuinfo) -gt 0
@@ -17,6 +21,7 @@
         {'os_family': 'Debian', 'package': 'qemu-kvm'},
         {'os_family': 'Archlinux', 'package': 'qemu-full'}
       ]| items2dict(key_name='os_family', value_name='package')}}"
+    register: kvm_install_test
   - name: Ensure KVM is installed on Red Hat hosts
     package: name='@virtualization'
     when: ansible_os_family == 'RedHat'
@@ -31,6 +36,7 @@
           - virt-manager
           - virt-viewer
           - plocate
+      register: kvm_install_test
     - name: Ensure plocate is enabled and started on Arch Linux hosts with systemd
       service:
         name: plocate-updatedb.timer
@@ -62,3 +68,7 @@
       dest: /usr/local/bin/kvmctl.sh
       mode: 0755
   become: true
+- name: Test if KVM is installed
+  set_fact:
+    kvm_installed: true
+  changed_when: kvm_install_test.failed != false

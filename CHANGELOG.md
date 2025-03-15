@@ -16,6 +16,7 @@
     * OpenJDK
     * [repo][]
     * [Visual Studio Code][]
+  * [virtualisation](virtualisation/README.md): Add support for macOS
 * Changed
   * desktop: Change variable name for [Firefox][] without Snap from
     `firefox_without_snap` to `firefox`.  This implies that the role
