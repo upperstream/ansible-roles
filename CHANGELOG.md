@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][]
+## [20250412][]
 
 * Added
   * Add `sound` role for configuring audio playback features
@@ -16,6 +16,7 @@
     * OpenJDK
     * [repo][]
     * [Visual Studio Code][]
+  * [packer](packer/README.md): Add support for Devuan
   * [virtualisation](virtualisation/README.md): Add support for macOS
 * Changed
   * desktop: Change variable name for [Firefox][] without Snap from
@@ -124,7 +125,7 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
-[Unreleased]: https://github.com/upperstream/ansible-roles/compare/20250212...HEAD
+[20250412]: https://github.com/upperstream/ansible-roles/compare/20250212...20250412
 [20250212]: https://github.com/upperstream/ansible-roles/compare/20241108...20250212
 [20241108]: https://github.com/upperstream/ansible-roles/compare/20241002...20241108
 [20241002]: https://github.com/upperstream/ansible-roles/compare/20240819...20241002
