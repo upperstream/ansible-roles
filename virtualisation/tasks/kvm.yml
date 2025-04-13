@@ -7,21 +7,26 @@
   shell:
     cmd: test $(egrep -c '(vmx|svm)' /proc/cpuinfo) -gt 0
 - block: # Need privileged operation
-  - name: Ensure KVM is installed on Debian hosts
-    package:
-      name:
-        - qemu-kvm
-        - libvirt-daemon-system
-        - libvirt-clients
-        - bridge-utils
-        - cpu-checker
+  - block: # Debian hosts
+    - name: Ensure KVM is installed on Debian hosts
+      package:
+        name:
+          - qemu-kvm
+          - libvirt-daemon-system
+          - libvirt-clients
+          - bridge-utils
+          - cpu-checker
+      vars:
+        qemu_package: "{{ [
+          {'os_family': 'Debian', 'package': 'qemu-kvm'},
+          {'os_family': 'Archlinux', 'package': 'qemu-full'}
+        ]| items2dict(key_name='os_family', value_name='package')}}"
+      register: kvm_install_test
+    - name: Test if KVM is installed on Debian hosts
+      set_fact:
+        kvm_installed: true
+      changed_when: kvm_install_test.failed is defined and kvm_install_test.failed != false
     when: ansible_os_family == 'Debian'
-    vars:
-      qemu_package: "{{ [
-        {'os_family': 'Debian', 'package': 'qemu-kvm'},
-        {'os_family': 'Archlinux', 'package': 'qemu-full'}
-      ]| items2dict(key_name='os_family', value_name='package')}}"
-    register: kvm_install_test
   - name: Ensure KVM is installed on Red Hat hosts
     package: name='@virtualization'
     when: ansible_os_family == 'RedHat'
@@ -52,6 +57,10 @@
       when: ansible_service_mgr != 'systemd'
     - name: Ensure locate database is updated on Arch Linux
       command: updatedb
+    - name: Test if KVM is installed on Arch Linux hosts
+      set_fact:
+        kvm_installed: true
+      changed_when: kvm_install_test.failed is defined and kvm_install_test.failed != false
     when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
   - name: Ensure users are added to kvm and libvirt groups
     user:
@@ -68,7 +77,3 @@
       dest: /usr/local/bin/kvmctl.sh
       mode: 0755
   become: true
-- name: Test if KVM is installed
-  set_fact:
-    kvm_installed: true
-  changed_when: kvm_install_test.failed != false

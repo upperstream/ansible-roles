@@ -5,6 +5,8 @@
 * Added
   * [docker_host](docker_host/README.md): Add support for Devuan and
     macOS
+  * [virtualisation](virtualisation/README.md): Refactor KVM and
+    Vagrant installation tasks for clarity and consistency
 
 ## [20250412][]
 
