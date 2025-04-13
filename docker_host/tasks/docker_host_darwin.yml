@@ -1,0 +1,4 @@
+---
+- name: Ensure Docker Desktop is installed on macOS hosts
+  homebrew_cask: name=docker
+  when: ansible_system == 'Darwin'

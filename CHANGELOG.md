@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased][]
+
+* Added
+  * [docker_host](docker_host/README.md): Add support for Devuan and
+    macOS
+
 ## [20250412][]
 
 * Added
@@ -125,6 +131,7 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
+[Unreleased]: https://github.com/upperstream/ansible-roles/compare/20250412...HEAD
 [20250412]: https://github.com/upperstream/ansible-roles/compare/20250212...20250412
 [20250212]: https://github.com/upperstream/ansible-roles/compare/20241108...20250212
 [20241108]: https://github.com/upperstream/ansible-roles/compare/20241002...20241108

@@ -1,0 +1,3 @@
+---
+- include_tasks: docker_host_{{ ansible_system | lower }}.yml
+  when: ansible_system in ['Linux', 'Darwin', 'Windows']
