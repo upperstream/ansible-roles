@@ -1,0 +1,10 @@
+---
+# Arch Linux specific WireGuard configuration tasks
+# Add any Arch Linux-specific WireGuard setup steps here
+- block:
+    - name: Ensure WireGuard kernel module is loaded on Arch Linux
+      community.general.modprobe:
+        name: wireguard
+        state: present
+  become: true
+  when: ansible_os_family == 'Archlinux'

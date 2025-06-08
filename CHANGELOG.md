@@ -7,6 +7,7 @@
     macOS
   * [virtualisation](virtualisation/README.md): Refactor KVM and
     Vagrant installation tasks for clarity and consistency
+  * [wireguard](wireguard/README.md): Add role for setting up WireGuard
 
 ## [20250412][]
 

@@ -1,0 +1,6 @@
+---
+- block:
+  - name: Ensure WireGuard for OpenBSD is installed
+    package: name=wireguard-tools
+  become: true
+  when: ansible_system == 'OpenBSD'

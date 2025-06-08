@@ -1,0 +1,10 @@
+---
+# Ubuntu specific WireGuard configuration tasks
+# Add any Ubuntu-specific WireGuard setup steps here
+- block:
+    - name: Ensure WireGuard PPA is added on Ubuntu
+      ansible.builtin.apt_repository:
+        repo: ppa:wireguard/wireguard
+        state: present
+  become: true
+  when: ansible_distribution == 'Ubuntu'

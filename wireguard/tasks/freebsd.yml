@@ -1,0 +1,8 @@
+---
+# FreeBSD specific WireGuard configuration tasks
+# Add any FreeBSD-specific WireGuard setup steps here
+- name: Ensure WireGuard is installed via pkg on FreeBSD
+  community.general.sysrc:
+    name: wireguard_interfaces
+    value: 'wg0'
+  become: true

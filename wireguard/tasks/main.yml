@@ -1,0 +1,75 @@
+---
+- name: Ensure WireGuard config directory is determined
+  vars:
+    config_dir: "{{ [
+        {'os_family': 'FreeBSD', 'path': '/usr/local/etc/wireguard'},
+        {'os_family': 'Darwin', 'path': '/opt/homebrew/etc/wireguard'}
+     ] | items2dict(key_name='os_family', value_name='path') }}"
+  set_fact:
+    wireguard_config_dir: "{{ config_dir[ansible_os_family] | default('/etc/wireguard') }}"
+
+- name: Install WireGuard
+  vars:
+    package_name: "{{ [
+        {'os_family': 'Debian', 'package': 'wireguard'}
+      ] | items2dict(key_name='os_family', value_name='package') }}"
+  package:
+    name: "{{ package_name[ansible_os_family] | default('wireguard-tools') }}"
+  become: "{{ false_for_macos }}"
+
+- block: # Need privileged operations
+  - name: Ensure WireGuard configuration directory exists
+    file:
+      path: "{{ wireguard_config_dir }}"
+      state: directory
+      mode: '0700'
+  - name: Ensure private key is created
+    shell: |
+      umask 077
+      wg genkey | tee {{ wireguard_config_dir }}/server.key
+    args:
+      creates: "{{ wireguard_config_dir }}/server.key"
+  - name: Ensure public key is created
+    shell: |
+      cat {{ wireguard_config_dir }}/server.key | wg pubkey | tee {{ wireguard_config_dir }}/server.pub
+    args:
+      creates: "{{ wireguard_config_dir }}/server.pub"
+  - name: Read private key file
+    slurp:
+      src: "{{ wireguard_config_dir }}/server.key"
+    register: private_key_file
+  - name: Ensure configuration file is created
+    ini_file:
+      path: "{{ wireguard_config_dir }}/wg0.conf"
+      mode: '600'
+      section: Interface
+      option: PrivateKey
+      value: "{{ private_key_file['content'] | b64decode }}"
+      section_has_values:
+        - option: 'Address'
+          value: "{{ wireguard['address'] }}"
+        - option: 'ListenPort'
+          value: "{{ wireguard['listen_port'] | default('51820') }}"
+    notify: restart WireGuard service
+  - name: Ensure peers are registered
+    ini_file:
+      path: "{{ wireguard_config_dir }}/wg0.conf"
+      exclusive: false
+      section: Peer
+      option: PublicKey
+      value: "{{ item['PublicKey'] }}"
+      section_has_values: "{{ item | dict2items(key_name='option', value_name='value') | selectattr('option', '!=', 'PublicKey') }}"
+    with_items: "{{ wireguard.peers }}"
+  become: true
+
+- name: Include platform specific tasks
+  include_tasks: "{{ ansible_os_family | lower }}.yml"
+  tags: wireguard_platform_specific
+
+- name: Ensure WireGuard service is enabled and started
+  service:
+    name: wireguard
+    enabled: yes
+    state: started
+  when: wireguard_start_at_boot is defined and wireguard_start_at_boot == true
+  become: true

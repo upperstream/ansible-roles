@@ -1,0 +1,21 @@
+---
+# macOS specific WireGuard configuration tasks
+# Add any macOS-specific WireGuard setup steps here
+#- name: Ensure WireGuard is installed via Homebrew on macOS
+#  community.general.homebrew:
+#    name: wireguard-tools
+#    state: present
+#  when: ansible_system == 'Darwin'
+- name: Ensure WireGuard plist file is created
+  copy:
+    dest: /Library/LaunchDaemons/com.wireguard.wg0.plist
+    src: ../files/com.wireguard.wg0.plist
+  notify: restart WireGuard service on macOS 
+  become: true
+
+- name: Ensure WireGuard service is enabled and started on macOS
+  community.general.launchd:
+    name: com.wireguard.wg0
+    enabled: yes
+    state: started
+  become: true

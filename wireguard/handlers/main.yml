@@ -1,0 +1,15 @@
+---
+- name: restart WireGuard service on macOS
+  community.general.launchd:
+    name: com.wireguard.wg0
+    enabled: yes
+    state: restarted
+  become: true
+
+- name: restart WireGuard service
+  service:
+    name: wireguard
+    enabled: yes
+    state: restarted
+  when: wireguard_start_at_boot is defined and wireguard_start_at_boot == true
+  become: true
