@@ -6,10 +6,15 @@
     state: restarted
   become: true
 
+- name: restart WireGuard service on OpenBSD
+  command: sh /etc/netstart
+  when: wireguard['start_at_boot'] is defined and wireguard['start_at_boot'] == true
+  become: true
+
 - name: restart WireGuard service
   service:
     name: wireguard
     enabled: yes
     state: restarted
-  when: wireguard_start_at_boot is defined and wireguard_start_at_boot == true
+  when: wireguard['start_at_boot'] is defined and wireguard['start_at_boot'] == true and ansible_distribution not in ['OpenBSD']
   become: true

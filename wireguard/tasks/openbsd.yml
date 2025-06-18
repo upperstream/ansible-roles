@@ -1,6 +1,55 @@
 ---
 - block:
   - name: Ensure WireGuard for OpenBSD is installed
-    package: name=wireguard-tools
+    package:
+      name: wireguard-tools
+  - name: Ensure pf configuration file is created on OpenBSD
+    template:
+      dest: /etc/pf-wg0.conf
+      mode: "0600"
+      src: pf-wg0.conf.j2
+  - name: Ensure pf-wg0.conf is valid on OpenBSD
+    command: pfctl -n -f /etc/pf-wg0.conf
+    changed_when: false
+  - name: Ensure configuration file is created on OpenBSD
+    ini_file:
+      path: "{{ wireguard_config_dir }}/wg0.conf"
+      mode: '600'
+      section: Interface
+      option: PrivateKey
+      value: "{{ private_key_file['content'] | b64decode }}"
+      section_has_values:
+        - option: Address
+          value: "{{ wireguard['address'] }}"
+        - option: ListenPort
+          value: "{{ wireguard['listen_port'] | default(wireguard_default_listen_port) }}"
+        - option: PostUp
+          value: pfctl -a wg0 -f /etc/pf-wg0.conf
+        - option: PreDown
+          value: pfctl -a wg0 -F all
+    notify: restart WireGuard service
+  - name: Ensure configuration file has Address value when WireGuard is not enabled at boot on OpenBSD
+    ini_file:
+      path: "{{ wireguard_config_dir }}/wg0.conf"
+      mode: '600'
+      section: Interface
+      option: Address
+      value: "{{ wireguard['address'] }}"
+    notify: restart WireGuard service on OpenBSD
+    when: wireguard['start_at_boot'] is not defined or wireguard['start_at_boot'] != true
+  - name: Ensure packet forwarding is enabled on OpenBSD
+    sysctl:
+      name: "{{ item }}"
+      value: 1
+    with_items:
+      - net.inet.ip.forwarding
+      - net.inet6.ip6.forwarding
+  - block: # WireGuard is enabled at boot
+    - name: Ensure pf-wg0.conf is effective on OpenBSD
+      command: pfctl -a wg0 -f /etc/pf-wg0.conf
+    - name: Ensure hostname.wg0 is created on OpenBSD
+      template: dest=/etc/hostname.wg0 mode="0644" src=hostname.wg0.j2
+      notify: restart WireGuard service on OpenBSD
+    when: wireguard['start_at_boot'] is defined and wireguard['start_at_boot'] == true
   become: true
   when: ansible_system == 'OpenBSD'

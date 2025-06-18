@@ -1,0 +1,5 @@
+inet {{ wireguard['address'].split('/').0 }} {{ wireguard['netmask'] }}
+wgport {{ wireguard['listen_port'] | default(wireguard_default_listen_port) }}
+wgkey {{ private_key_file['content'] | b64decode }}
+up
+!/usr/local/bin/wg setconf wg0 /etc/wireguard/wg0.conf

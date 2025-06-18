@@ -29,12 +29,14 @@
         "mktemp",
         "mountpoints",
         "mozillateam",
+        "netstart",
         "nfsclient",
         "nfsuserd",
         "pacaur",
         "pacman",
         "pakku",
         "paru",
+        "pfctl",
         "pikaur",
         "playbook",
         "posix",
@@ -42,6 +44,7 @@
         "runc",
         "sdktools",
         "selectattr",
+        "setconf",
         "shellenv",
         "softwareupdate",
         "startwm",
@@ -52,6 +55,8 @@
         "vars",
         "virtualbox",
         "vmware",
+        "wgkey",
+        "wgport",
         "xrdp"
     ]
 }
