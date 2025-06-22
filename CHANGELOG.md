@@ -3,13 +3,13 @@
 ## [Unreleased][]
 
 * Added
-  * [development](development/README.md): Add support for [Beyond
-    Compare][] on Debian hosts
-
+  * [desktop](desktop/README.md): Add support for [Xfce][] installation
+    on Debian family hosts and OpenBSD family hosts
   * [development](development/README.md): Add support for [Beyond
     Compare][] on Debian family hosts
 
 [Beyond Compare]: https://www.scootersoftware.com/
+[Xfce]: https://www.xfce.org/
 
 ## [20250618][]
 

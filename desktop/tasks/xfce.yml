@@ -1,0 +1,21 @@
+---
+- name: Import Xfce specific variables
+  include_vars: xfce.yml
+- name: Ensure the target OS is supported to install Xfce
+  fail:
+    msg: "This role does not support installation of Xfce on {{ ansible_os_family }}"
+  when: ansible_os_family not in xfce_supported_oses
+- name: "Ensure Xfce packages are installed on {{ ansible_os_family }} family hosts"
+  vars:
+    packages: "{{ [
+        { 'os_family': 'Debian', 'packages': ['task-xfce-desktop'] },
+        { 'os_family': 'OpenBSD', 'packages': ['xfce', 'consolekit2', 'dbus'] },
+      ] | items2dict(key_name='os_family', value_name='packages') }}"
+  package:
+    name: "{{ item }}"
+  with_items:
+    "{{ packages[ansible_os_family] }}"
+  become: "{{ false_for_macos }}"
+- name: "Set up Xfce on {{ ansible_os_family }} family hosts"
+  include_tasks: xfce_{{ ansible_os_family | lower }}.yml
+  when: ansible_os_family in xfce_supported_oses

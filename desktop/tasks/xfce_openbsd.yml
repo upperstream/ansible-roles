@@ -1,0 +1,26 @@
+---
+- block: # Need privileged operation
+  - name: Ensure Xconsole is disabled
+    replace:
+      path: /etc/X11/xenodm/Xsetup_0
+      regexp: '^${exec_prefix}/bin/xconsole'
+      replace: '#${exec_prefix}/bin/xconsole'
+  - name: Ensure relevant services are enabled and started
+    service:
+      name: "{{ item }}"
+      enabled: true
+      state: started
+    with_items:
+      - messagebus
+      - xenodm
+  - name: Ensure apmd is enabled and started
+    service: name='apmd' arguments='-A' enabled=true state=started
+  - name: Ensure per-user configuration is made
+    lineinfile:
+      path: "~{{ target_user }}/.xsession"
+      line: 'ck-launch-session startxfce4'
+      insertafter: EOF
+      mode: 0644
+      owner: "{{ target_user }}"
+    when: target_user is defined
+  become: true

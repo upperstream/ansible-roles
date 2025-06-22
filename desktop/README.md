@@ -5,8 +5,9 @@ This task installs the following software for desktop use.
 ## Desktop environment
 
 * Choice of desktop environments
-  * `cinnamon` - Cinnamon
-  * `kde` - KDE Plasma
+  * `cinnamon` - [Cinnamon][]
+  * `kde` - [KDE Plasma][]
+  * `xfce` - [Xfce][] (Debian family and OpenBSD family are supported)
 * [dwm][] with [st][] and [dmenu][]
 
 Set the variable `desktops` to contain desktop environment packages to
@@ -39,9 +40,12 @@ install, or specific browsers in the following list:
 Set the variable `fonts` to contain package names of fonts to install.
 
 [Chromium]: https://www.chromium.org/Home/
+[Cinnamon]: https://projects.linuxmint.com/cinnamon/
 [dmenu]: https://tools.suckless.org/dmenu/
 [dwm]: https://dwm.suckless.org/
 [Firefox]: https://www.mozilla.org/firefox/
 [Google Chrome]: https://www.google.com/chrome/
+[KDE Plasma]: https://kde.org/plasma-desktop/
 [Microsoft Edge]: https://www.microsoft.com/edge/
 [st]: https://st.suckless.org/
+[xfce]: https://www.xfce.org/
