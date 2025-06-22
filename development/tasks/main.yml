@@ -3,7 +3,7 @@
   - name: Ensure development tools are installed
     package: name="{{ item }}"
     with_items:
-      - "{{ development_tools | default([]) | difference(['gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
+      - "{{ development_tools | default([]) | difference(['bcompare', 'gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
   - block: # Debian family
     - name: Ensure essential build tools are installed on Debian host
       package: name=build-essential
@@ -51,3 +51,6 @@
 - name: Configure Game of Trees daemon
   include_tasks: got.yml
   when: development_tools is defined and ('gotd' in development_tools or 'gotwebd' in development_tools)
+- name: Install Beyond Compare
+  include_tasks: bcompare.yml
+  when: development_tools is defined and 'bcompare' in development_tools

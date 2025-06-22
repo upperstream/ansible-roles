@@ -1,0 +1,16 @@
+---
+- block: # On Debian hosts
+  - name: Ensure Scooter Software keyring is installed
+    get_url:
+      url: https://www.scootersoftware.com/DEB-GPG-KEY-scootersoftware.asc
+      dest: /etc/apt/trusted.gpg.d/DEB-GPG-KEY-scootersoftware.asc
+      mode: og+r
+  - name: Ensure Scooter Software repo is registered
+    get_url:
+      url: https://www.scootersoftware.com/scootersoftware.list
+      dest: /etc/apt/sources.list.d/scootersoftware.list
+      mode: og+r
+  - name: Ensure repo cache is updated
+    apt: update_cache=true
+  when: ansible_os_family == "Debian"
+  become: true

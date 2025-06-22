@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased][]
+
+* Added
+  * [development](development/README.md): Add support for [Beyond
+    Compare][] on Debian hosts
+
+  * [development](development/README.md): Add support for [Beyond
+    Compare][] on Debian family hosts
+
+[Beyond Compare]: https://www.scootersoftware.com/
+
 ## [20250618][]
 
 * Added
@@ -134,6 +145,7 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
+[Unreleased]: https://github.com/upperstream/ansible-roles/compare/20250618...HEAD
 [20250618]: https://github.com/upperstream/ansible-roles/compare/20250412...20250618
 [20250412]: https://github.com/upperstream/ansible-roles/compare/20250212...20250412
 [20250212]: https://github.com/upperstream/ansible-roles/compare/20241108...20250212

@@ -5,6 +5,7 @@ Enable development tools on the target host.
 This role can install the following tools if any is specified in
 `development_tools` variable:
 
+* `bcompare` - Beyond Compare
 * `gcm` - Git Credential Manager
 * `gh` - GitHub CLI
 * `git` - Git
