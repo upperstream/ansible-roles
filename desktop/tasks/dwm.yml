@@ -4,11 +4,12 @@
     - name: Ensure build essential tools are installed
       vars:
         build_essential_packages: "{{ [
-          {'os_family': 'Debian', 'packages': ['build-essential']},
-          {'os_family': 'Archlinux', 'packages': ['base-devel']},
-          {'os_family': 'Artix Linux', 'packages': ['base-devel']},
-          {'os_family': 'RedHat', 'packages': ['@C Development Tools and Libraries', '@Development Tools']},
-        ] | items2dict(key_name='os_family', value_name='packages') }}"
+            {'os_family': 'Debian', 'packages': ['build-essential']},
+            {'os_family': 'Archlinux', 'packages': ['base-devel']},
+            {'os_family': 'Artix Linux', 'packages': ['base-devel']},
+            {'os_family': 'RedHat', 'packages': ['@C Development Tools and Libraries', '@Development Tools']},
+            {'os_family': 'OpenBSD', 'packages': []},
+         ] | items2dict(key_name='os_family', value_name='packages') }}"
       package: name="{{ item }}"
       with_items: "{{ build_essential_packages[ansible_os_family] | list }}"
     - name: Ensure X11 headers and libraries are installed
@@ -18,7 +19,8 @@
           {'os_family': 'Archlinux', 'packages': ['libx11', 'libxft', 'libxinerama']},
           {'os_family': 'Artix Linux', 'packages': ['libx11', 'libxft', 'libxinerama']},
           {'os_family': 'RedHat', 'packages': ['libX11-devel', 'libXft-devel', 'libXinerama-devel']},
-        ] | items2dict(key_name='os_family', value_name='packages') }}"
+          {'os_family': 'OpenBSD', 'packages': []},
+         ] | items2dict(key_name='os_family', value_name='packages') }}"
       package: name="{{ x11_packages[ansible_os_family] | list }}"
     become: true
   - name: Ensure dwm source tarball is downloaded
@@ -30,10 +32,14 @@
     delegate_to: localhost
     with_items: "{{ dwm_patches }}"
     register: downloaded_dwm_patches
+  - name: Ensure unarchive tools are installed on OpenBSD
+    package: name="{{ ['unzip--', 'gtar--'] | list }}"
+    when: ansible_system != 'Linux'
+    become: true
   - name: Ensure dwm source files are extracted
     unarchive: src="{{ get_url.dest }}" dest=/tmp
     register: unarchive
-  - name: Detemine dwm source directory
+  - name: Determine dwm source directory
     set_fact: dwm_directory="{{ unarchive.dest }}/dwm-6.5"
   - name: Ensure dwm patches are applied
     ansible.posix.patch: src="{{ item.dest }}" basedir="{{ dwm_directory }}" strip=1
@@ -44,7 +50,7 @@
     make: chdir="{{ dwm_directory }}" target=install
     become: true
   when: dwm_patches is defined
-- block: # Need privileged ooperations
+- block: # Need privileged operations
   - name: Ensure dmenu is installed
     package: name=dmenu
   - name: Ensure dwm is installed on non- Arch Linux hosts
@@ -52,9 +58,10 @@
     when: dwm_patches is not defined and "ansible_os_family not in ['Archlinux', 'Artix Linux']"
   - name: Ensure st is installed on non- Arch Linux hosts
     vars:
-      st_package: "{{ [
-        {'os_family': 'Debian', 'package': 'stterm'}
-      ]| items2dict(key_name='os_family', value_name='package')}}"
+      st_package: "{{[
+        {'os_family': 'Debian', 'package': 'stterm'},
+        {'os_family': 'OpenBSD', 'package': 'st--scrollback'}
+       ]| items2dict(key_name='os_family', value_name='package')}}"
     package: name="{{ st_package[ansible_os_family] | default('st') }}"
     when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
   become: true

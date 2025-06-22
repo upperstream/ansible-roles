@@ -14,6 +14,7 @@
 ## [20250618][]
 
 * Added
+  * [desktop](desktop/README.md): Add support for OpenBSD to set up dwm
   * [docker_host](docker_host/README.md): Add support for Devuan and
     macOS
   * [virtualisation](virtualisation/README.md): Refactor KVM and
