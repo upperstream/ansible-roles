@@ -23,6 +23,7 @@
         "distfiles",
         "dmenu",
         "dpkg",
+        "EACCES",
         "firewalld",
         "forky",
         "genkey",

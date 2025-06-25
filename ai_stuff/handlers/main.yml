@@ -4,3 +4,15 @@
     msg: |
       Go is successfully installed.
       Add `/usr/local/go/bin` and `$HOME/go/bin` to your `PATH` environment variable.
+
+- name: Claude Code is installed to user's directory
+  debug:
+    msg: |
+      Claude Code is installed in user's directory as global package.
+      Make sure reinstall existing global packages (npm-global-packages.txt) to the user's directory,
+      and Add `$HOME/.npm-global/bin` to the user's `PATH `environment variable.
+
+- name: Recover npm global directory
+  command: "npm config set prefix {{ npm_original_global_directory }}"
+  become: true
+  become_user: "{{ target_user }}"

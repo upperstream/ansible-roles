@@ -21,9 +21,10 @@ This role is designed to work on:
 While there are no mandatory variables, you can customize the
 installation by setting:
 
-- `ai_stuff`: A list of components to install.  Candidates is the
+- `ai_stuff`: A list of components to install.  Candidates are the
   following:
   - 'charm_opencode': [OpenCode from charm.sh][] and its dependencies
+  - `claude_code`: [Claude Code][] and its dependencies
 
 ## Example Playbook
 
@@ -34,13 +35,14 @@ Here's an example playbook to use this role:
 	  roles:
 	    - ai_stuff
 
-If you want to install OpenCode from Charm:
+If you want to install Claude Code and OpenCode from Charm:
 
 	- hosts: server
 	  become: yes
 	  vars:
 	    ai_stuff:
 	      - charm_opencode
+		  - claude_code
 	    roles:
 	      - ai_stuff
 
@@ -51,4 +53,5 @@ If you want to install OpenCode from Charm:
 - The installation paths may vary based on your environment and system
   configuration.
 
+[Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
 [OpenCode from charm.sh]: https://github.com/opencode-ai/opencode

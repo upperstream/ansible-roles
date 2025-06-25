@@ -4,13 +4,14 @@
 
 * Added
   * Add [ai_stuff](ai_stuff/README.md) role.  Initially it supports
-    [OpenCode from charm.sh][] only.
+    [Claude Code][] and [OpenCode from charm.sh][].
   * [desktop](desktop/README.md): Add support for [Xfce][] installation
     on Debian family hosts and OpenBSD family hosts
   * [development](development/README.md): Add support for [Beyond
     Compare][] on Debian family hosts
 
 [Beyond Compare]: https://www.scootersoftware.com/
+[Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
 [OpenCode from charm.sh]: https://github.com/opencode-ai/opencode
 [Xfce]: https://www.xfce.org/
 
