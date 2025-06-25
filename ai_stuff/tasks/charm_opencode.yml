@@ -1,0 +1,26 @@
+---
+- name: Determine Go tarball name
+  set_fact:
+    go_tarball: "go1.24.4.{{ ansible_system | lower }}-{{ ansible_machine | regex_replace('^x86_64$', 'amd64') }}.tar.gz"
+- name: Download Go tarball
+  get_url:
+    dest: "/tmp/{{ go_tarball }}"
+    url: "https://go.dev/dl/{{ go_tarball }}"
+  delegate_to: localhost
+- name: Ensure Go is installed
+  unarchive:
+    creates: /usr/local/go/bin/go
+    dest: /usr/local
+    src: "/tmp/{{ go_tarball }}"
+  become: true
+  notify:
+    - Go is installed
+- name: Ensure OpenCode is installed
+  command:
+    cmd: "/usr/local/go/bin/go install {{ charm_opencode_repo }}"
+    creates: "/home/{{ target_user }}/go/bin/opencode"
+  become: true
+  become_user: "{{ target_user }}"
+- name: Ensure Ripgrep and FZF are installed
+  package: "name={{ ['fzf', 'ripgrep'] }}"
+  become: true

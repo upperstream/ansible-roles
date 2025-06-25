@@ -1,0 +1,4 @@
+---
+- name: Set up OpenCode from Charm
+  include_tasks: charm_opencode.yml
+  when: ai_stuff is defined and 'charm_opencode' in ai_stuff

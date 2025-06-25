@@ -43,6 +43,7 @@
         "netstart",
         "nfsclient",
         "nfsuserd",
+        "opencode",
         "pacaur",
         "pacman",
         "pakku",
@@ -72,5 +73,9 @@
         "wgkey",
         "wgport",
         "xrdp"
-    ]
+    ],
+    "markdownlint.config": {
+        "MD010": false,
+        "MD040": false
+    }
 }

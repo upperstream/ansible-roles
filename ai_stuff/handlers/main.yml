@@ -1,0 +1,6 @@
+---
+- name: Go is installed
+  debug:
+    msg: |
+      Go is successfully installed.
+      Add `/usr/local/go/bin` and `$HOME/go/bin` to your `PATH` environment variable.
