@@ -1,8 +1,8 @@
 ---
 - name: Ensure node module installer is pushed
   copy: src=install_node_module.sh dest=/tmp/install_node_module.sh mode=0755
-- name: Ensure Claude Code is installed
+- name: Ensure Gemini CLI is installed
   shell:
-    cmd: "/tmp/install_node_module.sh {{ claude_code_package }}"
+    cmd: "/tmp/install_node_module.sh {{ gemini_cli_package }}"
   become: true
   become_user: "{{ target_user }}"

@@ -3,8 +3,8 @@
 ## [Unreleased][]
 
 * Added
-  * Add [ai_stuff](ai_stuff/README.md) role.  Initially it supports
-    [Claude Code][] and [OpenCode from charm.sh][].
+  * Add [ai_stuff](ai_stuff/README.md) role, which installs
+    [Claude Code][], [Gemini CLI][], and [OpenCode from charm.sh][]
   * [desktop](desktop/README.md): Add support for [Xfce][] installation
     on Debian family hosts and OpenBSD family hosts
   * [development](development/README.md): Add support for [Beyond
@@ -13,6 +13,7 @@
 
 [Beyond Compare]: https://www.scootersoftware.com/
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
+[Gemini CLI]: https://github.com/google-gemini/gemini-cli
 [Node.js]: https://nodejs.org/
 [nvm]: https://github.com/nvm-sh/nvm
 [OpenCode from charm.sh]: https://github.com/opencode-ai/opencode

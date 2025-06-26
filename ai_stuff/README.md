@@ -23,8 +23,9 @@ installation by setting:
 
 - `ai_stuff`: A list of components to install.  Candidates are the
   following:
-  - 'charm_opencode': [OpenCode from charm.sh][] and its dependencies
+  - `charm_opencode`: [OpenCode from charm.sh][] and its dependencies
   - `claude_code`: [Claude Code][] and its dependencies
+  - `gemini_cli`: [Gemini CLI][] and its dependencies
 
 ## Example Playbook
 
@@ -35,7 +36,7 @@ Here's an example playbook to use this role:
 	  roles:
 	    - ai_stuff
 
-If you want to install Claude Code and OpenCode from Charm:
+If you want to install Claude Code, Gemini CLI, and OpenCode from Charm:
 
 	- hosts: server
 	  become: yes
@@ -43,6 +44,7 @@ If you want to install Claude Code and OpenCode from Charm:
 	    ai_stuff:
 	      - charm_opencode
 		  - claude_code
+		  - gemini_cli
 	    roles:
 	      - ai_stuff
 
@@ -54,4 +56,5 @@ If you want to install Claude Code and OpenCode from Charm:
   configuration.
 
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
+[Gemini CLI]: https://github.com/google-gemini/gemini-cli
 [OpenCode from charm.sh]: https://github.com/opencode-ai/opencode

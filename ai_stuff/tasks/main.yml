@@ -5,3 +5,6 @@
 - name: Set up Claude Code
   include_tasks: claude_code.yml
   when: ai_stuff is defined and 'claude_code' in ai_stuff
+- name: Set up Gemini CLI
+  include_tasks: gemini_cli.yml
+  when: ai_stuff is defined and 'gemini_cli' in ai_stuff

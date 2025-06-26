@@ -1,3 +1,4 @@
 ---
 charm_opencode_repo: "github.com/opencode-ai/opencode@latest"
 claude_code_package: "@anthropic-ai/claude-code"
+gemini_cli_package: "@google/gemini-cli"
