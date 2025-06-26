@@ -41,6 +41,7 @@
         "mktemp",
         "mountpoints",
         "mozillateam",
+        "myuser",
         "netstart",
         "nfsclient",
         "nfsuserd",

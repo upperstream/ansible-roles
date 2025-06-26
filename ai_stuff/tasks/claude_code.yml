@@ -1,42 +1,8 @@
 ---
-- name: Ensure npm is installed
-  package: name=npm
-  become: "{{ false_for_macos }}"
+- name: Ensure Claude Code installer is pushed
+  template: src=install_claude_code.sh.j2 dest=/tmp/install_claude_code.sh mode=0755
 - name: Ensure Claude Code is installed
-  community.general.npm:
-    global: true
-    name: "{{ claude_code_package }}"
+  shell:
+    cmd: /tmp/install_claude_code.sh
   become: true
   become_user: "{{ target_user }}"
-  ignore_errors: true
-  register: npm_install_claude_code
-- block: # Workaround for npm install error with EACCES
-  - name: Save the list of existing global packages
-    shell: "npm list -g --depth=0 > $HOME/npm-global-packages.txt"
-  - name: Create a directory for global packages
-    file:
-      path: "/home/{{ target_user }}/.npm-global"
-      state: directory
-  - name: Determine npm original global directory
-    command: npm config get prefix
-    register: npm_prefix
-  - name: Remember npm original global directory
-    set_fact:
-      npm_original_global_directory: "{{ npm_prefix.stdout_lines[0] }}"
-  - name: Configure npm to use the new global directory
-    command: "npm config set prefix /home/{{ target_user }}/.npm-global"
-    register: npm_set_global
-  - name: Retry Claude Code installation
-    community.general.npm:
-      global: true
-      name: "{{ claude_code_package }}"
-    ignore_errors: true
-    notify: Claude Code is installed to user's directory
-    register: npm_install_claude_code2
-  - debug: msg="Recover npm global directory to `{{ npm_original_global_directory }}` in the handler"
-    changed_when: npm_install_claude_code2.failed == true
-    notify: Recover npm global directory
-    when: npm_original_global_directory.failed == false and npm_install_claude_code2.failed == true
-  become: true
-  become_user: "{{ target_user }}"
-  when: npm_install_claude_code.failed == true and npm_install_claude_code.stderr_lines[0] == 'npm ERR! code EACCES'
