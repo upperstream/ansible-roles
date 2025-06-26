@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+. $HOME/.nvm/nvm.sh
+nvm install {{ node_version | regex_replace('^v([0-9]+)\..*$', '\\1') }}

@@ -9,9 +9,12 @@
     on Debian family hosts and OpenBSD family hosts
   * [development](development/README.md): Add support for [Beyond
     Compare][] on Debian family hosts
+  * Add [node](node/README.md) role to install [Node.js][] using [nvm][].
 
 [Beyond Compare]: https://www.scootersoftware.com/
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
+[Node.js]: https://nodejs.org/
+[nvm]: https://github.com/nvm-sh/nvm
 [OpenCode from charm.sh]: https://github.com/opencode-ai/opencode
 [Xfce]: https://www.xfce.org/
 

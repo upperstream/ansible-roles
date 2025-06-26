@@ -1,0 +1,17 @@
+---
+- name: Ensure curl is installed
+  package: name=curl
+  become: true
+- name: Ensure node installer is pushed
+  template: src=install_node.sh.j2 dest=/tmp/install_node.sh mode=0755
+- block: # Impersonate target_user
+  - name: Ensure nvm is installed
+    shell:
+      cmd: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh | bash"
+      creates: "/home/{{ target_user }}/.nvm/nvm.sh"
+  - name: Ensure node is installed
+    shell:
+      cmd: /tmp/install_node.sh
+      creates: "/home/{{ target_user }}/.nvm/versions/node/{{ node_version }}/bin/node"
+  become: true
+  become_user: "{{ target_user }}"
