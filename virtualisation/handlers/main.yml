@@ -1,0 +1,4 @@
+- name: Hyper-V is enabled
+  debug:
+    msg: "You have to reboot the target host in order to take effect enabling Hyper-V."
+  when: hyperv_enabled is defined and hyperv_enabled.rc == 0

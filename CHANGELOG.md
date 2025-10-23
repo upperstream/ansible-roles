@@ -12,13 +12,18 @@
     Compare][] on Debian family hosts
   * Add [node](node/README.md) role to install [Node.js][] using [nvm][].
   * [packer](packer/README.md): Add support for Windows
+  * [virtualisation](virtualisation/README.md): Add support for Windows
+    to install [Hyper-V][], [Vagrant][] and [VirtualBox][]
 
 [Beyond Compare]: https://www.scootersoftware.com/
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
 [Gemini CLI]: https://github.com/google-gemini/gemini-cli
+[Hyper-V]: https://learn.microsoft.com/windows-server/virtualization/hyper-v/
 [Node.js]: https://nodejs.org/
 [nvm]: https://github.com/nvm-sh/nvm
 [OpenCode from charm.sh]: https://github.com/opencode-ai/opencode
+[Vagrant]: https://developer.hashicorp.com/vagrant
+[VirtualBox]: https://www.virtualbox.org/ "Oracle VirtualBox"
 [Xfce]: https://www.xfce.org/
 
 ## [20250618][]
@@ -106,7 +111,6 @@
 [dwm]: https://dwm.suckless.org/
 [KDE Plasma]: https://kde.org/plasma-desktop/ "KDE Plasma Desktop"
 [Packer]: https://www.packer.io/ "Packer by HashiCorp"
-[VirtualBox]: https://www.virtualbox.org/ "Oracle VirtualBox"
 
 ## [20241002][]
 

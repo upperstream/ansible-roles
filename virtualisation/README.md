@@ -42,7 +42,7 @@ is also installed on Linux target host.
 
 This task installs [VirtualBox](https://www.virtualbox.org/) on the
 target host running Debian descendants, Red Hat descendants, Arch Linux
-descendants, or FreeBSD hosts.
+descendants, FreeBSD, and Windows hosts.
 
 ## VMware
 

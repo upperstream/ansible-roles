@@ -1,5 +1,5 @@
 ---
-- block: # Install VirtualBox on non- macOS hosts with privileged operations
+- block: # Install VirtualBox on non- macOS or Windows hosts with privileged operations
   - block: # Debian family
     - name: Ensure VirtualBox dependencies are installed
       package: name=openssl state=present
@@ -27,7 +27,7 @@
             {'version': '10', 'codename': 'buster'},
             {'version': '9', 'codename': 'stretch'},
             {'version': '8', 'codename': 'jessie'}
-          ]| items2dict(key_name='version', value_name='codename')}}"
+           ]| items2dict(key_name='version', value_name='codename')}}"
       - name: Ensure VirtualBox repo is registered on Devuan
         apt_repository:
           repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/oracle-virtualbox-2016.gpg] https://download.virtualbox.org/virtualbox/{{ ansible_os_family | lower }} {{ debian_codename }} contrib"
@@ -58,14 +58,14 @@
         {'os_family': 'Archlinux', 'package': 'virtualbox'},
         {'os_family': 'Artix Linux', 'package': 'virtualbox'},
         {'os_family': 'FreeBSD', 'package': 'virtualbox-ose'}
-      ]| items2dict(key_name='os_family', value_name='package')}}"
+       ]| items2dict(key_name='os_family', value_name='package')}}"
     register: virtualbox_install_test
   - name: Ensure VirtualBox kernel modules are compiled on non- Arch Linux hosts
     command:
       cmd: /sbin/vboxconfig
       creates: "/usr/lib/modules/{{ ansible_kernel }}/misc/vboxdrv.ko"
     when: "ansible_system == 'Linux' and ansible_os_family not in ['Archlinux', 'Artix Linux']"
-  when: ansible_system != 'Darwin'
+  when: ansible_os_family not in ['Darwin', 'Windows']
   become: true
 - name: Ensure VirtualBox is installed on macOS hosts
   homebrew_cask:
@@ -73,6 +73,10 @@
     sudo_password: "{{ ansible_become_pass }}"
   register: virtualbox_install_test
   when: ansible_system == 'Darwin'
+- name: Ensure VirtualBox is installed on Windows hosts
+  win_chocolatey: name=virtualbox
+  register: virtualbox_install_test
+  when: ansible_os_family == 'Windows'
 - name: Test if VirtualBox is installed
   set_fact:
     virtualbox_installed: true
