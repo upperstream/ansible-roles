@@ -5,6 +5,7 @@
 * Added
   * Add [ai_stuff](ai_stuff/README.md) role, which installs
     [Claude Code][], [Gemini CLI][], and [OpenCode from charm.sh][]
+  * [base](base/README.md): Add support for Windows
   * [desktop](desktop/README.md): Add support for [Xfce][] installation
     on Debian family hosts and OpenBSD family hosts
   * [development](development/README.md): Add support for [Beyond

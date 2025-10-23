@@ -7,7 +7,8 @@ The `base` role configures the basic features of the target host.
 ## Variables
 
 * `base` - List of basic capabilities of the target host:
-  * `hostname` - Set the hostname of the target host if defined
+  * `hostname` - Set the hostname of the target host if defined.
+    Windows is not supported
   * `nfs_client` - Set up NFS client functionality and mount NFS server
     exports (FreeBSD and Linux hosts are supported.)
   * `zfs` - Install ZFS utilities to mount ZFS file systems (FreeBSD
@@ -49,8 +50,18 @@ The `base` role configures the basic features of the target host.
     user provided password, which can be used as the `sudo_password`
     for [`community.general.homebrew_cask`][] module.
 
+## Bootstrap for Windows hosts
+
+* When `base` role is assigned to Windows hosts, [windows](tasks/windows.yml)
+  tasks will be automatically executed.  This ensures that:
+
+  * Execution Policy is updated so that Chocolatey script can be
+    executed.
+  * [Chocolatey][] client is installed.
+
 [`ansible_become_password`]: https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_privilege_escalation.html#become-connection-variables
     "Understanding privilege escalation: become"
+[Chocolatey]: https://docs.chocolatey.org/en-us/choco/setup/
 [`community.general.homebrew_cask`]: https://docs.ansible.com/ansible/latest/collections/community/general/homebrew_cask_module.html
     "community.general.homebrew_cask module &ndash; Install and uninstall homebrew casks"
 [How do I generate encrypted passwords for the user module]:

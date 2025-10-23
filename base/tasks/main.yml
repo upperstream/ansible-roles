@@ -2,6 +2,9 @@
 - name: Bootstrap for macOS target host
   include_tasks: macos.yml
   when: ansible_system == 'Darwin'
+- name: Bootstrap for Windows target host
+  include_tasks: windows.yml
+  when: ansible_os_family == 'Windows'
 - block:
   - name: Ensure groups exist on the target host
     group:
@@ -29,12 +32,19 @@
 - name: Set up NFS client
   include_tasks: nfs_client.yml
   when: (base is defined and 'nfs_client' in base)
-- name: Set up miscellaneous tools
-  package: name="{{ item }}" state=present
-  with_items:
-   - "{{ misc_tools | list }}"
+- block: # misc_tools is defined
+  - name: Set up miscellaneous tools on non- Windows hosts
+    package: name="{{ item }}" state=present
+    with_items:
+    - "{{ misc_tools | list }}"
+    when: ansible_os_family != 'Windows'
+    become: "{{ false_for_macos }}"
+  - name: Set up miscellaneous tools on Windows hosts
+    win_chocolatey: name="{{ item }}" state=present
+    with_items:
+     - "{{ misc_tools | list }}"
+    when: ansible_os_family == 'Windows'
   when: misc_tools is defined
-  become: "{{ false_for_macos }}"
 - name: Set up miscellaneous GUI tools on macOS
   homebrew_cask:
     name: "{{ item }}"
@@ -48,5 +58,5 @@
   when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
 - name: Ensure hostname is set
   hostname: name="{{ base.hostname }}"
-  when: base is defined and base.hostname is defined
+  when: ansible_os_family != 'Windows' and base is defined and base.hostname is defined
   become: true
