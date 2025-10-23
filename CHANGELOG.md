@@ -11,6 +11,7 @@
   * [development](development/README.md): Add support for [Beyond
     Compare][] on Debian family hosts
   * Add [node](node/README.md) role to install [Node.js][] using [nvm][].
+  * [packer](packer/README.md): Add support for Windows
 
 [Beyond Compare]: https://www.scootersoftware.com/
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview

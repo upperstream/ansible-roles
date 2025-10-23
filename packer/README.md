@@ -12,11 +12,8 @@ Installs [Packer][] to the target host.
 * This task assumes that the target host is running:
   * Arch Linux and Artix Linux,
   * Debian and its descendants,
-  * Fedora, or
-  * FreeBSD
+  * Fedora,
+  * FreeBSD, or
+  * Windows
 
 [Packer]: https://www.packer.io/ "Packer by HashiCorp"
-
----
-
-Copyright &copy; 2023, 2024 Upperstream.

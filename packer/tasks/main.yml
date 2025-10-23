@@ -27,7 +27,7 @@
             {'devuan_codename': 'beowulf', 'debian_codename': 'buster'},
             {'devuan_codename': 'ascii', 'debian_codename': 'stretch'},
             {'devuan_codename': 'jessie', 'debian_codename': 'jessie'}
-          ]| items2dict(key_name='devuan_codename', value_name='debian_codename')}}"
+           ]| items2dict(key_name='devuan_codename', value_name='debian_codename')}}"
       when: ansible_distribution == 'Devuan'
     - name: Ensure Packer repo is registered on Debian family
       apt_repository:
@@ -35,7 +35,7 @@
         filename: hashicorp
       when: ansible_distribution != 'Devuan'
     when: ansible_os_family == 'Debian'
-  - block: # Add Packer respoitory on Fedora
+  - block: # Add Packer repository on Fedora
     - name: Ensure dnf plugins is installed on Fedora
       package: name=dnf-plugins-core
     - name: Ensure HashiCorp repository is installed on Fedora
@@ -49,7 +49,7 @@
   - block: # Install Packer on Arch Linux hosts
     - name: Ensure GNU stow is installed on Arch Linux hosts
       package: name=stow
-    - name: Ensire Packer directory is created on Arch Linux hosts
+    - name: Ensure Packer directory is created on Arch Linux hosts
       file:
         path: /usr/local/share/packer-{{ archlinux_packer_version }}/{{ item }}
         recurse: true
@@ -76,3 +76,6 @@
         creates: /usr/local/bin/packer
     when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
   become: "{{ false_for_macos }}"
+- name: Ensure Packer is installed on Windows hosts
+  win_chocolatey: name=packer
+  when: ansible_os_family == 'Windows'
