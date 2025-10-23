@@ -1,9 +1,16 @@
 ---
+- name: Ensure development tools are installed on non-Windows hosts
+  package: name="{{ item }}"
+  with_items:
+    - "{{ development_tools | default([]) | difference(['bcompare', 'gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
+  become: "{{ false_for_macos }}"
+  when: development_tools is defined and ansible_os_family != 'Windows'
+- name: Ensure development tools are installed on Windows hosts
+  win_chocolatey: name="{{ item }}"
+  with_items:
+    - "{{ development_tools | default([]) | difference(['bcompare', 'gcm', 'gotd', 'gotwebd', 'java', 'markdown', 'repo']) | list }}"
+  when: development_tools is defined and ansible_os_family == 'Windows'
 - block: # Need privileged operations
-  - name: Ensure development tools are installed
-    package: name="{{ item }}"
-    with_items:
-      - "{{ development_tools | default([]) | difference(['bcompare', 'gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
   - block: # Debian family
     - name: Ensure essential build tools are installed on Debian host
       package: name=build-essential
@@ -38,10 +45,10 @@
   become: "{{ false_for_macos }}"
 - name: Install GitHub CLI
   include_tasks: github_cli.yml
-  when: development_tools is defined and 'gh' in development_tools
+  when: development_tools is defined and 'gh' in development_tools and ansible_os_family != 'Windows'
 - name: Optionally install Visual Studio Code
   include_tasks: vscode.yml
-  when: development_tools is defined and 'vscode' in development_tools
+  when: development_tools is defined and 'vscode' in development_tools and ansible_os_family != 'Windows'
 - name: Optionally install repo
   include_tasks: repo.yml
   when: development_tools is defined and 'repo' in development_tools

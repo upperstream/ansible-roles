@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased][]
+## [20251024][]
 
 * Added
   * Add [ai_stuff](ai_stuff/README.md) role, which installs
@@ -9,7 +9,9 @@
   * [desktop](desktop/README.md): Add support for [Xfce][] installation
     on Debian family hosts and OpenBSD family hosts
   * [development](development/README.md): Add support for [Beyond
-    Compare][] on Debian family hosts
+    Compare][] on Debian family hosts and Windows hosts
+  * development: Add support for Windows to install [GitHub CLI][] and
+    [Visual Studio Code][]
   * Add [node](node/README.md) role to install [Node.js][] using [nvm][].
   * [packer](packer/README.md): Add support for Windows
   * [virtualisation](virtualisation/README.md): Add support for Windows
@@ -18,12 +20,14 @@
 [Beyond Compare]: https://www.scootersoftware.com/
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
 [Gemini CLI]: https://github.com/google-gemini/gemini-cli
+[GitHub CLI]: https://cli.github.com/
 [Hyper-V]: https://learn.microsoft.com/windows-server/virtualization/hyper-v/
 [Node.js]: https://nodejs.org/
 [nvm]: https://github.com/nvm-sh/nvm
 [OpenCode from charm.sh]: https://github.com/opencode-ai/opencode
 [Vagrant]: https://developer.hashicorp.com/vagrant
 [VirtualBox]: https://www.virtualbox.org/ "Oracle VirtualBox"
+[Visual Studio Code]: https://code.visualstudio.com/
 [Xfce]: https://www.xfce.org/
 
 ## [20250618][]
@@ -65,7 +69,6 @@
 [Firefox]: https://www.mozilla.org/firefox/
 [Game of Trees]: https://gameoftrees.org/index.html
 [repo]: https://gerrit.googlesource.com/git-repo/
-[Visual Studio Code]: https://code.visualstudio.com/
 
 ## [20250212][]
 
@@ -160,7 +163,7 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
-[Unreleased]: https://github.com/upperstream/ansible-roles/compare/20250618...HEAD
+[20251024]: https://github.com/upperstream/ansible-roles/compare/20250618...20251024
 [20250618]: https://github.com/upperstream/ansible-roles/compare/20250412...20250618
 [20250412]: https://github.com/upperstream/ansible-roles/compare/20250212...20250412
 [20250212]: https://github.com/upperstream/ansible-roles/compare/20241108...20250212

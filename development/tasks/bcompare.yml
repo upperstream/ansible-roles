@@ -1,11 +1,16 @@
 ---
-- block: # Need privileged operation
-  - name: Ensure OS is supported
-    fail:
-      msg: "{{ ansible_os_family }} is not supported"
-    when: ansible_os_family != 'Debian'
-  - name: Ensure OS specific tasks to be done
-    include_tasks: "bcompare_{{ ansible_os_family | lower }}.yml"
-  - name: Ensure Beyond Compare is installed
-    package: name=bcompare
+- name: Ensure OS is supported
+  fail:
+    msg: "{{ ansible_os_family }} is not supported"
+  when: ansible_os_family not in ['Darwin', 'Debian', 'Windows']
+- name: Ensure OS specific tasks to be done
+  include_tasks: "bcompare_{{ ansible_os_family | lower }}.yml"
+  when: ansible_os_family != 'Windows'
+- name: Ensure Beyond Compare is installed
+  package: name=bcompare
   become: "{{ false_for_macos }}"
+  when: ansible_os_family != 'Windows'
+- name: Ensure Beyond Compare is installed on Windows hosts
+  win_chocolatey:
+    name: beyondcompare
+  when: ansible_os_family == 'Windows'
