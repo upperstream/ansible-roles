@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+* Fixed
+  * [remote_access_server](remote_access_server/README.md): Fix
+    indentation in variable declaration for startwm_sh_file in xrdp task.
+
 ## [20251024][]
 
 * Added
@@ -163,10 +169,19 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
-[20251024]: https://github.com/upperstream/ansible-roles/compare/20250618...20251024
-[20250618]: https://github.com/upperstream/ansible-roles/compare/20250412...20250618
-[20250412]: https://github.com/upperstream/ansible-roles/compare/20250212...20250412
-[20250212]: https://github.com/upperstream/ansible-roles/compare/20241108...20250212
-[20241108]: https://github.com/upperstream/ansible-roles/compare/20241002...20241108
-[20241002]: https://github.com/upperstream/ansible-roles/compare/20240819...20241002
-[20240819]: https://github.com/upperstream/ansible-roles/releases/tag/20240819
+[Unreleased]:
+  https://github.com/upperstream/ansible-roles/compare/20251024...HEAD
+[20251024]:
+  https://github.com/upperstream/ansible-roles/compare/20250618...20251024
+[20250618]:
+  https://github.com/upperstream/ansible-roles/compare/20250412...20250618
+[20250412]:
+  https://github.com/upperstream/ansible-roles/compare/20250212...20250412
+[20250212]:
+  https://github.com/upperstream/ansible-roles/compare/20241108...20250212
+[20241108]:
+  https://github.com/upperstream/ansible-roles/compare/20241002...20241108
+[20241002]:
+  https://github.com/upperstream/ansible-roles/compare/20240819...20241002
+[20240819]:
+  https://github.com/upperstream/ansible-roles/releases/tag/20240819

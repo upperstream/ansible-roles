@@ -21,10 +21,10 @@
       group: "{{ item }}"
       mode: '0755'
     vars:
-      - params:
+      params:
         - files:
           - "{{ inventory_hostname }}/startwm.sh"
-      - startwm_sh_file: "{{ lookup('first_found', params, errors='ignore') | default('', true) }}"
+      startwm_sh_file: "{{ lookup('first_found', params, errors='ignore') | default('', true) }}"
     when: startwm_sh_file != ''
     become: true
     with_items: "{{ users }}"
