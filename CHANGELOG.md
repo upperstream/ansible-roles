@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+* Added
+  * [base](base/README.md): Add support for configuring SSH public keys
+    for users.
 * Fixed
   * [remote_access_server](remote_access_server/README.md): Fix
     indentation in variable declaration for startwm_sh_file in xrdp task.

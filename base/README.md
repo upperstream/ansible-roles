@@ -28,6 +28,9 @@ The `base` role configures the basic features of the target host.
     in accordance to the remote host's password specification.  See
     _[How do I generate encrypted passwords for the user module][]_ for
     details.
+  * `authorized_keys` - Optional list of SSH public keys to authenticate
+    the user.  Authorized keys for only users who have this list will be
+    set.
 * `zfs_load_keys`- List of ZFS dataset to load encryption keys for
   at boot.  On FreeBSD host, this variable is a dictionary of dataset
   to key location pairs.  On Linux host, this variable is a list of

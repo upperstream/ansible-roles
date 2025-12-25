@@ -12,15 +12,24 @@
     with_items:
       - "{{ groups_to_create }}"
     when: groups_to_create is defined
-  - name: Ensure users exist on the target host
-    user:
-      name: "{{ item.name }}"
-      password: "{{ item.password }}"
-      group: "{{ item.group | default(omit) }}"
-      groups: "{{ item.groups }}"
-      append: "{{ item.append }}"
-    with_items:
-      - "{{ users_to_create }}"
+  - block: # users_to_create is defined
+    - name: Ensure users exist on the target host
+      user:
+        name: "{{ item.name }}"
+        password: "{{ item.password }}"
+        group: "{{ item.group | default(omit) }}"
+        groups: "{{ item.groups }}"
+        append: "{{ item.append }}"
+      with_items:
+        - "{{ users_to_create }}"
+    - name: Ensure authorized keys are set for existing users
+      ansible.posix.authorized_key:
+        user: "{{ item.0.name }}"
+        key: "{{ item.1 }}"
+      loop: "{{ users_to_create
+        | selectattr('authorized_keys', 'defined')
+        | list
+        | subelements('authorized_keys') }}"
     when: users_to_create is defined
   become: true
 - name: Set up ZFS on FreeBSD
