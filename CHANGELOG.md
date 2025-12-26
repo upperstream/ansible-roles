@@ -6,8 +6,9 @@
   * [base](base/README.md): Add support for configuring SSH public keys
     for users.
 * Changed
-  * [development](development/README.md), [packer](packer/README.md):
-    Use `ansible.builtin.deb822_repository` module instead of
+  * [development](development/README.md), [packer](packer/README.md),
+    [virtualisation](virtualisation/README.md): Use
+    `ansible.builtin.deb822_repository` module instead of
     `ansible.builtin.apt_key` module as `apt-key` is deprecated in
     Debian 13.
 * Fixed

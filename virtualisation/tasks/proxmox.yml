@@ -8,20 +8,19 @@
   changed_when: false
   register: arch
   check_mode: false
-- block:
-  - name: Ensure GnuPG is installed
-    package: name=gnupg
-  - name: Ensure Proxmox keyring is installed
-    apt_key:
-      url: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release }}.gpg"
-      keyring: "/etc/apt/trusted.gpg.d/proxmox-release-{{ ansible_distribution_release }}.gpg"
+- block: # Debian hosts
+  - name: Ensure python3-debian is installed for deb822_repository on Debian hosts
+    package: name=python3-debian
   - name: Ensure proxmox repo is registered
-    apt_repository:
-      repo: "deb [arch={{ arch.stdout_lines[0] | regex_replace('^x86_64$', 'amd64')}}] http://download.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-no-subscription"
-      state: present
-      update_cache: yes
+    deb822_repository:
+      signed_by: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release }}.gpg"
+      uris: http://download.proxmox.com/debian/pve
+      suites: "{{ ansible_distribution_release }}"
+      components: [ pve-no-subscription ]
+      name: proxmox
+      enabled: true
   - name: Ensure Proxmox kernel is installed
-    package: name=proxmox-default-kernel
+    apt: name=proxmox-default-kernel update_cache=true
     register: proxmox_kernel_installed
   - name: Ensure target host is rebooted
     reboot:
