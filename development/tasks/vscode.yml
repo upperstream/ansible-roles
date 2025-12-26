@@ -1,15 +1,17 @@
 ---
 - block: # Debian hosts
-  - name: Ensure Microsoft PGP key is installed on Debian hosts
-    apt_key:
-      url: https://packages.microsoft.com/keys/microsoft.asc
-      keyring: /etc/apt/keyrings/packages.microsoft.gpg
+  - name: Ensure python3-debian is installed for deb822_repository on Debian hosts
+    package: name=python3-debian
   - name: Ensure Visual Studio Code repo is installed on Debian hosts
-    apt_repository:
-      repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
-      filename: vscode
+    deb822_repository:
+      signed_by: https://packages.microsoft.com/keys/microsoft.asc
+      uris: https://packages.microsoft.com/repos/code
+      suites: stable
+      components: [ main ]
+      name: vscode
+      enabled: true
   - name: Ensure Visual Studio Code is installed on Debian hosts
-    package: name=code
+    apt: name=code update_cache=yes
   when: ansible_os_family == 'Debian' and (development_tools is defined and 'vscode' in development_tools)
   become: true
 - block: # Red Hat hosts

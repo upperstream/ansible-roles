@@ -5,6 +5,10 @@
 * Added
   * [base](base/README.md): Add support for configuring SSH public keys
     for users.
+* Changed
+  * [development](development/README.md): Use `ansible.builtin.deb822_repository`
+    module instead of `ansible.builtin.apt_key` module as `apt-key` is
+    deprecated in Debian 13.
 * Fixed
   * [remote_access_server](remote_access_server/README.md): Fix
     indentation in variable declaration for startwm_sh_file in xrdp task.
