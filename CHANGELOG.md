@@ -3,8 +3,8 @@
 ## [Unreleased]
 
 * Added
-  * [base](base/README.md): Add support for configuring SSH public keys
-    for users.
+  * [base](base/README.md): Add support for configuring shell and SSH
+    public keys for users.
 * Changed
   * [development](development/README.md), [packer](packer/README.md),
     [virtualisation](virtualisation/README.md): Use

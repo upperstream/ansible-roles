@@ -20,6 +20,7 @@
         group: "{{ item.group | default(omit) }}"
         groups: "{{ item.groups }}"
         append: "{{ item.append }}"
+        shell: "{{ item.shell | default(omit) }}"
       with_items:
         - "{{ users_to_create }}"
     - name: Ensure authorized keys are set for existing users
