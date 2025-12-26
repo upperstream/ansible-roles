@@ -26,6 +26,7 @@
 - name: Ensure Vagrant is installed on Windows hosts
   win_chocolatey: name=vagrant
   register: vagrant_install_test
+  when: ansible_os_family == 'Windows'
 - name: Ensure Vagrant Libvirt provider in installed on Arch Linux hosts
   command: vagrant plugin install vagrant-libvirt
   when: "ansible_os_family in ['Archlinux', 'Artix Linux']"

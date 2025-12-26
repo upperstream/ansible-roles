@@ -16,6 +16,8 @@
 * Fixed
   * [remote_access_server](remote_access_server/README.md): Fix
     indentation in variable declaration for startwm_sh_file in xrdp task.
+  * virtualisation: [Vagrant][] installation using [Chocolatey][] was
+    attempted on non- Windows hosts.
 
 ## [20251024][]
 
@@ -35,6 +37,7 @@
     to install [Hyper-V][], [Vagrant][] and [VirtualBox][]
 
 [Beyond Compare]: https://www.scootersoftware.com/
+[Chocolatey]: https://chocolatey.org/
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
 [Gemini CLI]: https://github.com/google-gemini/gemini-cli
 [GitHub CLI]: https://cli.github.com/
