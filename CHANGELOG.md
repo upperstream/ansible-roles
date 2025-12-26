@@ -16,6 +16,8 @@
   * [remote_access_server](remote_access_server/README.md): Perform
     server component installation only when `remote_access_server` is
     defined.
+  * [wireguard](wireguard/README.md): Create [WireGuard][]
+    configuration file only when `wireguard` is defined.
 * Fixed
   * remote_access_server: Fix indentation in variable declaration for
     startwm_sh_file in xrdp task.
@@ -62,6 +64,8 @@
   * [virtualisation](virtualisation/README.md): Refactor KVM and
     Vagrant installation tasks for clarity and consistency
   * [wireguard](wireguard/README.md): Add role for setting up WireGuard
+
+[WireGuard]: https://www.wireguard.com/
 
 ## [20250412][]
 

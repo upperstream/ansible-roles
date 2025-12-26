@@ -13,7 +13,7 @@
 
 - name: restart WireGuard service
   service:
-    name: wireguard
+    name: wg-quick@wg0
     enabled: yes
     state: restarted
   when: wireguard['start_at_boot'] is defined and wireguard['start_at_boot'] == true and ansible_distribution not in ['OpenBSD']

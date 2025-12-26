@@ -51,7 +51,7 @@
         - option: ListenPort
           value: "{{ wireguard['listen_port'] | default(wireguard_default_listen_port) }}"
     notify: restart WireGuard service
-    when: ansible_distribution not in ['OpenBSD']
+    when: ansible_distribution not in ['OpenBSD'] and wireguard is defined
   - name: Ensure peers are registered in configuration file
     ini_file:
       path: "{{ wireguard_config_dir }}/wg0.conf"
@@ -61,6 +61,7 @@
       value: "{{ item['PublicKey'] }}"
       section_has_values: "{{ item | dict2items(key_name='option', value_name='value') | selectattr('option', '!=', 'PublicKey') }}"
     with_items: "{{ wireguard.peers | default(wireguard_default_peers) }}"
+    when: wireguard is defined
   become: true
 
 - name: Include platform specific tasks
@@ -69,7 +70,7 @@
 
 - name: Ensure WireGuard service is enabled and started
   service:
-    name: wireguard
+    name: wg-quick@wg0
     enabled: yes
     state: started
   when: wireguard['start_at_boot'] is defined and wireguard['start_at_boot'] == true and ansible_distribution not in ['OpenBSD']
