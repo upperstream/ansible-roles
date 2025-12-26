@@ -1,14 +1,8 @@
 ---
 - block: # Need privileged operation
   - block: # Add Packer repo on Debian hosts
-    - name: Ensure HashiCorp PGP key is installed
-      apt_key:
-        url: https://apt.releases.hashicorp.com/gpg
-        keyring: /usr/share/keyrings/hashicorp-archive-keyring.gpg
-    - name: Get CPU architecture name
-      command: dpkg --print-architecture
-      register: arch
-      check_mode: false
+    - name: Ensure python3-debian is installed for deb822_repository on Debian hosts
+      package: name=python3-debian
     - block: # Determine Devuan codename
       - name: Get Debian version
         shell: cat /etc/debian_version | sed 's/^\([0-9][0-9]*\)\..*$/\1/'
@@ -16,9 +10,13 @@
         when: ansible_distribution_file_variety == "Debian"
         check_mode: false
       - name: Ensure Packer repo is registered on Devuan
-        apt_repository:
-          repo: "deb [arch={{ ansible_architecture | replace('x86_64', 'amd64') }} signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ codenames[ansible_lsb.codename] }} main"
-          filename: hashicorp
+        deb822_repository:
+          signed_by: hhttps://apt.releases.hashicorp.com/gpg
+          uris: https://apt.releases.hashicorp.com
+          suites: "{{ codenames[ansible_lsb.codename] }}"
+          components: [ main ]
+          name: hashicorp
+          enabled: true
         vars:
           codenames: "{{ [
             {'devuan_codename': 'excalibur', 'debian_codename': 'trixie'},
@@ -29,10 +27,14 @@
             {'devuan_codename': 'jessie', 'debian_codename': 'jessie'}
            ]| items2dict(key_name='devuan_codename', value_name='debian_codename')}}"
       when: ansible_distribution == 'Devuan'
-    - name: Ensure Packer repo is registered on Debian family
-      apt_repository:
-        repo: "deb [arch={{ arch.stdout_lines[0] }} signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_lsb.codename }} main"
-        filename: hashicorp
+    - name: Ensure Packer repo is registered on Debian family except Devuan
+      deb822_repository:
+        signed_by: hhttps://apt.releases.hashicorp.com/gpg
+        uris: https://apt.releases.hashicorp.com
+        suites: "{{ ansible_lsb.codename }}"
+        components: [ main ]
+        name: hashicorp
+        enabled: true
       when: ansible_distribution != 'Devuan'
     when: ansible_os_family == 'Debian'
   - block: # Add Packer repository on Fedora
