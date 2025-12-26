@@ -1,17 +1,30 @@
 ---
-- name: Ensure curl is installed
-  package: name=curl
+- block: # Need root privileges
+  - name: Ensure bash and curl are installed
+    package: name="{{ item }}" state=present
+    with_items:
+      - bash
+      - curl
+  - name: Ensure GNU make is installed on *BSD hosts
+    package: name=gmake state=present
+    when: ansible_system in ['FreeBSD', 'OpenBSD', 'NetBSD']
   become: true
 - name: Ensure node installer is pushed
   template: src=install_node.sh.j2 dest=/tmp/install_node.sh mode=0755
-- block: # Impersonate target_user
-  - name: Ensure nvm is installed
-    shell:
-      cmd: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_version }}/install.sh | bash"
-      creates: "/home/{{ target_user }}/.nvm/nvm.sh"
-  - name: Ensure node is installed
-    shell:
-      cmd: /tmp/install_node.sh
-      creates: "/home/{{ target_user }}/.nvm/versions/node/{{ node_version }}/bin/node"
+- name: Ensure nvm installer is downloaded
+  get_url:
+    url: https://raw.githubusercontent.com/nvm-sh/nvm/refs/heads/master/install.sh
+    dest: /tmp/install_nvm.sh
+    mode: 0755
+- name: Ensure nvm is installed
+  shell:
+    cmd: /tmp/install_nvm.sh
+    creates: "/home/{{ target_user }}/.nvm/nvm.sh"
+  become: true
+  become_user: "{{ target_user }}"
+- name: Ensure node is installed
+  shell:
+    cmd: CC=clang CXX=clang++ /tmp/install_node.sh
+    creates: "/home/{{ target_user }}/.nvm/versions/node/{{ node_version }}/bin/node"
   become: true
   become_user: "{{ target_user }}"

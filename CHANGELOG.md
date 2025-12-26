@@ -5,6 +5,8 @@
 * Added
   * [base](base/README.md): Add support for configuring shell and SSH
     public keys for users.
+  * [node](node/README.md): Add support for node installation on BSD
+    hosts.
 * Changed
   * [development](development/README.md), [packer](packer/README.md),
     [virtualisation](virtualisation/README.md): Use
