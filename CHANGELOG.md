@@ -13,9 +13,12 @@
     `ansible.builtin.deb822_repository` module instead of
     `ansible.builtin.apt_key` module as `apt-key` is deprecated in
     Debian 13.
+  * [remote_access_server](remote_access_server/README.md): Perform
+    server component installation only when `remote_access_server` is
+    defined.
 * Fixed
-  * [remote_access_server](remote_access_server/README.md): Fix
-    indentation in variable declaration for startwm_sh_file in xrdp task.
+  * remote_access_server: Fix indentation in variable declaration for
+    startwm_sh_file in xrdp task.
   * virtualisation: [Vagrant][] installation using [Chocolatey][] was
     attempted on non- Windows hosts.
 

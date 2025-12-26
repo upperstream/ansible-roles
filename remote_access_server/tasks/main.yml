@@ -32,6 +32,7 @@
 - block: # Need privileged operations
   - name: Ensure remote access server components are installed
     package: "name={{ remote_access_servers | reject('search', 'xrdp') | list }}"
+    when: remote_access_servers is defined and (remote_access_servers | reject('search', 'xrdp') | list) | length > 0
   - block: # Post-install configuration of xrdp on Red Hat hosts
     - name: Check whether firewalld is running on Red Hat hosts
       systemd_service: name=firewalld
