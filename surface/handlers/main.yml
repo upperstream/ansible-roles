@@ -1,0 +1,4 @@
+---
+- name: Grub has been updated
+  debug:
+    msg: "Grub configuration is updated. Please reboot the system to apply new kernel if necessary."

@@ -1,0 +1,8 @@
+---
+- name: Include platform specific tasks
+  vars:
+    task_name: "{{ [
+      {'os_family': 'Arch Linux', 'task': 'ArchLinux'},
+      {'os_family': 'Artix Linux', 'task': 'ArchLinux'},
+     ] | items2dict(key_name='os_family', value_name='task') }}"
+  include_tasks: "{{ task_name[ansible_os_family] | default(ansible_os_family) | lower }}.yml"

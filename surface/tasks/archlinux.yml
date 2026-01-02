@@ -1,0 +1,68 @@
+---
+- name: Check if linux-surface repository is configured
+  shell: grep -q "linux-surface" /etc/pacman.conf || grep -q "linux-surface" /etc/pacman.d/*.conf 2>/dev/null
+  register: surface_repo_check
+  failed_when: false
+  changed_when: false
+
+- block: # Add linux-surface repository
+  - name: Ensure linux-surface key is added
+    shell: |
+      curl -s https://raw.githubusercontent.com/linux-surface/linux-surface/master/pkg/keys/surface.asc | pacman-key --add -
+
+  - name: Ensure linux-surface key is trusted
+    shell: pacman-key --lsign-key 56C464BAAC421453
+
+  - name: Ensure linux-surface repository is added
+    copy:
+      dest: /etc/pacman.d/surface.conf
+      content: |
+        [linux-surface]
+        Server = https://pkg.surfacelinux.com/arch/
+
+  - name: Include linux-surface repository in pacman.conf
+    lineinfile:
+      path: /etc/pacman.conf
+      line: "Include = /etc/pacman.d/surface.conf"
+      insertafter: '^\[core\]'
+
+  - name: Update package cache
+    community.general.pacman:
+      update_cache: yes
+
+  become: true
+  when:
+    - ansible_distribution in ['Arch Linux', 'Artix Linux']
+    - surface_repo_check.rc != 0
+
+- block: # Need privileged operations
+  - name: Ensure necessary packages are installed (1/2)
+    kewlfft.aur.aur:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - linux-surface
+      - linux-firmware-intel
+    register: install_results
+  - name: Ensure necessary packages are installed (2/2)
+    kewlfft.aur.aur:
+      name: "{{ item }}"
+      state: present
+    with_items:
+      - linux-surface-headers
+      - iptsd
+  - name: Ensure libwacom-surface is installed
+    kewlfft.aur.aur:
+      name: libwacom-surface
+      state: present
+    become: true
+    become_user: "{{ ansible_user }}"
+
+  - name: Ensure Grub is updated
+    command: grub-mkconfig -o /boot/grub/grub.cfg
+    notify: Grub has been updated
+    when: install_results is changed
+
+  become: true
+  when:
+    - ansible_distribution in ['Arch Linux', 'Artix Linux']

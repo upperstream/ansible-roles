@@ -1,12 +1,14 @@
 # Changelog
 
-## [Unreleased]
+## [20260102]
 
 * Added
   * [base](base/README.md): Add support for configuring shell and SSH
     public keys for users.
   * [node](node/README.md): Add support for node installation on BSD
     hosts.
+  * Add [surface](surface/README.md) role, which installs Linux kernel
+    and drivers for Microsoft Surface devices.
 * Changed
   * base: Daclare the set_fact task for Arch Linux change nothing and
     never fails; it merely defines the list of AUR helpers.
@@ -193,8 +195,8 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
-[Unreleased]:
-  https://github.com/upperstream/ansible-roles/compare/20251024...HEAD
+[20260102]:
+  https://github.com/upperstream/ansible-roles/compare/20251024...20260102
 [20251024]:
   https://github.com/upperstream/ansible-roles/compare/20250618...20251024
 [20250618]:
