@@ -10,6 +10,7 @@
 * Changed
   * base: Daclare the set_fact task for Arch Linux change nothing and
     never fails; it merely defines the list of AUR helpers.
+  * base: Add the default value for AUR helper.
   * [development](development/README.md), [packer](packer/README.md),
     [virtualisation](virtualisation/README.md): Use
     `ansible.builtin.deb822_repository` module instead of
