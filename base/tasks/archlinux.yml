@@ -10,7 +10,9 @@
       {'name': 'pikaur', 'value': {'PKGBUILD': 'https://aur.archlinux.org/pikaur.git', 'dependencies': ['python']}},
       {'name': 'trizen', 'value': {'PKGBUILD': 'https://aur.archlinux.org/trizen.git', 'dependencies': ['perl']}},
       {'name': 'yay', 'value': {'PKGBUILD': 'https://aur.archlinux.org/yay.git', 'dependencies': ['go']}},
-    ] | items2dict(key_name='name', value_name='value') }}"
+     ] | items2dict(key_name='name', value_name='value') }}"
+  failed_when: false
+  changed_when: false
 - name: Ensure AUR helper dependencies are satisfied
   package: name="{{ ['git', wrappers[archlinux_pacman_wrapper]['dependencies']] | flatten }}"
   become: true

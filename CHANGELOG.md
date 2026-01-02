@@ -8,6 +8,8 @@
   * [node](node/README.md): Add support for node installation on BSD
     hosts.
 * Changed
+  * base: Daclare the set_fact task for Arch Linux change nothing and
+    never fails; it merely defines the list of AUR helpers.
   * [development](development/README.md), [packer](packer/README.md),
     [virtualisation](virtualisation/README.md): Use
     `ansible.builtin.deb822_repository` module instead of
