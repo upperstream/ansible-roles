@@ -1,7 +1,11 @@
 ---
-- name: Ensure Execution Policy allows script execution on Windows hosts
-  raw: Set-ExecutionPolicy AllSigned
-  when: ansible_os_family == 'Windows'
-- name: Ensure Chocolatey is installed on Windows hosts
-  raw: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+- block: # Bootstrapping for Windows hosts
+  - name: Ensure Execution Policy allows script execution on Windows hosts
+    raw: Set-ExecutionPolicy AllSigned
+  - name: Ensure Chocolatey is installed on Windows hosts
+    raw: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+  - name: Ensure Chocolatey is used as package manager on Windows hosts
+    set_fact:
+      ansible_facts:
+        pkg_mgr: chocolatey.chocolatey.win_chocolatey
   when: ansible_os_family == 'Windows'

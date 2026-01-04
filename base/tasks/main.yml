@@ -43,17 +43,11 @@
   include_tasks: nfs_client.yml
   when: (base is defined and 'nfs_client' in base)
 - block: # misc_tools is defined
-  - name: Set up miscellaneous tools on non- Windows hosts
+  - name: Set up miscellaneous tools
     package: name="{{ item }}" state=present
     with_items:
-    - "{{ misc_tools | list }}"
-    when: ansible_os_family != 'Windows'
-    become: "{{ false_for_macos }}"
-  - name: Set up miscellaneous tools on Windows hosts
-    win_chocolatey: name="{{ item }}" state=present
-    with_items:
-     - "{{ misc_tools | list }}"
-    when: ansible_os_family == 'Windows'
+      - "{{ misc_tools | list }}"
+    become: "{{ false_for_macos_and_windows }}"
   when: misc_tools is defined
 - name: Set up miscellaneous GUI tools on macOS
   homebrew_cask:
@@ -62,7 +56,7 @@
   with_items:
     - "{{ misc_gui_tools | list }}"
   when: misc_gui_tools is defined and ansible_system == 'Darwin'
-  become: "{{ false_for_macos }}"
+  become: "{{ false_for_macos_and_windows }}"
 - name: Ensure basic configuration is made on Arch Linux
   include_tasks: archlinux.yml
   when: "ansible_os_family in ['Archlinux', 'Artix Linux']"

@@ -1,15 +1,10 @@
 ---
-- name: Ensure development tools are installed on non-Windows hosts
+- name: Ensure development tools are installed
   package: name="{{ item }}"
   with_items:
     - "{{ development_tools | default([]) | difference(['bcompare', 'gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
-  become: "{{ false_for_macos }}"
-  when: development_tools is defined and ansible_os_family != 'Windows'
-- name: Ensure development tools are installed on Windows hosts
-  win_chocolatey: name="{{ item }}"
-  with_items:
-    - "{{ development_tools | default([]) | difference(['bcompare', 'gcm', 'gotd', 'gotwebd', 'java', 'markdown', 'repo']) | list }}"
-  when: development_tools is defined and ansible_os_family == 'Windows'
+  become: "{{ false_for_macos_and_windows }}"
+  when: development_tools is defined
 - block: # Need privileged operations
   - block: # Debian family
     - name: Ensure essential build tools are installed on Debian host
@@ -42,7 +37,7 @@
       name: "{{ jdk | default('temurin') }}"
       sudo_password: "{{ ansible_become_pass }}"
     when: development_tools is defined and 'java' in development_tools and ansible_system == "Darwin"
-  become: "{{ false_for_macos }}"
+  become: "{{ false_for_macos_and_windows }}"
 - name: Install GitHub CLI
   include_tasks: github_cli.yml
   when: development_tools is defined and 'gh' in development_tools and ansible_os_family != 'Windows'

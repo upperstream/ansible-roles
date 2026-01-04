@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+
+* Changed
+  * Generalise role definitions between Windows hosts and other OS hosts:
+    * Rename `false_for_macos` variable to `false_for_macos_and_windows`,
+      which is now used for macOS hosts and Windows hosts to deny
+	  privilege escalation to install packages.
+    * Use `ansible.builtin.package` module to install packages on
+	  Windows instead of `chocolatey.chocolatey.win_chocolatey` module.
+
 ## [20260102]
 
 * Added
@@ -195,6 +205,8 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
+[Unreleased]:
+  https://github.com/upperstream/ansible-roles/compare/20260102...HEAD
 [20260102]:
   https://github.com/upperstream/ansible-roles/compare/20251024...20260102
 [20251024]:

@@ -77,7 +77,7 @@
       args:
         creates: /usr/local/bin/packer
     when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
-  become: "{{ false_for_macos }}"
+  become: "{{ false_for_macos_and_windows }}"
 - name: Ensure Packer is installed on Windows hosts
-  win_chocolatey: name=packer
+  package: name=packer
   when: ansible_os_family == 'Windows'

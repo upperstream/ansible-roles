@@ -15,7 +15,7 @@
       ] | items2dict(key_name='os_family', value_name='package') }}"
   package:
     name: "{{ package_name[ansible_os_family] | default('wireguard-tools') }}"
-  become: "{{ false_for_macos }}"
+  become: "{{ false_for_macos_and_windows }}"
 
 - block: # Need privileged operations
   - name: Ensure WireGuard configuration directory exists

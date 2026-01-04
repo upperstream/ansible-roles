@@ -5,4 +5,4 @@
 - name: Ensure Chromium browser is installed on non- Arch Linux hosts
   package: name=chromium
   when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
-  become: "{{ false_for_macos }}"
+  become: "{{ false_for_macos_and_windows }}"

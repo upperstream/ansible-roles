@@ -15,7 +15,7 @@
     name: "{{ item }}"
   with_items:
     "{{ packages[ansible_os_family] }}"
-  become: "{{ false_for_macos }}"
+  become: "{{ false_for_macos_and_windows }}"
 - name: "Set up Xfce on {{ ansible_os_family }} family hosts"
   include_tasks: xfce_{{ ansible_os_family | lower }}.yml
   when: ansible_os_family in xfce_supported_oses

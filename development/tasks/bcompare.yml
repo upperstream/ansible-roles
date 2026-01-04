@@ -1,16 +1,22 @@
 ---
+- name: Determine Beyond Compare package name
+  vars:
+    package_names: "{{ [
+      {'os_family': 'Darwin', 'package': 'beyond-compare'},
+      {'os_family': 'Debian', 'package': 'bcompare'},
+      {'os_family': 'Windows', 'package': 'beyondcompare'},
+     ] | items2dict(key_name='os_family', value_name='package') }}"
+  set_fact:
+    bcompare_package_name: "{{ package_names.get(ansible_os_family, '') }}"
+  changed_when: false
+  failed_when: false
 - name: Ensure OS is supported
   fail:
-    msg: "{{ ansible_os_family }} is not supported"
-  when: ansible_os_family not in ['Darwin', 'Debian', 'Windows']
+    msg: "Beyond Compare installation is not supported on {{ ansible_os_family }}"
+  when: bcompare_package_name == '' or bcompare_package_name is not defined
 - name: Ensure OS specific tasks to be done
   include_tasks: "bcompare_{{ ansible_os_family | lower }}.yml"
   when: ansible_os_family != 'Windows'
 - name: Ensure Beyond Compare is installed
-  package: name=bcompare
-  become: "{{ false_for_macos }}"
-  when: ansible_os_family != 'Windows'
-- name: Ensure Beyond Compare is installed on Windows hosts
-  win_chocolatey:
-    name: beyondcompare
-  when: ansible_os_family == 'Windows'
+  package: name='{{ bcompare_package_name }}'
+  become: "{{ false_for_macos_and_windows }}"

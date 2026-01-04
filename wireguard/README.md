@@ -93,7 +93,7 @@ system.
 On macOS, WireGuard is managed as a launchd service.  The role will
 create/manage a `com.wireguard.wg0.plist` file (expected to be in
 `files/com.wireguard.wg0.plist` within the role) and use `launchd` to
-control the service.  The `false_for_macos` variable is used internally
+control the service.  The `false_for_macos_and_windows` variable is used internally
 to manage privilege escalation for Homebrew package installation,
 assuming it's set appropriately in your inventory or other var files if
 needed (though the role doesn't define a default for it).

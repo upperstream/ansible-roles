@@ -22,7 +22,7 @@
     - name: Ensure Firefox is installed on Debian family hosts
       package:
         name: firefox
-      become: "{{ false_for_macos }}"
+      become: "{{ false_for_macos_and_windows }}"
     - name: Ensure unattended upgrade of snap version is disabled on Debian family hosts
       copy:
         content: 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:{{ ansible_lsb.id }}";'

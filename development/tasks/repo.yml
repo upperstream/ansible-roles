@@ -2,7 +2,7 @@
 - block: # development_tools is defined and 'repo' in development_tools
   - name: Ensure repo is installed on Debian family or macOS
     package: name=repo
-    become: "{{ false_for_macos }}"
+    become: "{{ false_for_macos_and_windows }}"
     when: ansible_os_family == 'Debian' or ansible_system == 'Darwin'
   - block: # non- Debian Linux hosts with privileged operations
     - name: Ensure repo dependencies are satisfied
