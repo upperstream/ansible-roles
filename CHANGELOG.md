@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+* Added
+  * [base](base/README.md): Add support for Windows hosts to set
+    hostname.
 * Changed
   * Generalise role definitions between Windows hosts and other OS hosts:
     * Rename `false_for_macos` variable to `false_for_macos_and_windows`,

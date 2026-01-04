@@ -1,0 +1,4 @@
+---
+- name: hostname has been changed
+  ansible.builtin.debug:
+    msg: "The hostname has been changed.  Reboot the target host to apply the change."

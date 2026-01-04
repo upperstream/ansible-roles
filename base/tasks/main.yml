@@ -60,7 +60,14 @@
 - name: Ensure basic configuration is made on Arch Linux
   include_tasks: archlinux.yml
   when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
-- name: Ensure hostname is set
-  hostname: name="{{ base.hostname }}"
-  when: ansible_os_family != 'Windows' and base is defined and base.hostname is defined
-  become: true
+- block: # Set hostname
+  - name: Ensure hostname is set
+    hostname: name="{{ base.hostname }}"
+    when: ansible_os_family != 'Windows'
+    become: true
+  - name: Ensure hostname is set on Windows hosts
+    ansible.windows.win_hostname:
+      name: "{{ base.hostname }}"
+    notify: hostname has been changed
+    when: ansible_os_family == 'Windows'
+  when: base is defined and base.hostname is defined
