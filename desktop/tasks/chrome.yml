@@ -20,4 +20,7 @@
       name: google-chrome
       sudo_password: "{{ ansible_become_pass }}"
     when: ansible_system == 'Darwin'
+  - name: Ensure Chrome is installed on Windows hosts
+    package: name=googlechrome
+    when: ansible_os_family == 'Windows'
   when: "'chrome' in browsers"
