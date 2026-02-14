@@ -14,6 +14,9 @@
 	  privilege escalation to install packages.
     * Use `ansible.builtin.package` module to install packages on
 	  Windows instead of `chocolatey.chocolatey.win_chocolatey` module.
+* Fixed
+  * [packer](packer/README.md): Corrected the GPG key URL for Debian and
+    Devuan hosts.
 
 ## [20260102]
 
