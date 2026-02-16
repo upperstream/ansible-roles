@@ -1,0 +1,10 @@
+- name: Fail if OS is not supported
+  fail:
+    msg: "Dropbox Desktop installation is only supported on Debian and Ubuntu.  Current OS family: {{ ansible_os_family }}"
+  when: ansible_os_family not in ['Debian', 'Ubuntu']
+
+- name: Ensure Dropbox Desktop is installed on Debian or Ubuntu
+  apt:
+    deb: "https://linux.dropbox.com/packages/{{ ansible_os_family | lower }}/dropbox_{{ dropbox_desktop_version}}_{{ ansible_machine | replace('x86_64', 'amd64') }}.deb"
+  when: ansible_os_family in ['Debian', 'Ubuntu']
+  become: true

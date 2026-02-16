@@ -1,0 +1,3 @@
+- name: Install Dropbox Desktop
+  include_tasks: dropbox_desktop.yaml
+  when: dropbox_desktop == true
