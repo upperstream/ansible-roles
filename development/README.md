@@ -36,7 +36,13 @@ daemons are installed and enabled on the target host.  You may need to
 provide configuration files (`files/{{ ansible_hostname }}/gotd.conf`
 for `gotd`) and (`files/{{ ansible_hostname }}/gotwebd.conf` for
 `gotwebd`).  You may also need HTTPd configuration file
-(`files/{{ ansible_hostname }}/gotwebd_httpd.conf`) when you set up `gotwebd`.
+(`files/{{ ansible_hostname }}/gotwebd_httpd.conf`) when you set up
+`gotwebd`.
+
+## Git Credential Manager
+
+Variable `gcm_version` specifies the version to install, which defaults
+to `2.7.0`.
 
 ## OpenJDK
 

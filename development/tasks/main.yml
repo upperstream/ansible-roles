@@ -15,6 +15,7 @@
         shell: apt list --installed | grep -q gcm
         ignore_errors: true
         register: gcm_install_test
+        changed_when: false
       - name: Ensure Git Credential Manager dependencies are satisfied
         package:
           name:
@@ -25,7 +26,7 @@
         when: ansible_system == "Linux"
       - name: Optionally install Git Credential Manager
         apt:
-          deb: https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.3.2/gcm-linux_amd64.2.3.2.deb
+          deb: "https://github.com/git-ecosystem/git-credential-manager/releases/download/v{{ gcm_version }}/gcm-linux_{{ ansible_machine | replace('x86_64', 'amd64') }}.{{ gcm_version }}.deb"
         when: gcm_install_test.rc != 0
       when: development_tools is defined and 'gcm' in development_tools
     when: ansible_os_family == "Debian"

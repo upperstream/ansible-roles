@@ -13,14 +13,18 @@
   * Generalise role definitions between Windows hosts and other OS hosts:
     * Rename `false_for_macos` variable to `false_for_macos_and_windows`,
       which is now used for macOS hosts and Windows hosts to deny
-	  privilege escalation to install packages.
+      privilege escalation to install packages.
     * Use `ansible.builtin.package` module to install packages on
-	  Windows instead of `chocolatey.chocolatey.win_chocolatey` module.
+      Windows instead of `chocolatey.chocolatey.win_chocolatey` module.
+  * [development](development/README.md): introduce `gcm_version`
+    variable to specify the [Git Credential Manager][] version to
+	install, which defaults to `2.7.0`.
 * Fixed
   * [packer](packer/README.md): Corrected the GPG key URL for Debian and
     Devuan hosts.
 
 [Dropbox]: https://www.dropbox.com/
+[Git Credential Manager]: https://github.com/git-ecosystem/git-credential-manager
 
 ## [20260102]
 
