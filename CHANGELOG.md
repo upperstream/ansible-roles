@@ -36,7 +36,7 @@
   * Add [surface](surface/README.md) role, which installs Linux kernel
     and drivers for Microsoft Surface devices.
 * Changed
-  * base: Daclare the set_fact task for Arch Linux change nothing and
+  * base: Declare the set_fact task for Arch Linux change nothing and
     never fails; it merely defines the list of AUR helpers.
   * base: Add the default value for AUR helper.
   * [development](development/README.md), [packer](packer/README.md),
