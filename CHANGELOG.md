@@ -20,6 +20,8 @@
     variable to specify the [Git Credential Manager][] version to
 	install, which defaults to `2.7.0`.
 * Fixed
+  * [docker_host](docker_host/README.md): Correct package name for
+    Docker on macOS.
   * [packer](packer/README.md): Corrected the GPG key URL for Debian and
     Devuan hosts.
 
