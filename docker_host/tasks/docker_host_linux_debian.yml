@@ -44,11 +44,11 @@
             {'devuan_codename': 'beowulf', 'debian_codename': 'buster'},
             {'devuan_codename': 'ascii', 'debian_codename': 'stretch'},
             {'devuan_codename': 'jessie', 'debian_codename': 'jessie'}
-          ]| items2dict(key_name='devuan_codename', value_name='debian_codename')}}"
+           ]| items2dict(key_name='devuan_codename', value_name='debian_codename')}}"
     when: ansible_distribution == 'Devuan'
   - name: Ensure Docker repository information is added
     ansible.builtin.apt_repository:
-      repo: "deb [arch={{ ansible_architecture | replace('x86_64', 'amd64') }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_lsb.codename }} stable"
+      repo: "deb [arch={{ ansible_architecture | replace('x86_64', 'amd64') }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_lsb.codename }} stable"
       filename: docker
     when: ansible_distribution != 'Devuan'
   - name: Ensure Docker Engine is installed

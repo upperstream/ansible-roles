@@ -7,6 +7,8 @@
     hostname.
   * [desktop](desktop/README.md): Add support for installation of Chrome
     and Firebox browsers on Windows hosts.
+  * [docker_host](docker_host/README.md): Add support for Docker Engine
+    installation on Ubuntu host.
   * Add [dropbox](dropbox/README.md) role, which installs the [Dropbox][]
     client.  Currently Debian and Ubuntu target hosts are supported.
 * Changed
