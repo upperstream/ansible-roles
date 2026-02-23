@@ -13,8 +13,13 @@
 
 - name: restart WireGuard service
   service:
-    name: wg-quick@wg0
+    name: "{{ service_names[ansible_service_mgr] }}"
     enabled: yes
     state: restarted
+  vars:
+    service_names: "{{ [
+      {'service_mgr': 'systemd', 'service_name': 'wg-quick@wg0'},
+      {'service_mgr': 'sysvinit', 'service_name': 'wg0'},
+     ] | items2dict(key_name='service_mgr', value_name='service_name') }}"
   when: wireguard['start_at_boot'] is defined and wireguard['start_at_boot'] == true and ansible_distribution not in ['OpenBSD']
   become: true

@@ -11,11 +11,16 @@
 - name: Install WireGuard
   vars:
     package_name: "{{ [
-        {'os_family': 'Debian', 'package': 'wireguard'}
+        {'os_family': 'Debian', 'package': 'wireguard'},
+        {'os_family': 'Windows', 'package': 'wireguard'},
       ] | items2dict(key_name='os_family', value_name='package') }}"
   package:
     name: "{{ package_name[ansible_os_family] | default('wireguard-tools') }}"
   become: "{{ false_for_macos_and_windows }}"
+
+- name: Exit this role on Windows hosts
+  meta: end_play
+  when: ansible_os_family == 'Windows'
 
 - block: # Need privileged operations
   - name: Ensure WireGuard configuration directory exists
@@ -68,10 +73,22 @@
   include_tasks: "{{ ansible_os_family | lower }}.yml"
   tags: wireguard_platform_specific
 
-- name: Ensure WireGuard service is enabled and started
-  service:
-    name: wg-quick@wg0
-    enabled: yes
-    state: started
+- block: # Enable and start WireGuard service
+  - name: Ensure WireGuard init script is created on sysvinit hosts
+    copy:
+      dest: /etc/init.d/wg0
+      src: wg0.sysvinit.sh
+      mode: '0755'
+    when: ansible_service_mgr == 'sysvinit'
+  - name: Ensure WireGuard service is enabled and started
+    service:
+      name: "{{ service_names[ansible_service_mgr] }}"
+      enabled: yes
+      state: started
+    vars:
+      service_names: "{{ [
+        {'service_mgr': 'systemd', 'service_name': 'wg-quick@wg0'},
+        {'service_mgr': 'sysvinit', 'service_name': 'wg0'},
+       ] | items2dict(key_name='service_mgr', value_name='service_name') }}"
   when: wireguard['start_at_boot'] is defined and wireguard['start_at_boot'] == true and ansible_distribution not in ['OpenBSD']
   become: true
