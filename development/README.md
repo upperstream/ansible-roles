@@ -12,6 +12,7 @@ This role can install the following tools if any is specified in
 * `got` - [Game of Trees][]
 * `java` - OpenJDK
 * `markdown` - Markdown parser
+* `mise` - [MISE-EN-PLACE][] dev tools, env vars, task runner
 * `repo` - The [Multiple Git Repository Tool][]
 * `vscode` - [Visual Studio Code][] on FreeBSD, Debian hosts, Red Hat
   hosts, and Windows hosts
@@ -21,6 +22,7 @@ Also the following tools are installed:
 * `build-essential` (on Debian and its descendants)
 
 [Game of Trees]: https://gameoftrees.org/index.html
+[MISE-EN-PLACE]: https://mise.jdx.dev/
 [Multiple Git Repository Tool]: https://gerrit.googlesource.com/git-repo/
 [Visual Studio Code]: https://code.visualstudio.com/
 

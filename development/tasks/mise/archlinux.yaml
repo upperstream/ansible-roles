@@ -1,0 +1,4 @@
+- name: Ensure Mise is installed on Arch Linux hosts
+  package: name=mise
+  when: ansible_os_family == 'Archlinux'
+  become: "{{ false_for_macos_and_windows }}"

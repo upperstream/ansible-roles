@@ -1,0 +1,13 @@
+- block: # Debian hosts
+  - name: Ensure Mise repo is installed on Debian hosts
+    deb822_repository:
+      signed_by: https://mise.jdx.dev/gpg-key.pub
+      uris: https://mise.jdx.dev/deb
+      suites: stable
+      components: [main]
+      name: mise
+      enabled: true
+  - name: Ensure Mise is installed on Debian hosts
+    apt: name=mise update_cache=yes
+  when: ansible_os_family == 'Debian'
+  become: "{{ false_for_macos_and_windows }}"

@@ -2,7 +2,7 @@
 - name: Ensure development tools are installed
   package: name="{{ item }}"
   with_items:
-    - "{{ development_tools | default([]) | difference(['bcompare', 'gcm', 'gh', 'gotd', 'gotwebd', 'java', 'repo', 'vscode']) | list }}"
+    - "{{ development_tools | default([]) | difference(['bcompare', 'gcm', 'gh', 'gotd', 'gotwebd', 'java', 'mise', 'repo', 'vscode']) | list }}"
   become: "{{ false_for_macos_and_windows }}"
   when: development_tools is defined
 - block: # Need privileged operations
@@ -57,3 +57,11 @@
 - name: Install Beyond Compare
   include_tasks: bcompare.yml
   when: development_tools is defined and 'bcompare' in development_tools
+- block: # Install Mise
+  - name: Install Mise on selected OS families
+    include_tasks: "mise/{{ ansible_os_family | lower | replace(' ', '_') }}.yaml"
+    when: ansible_os_family in ['Alpine', 'Archlinux', 'Artix Linux', 'Darwin', 'Debian', 'Windows']
+  - name: Install Mise on unselected OS families
+    include_tasks: "mise/mise_run.yaml"
+    when: ansible_os_family not in ['Alpine', 'Archlinux', 'Artix Linux', 'Darwin', 'Debian', 'Windows']
+  when: development_tools is defined and 'mise' in development_tools

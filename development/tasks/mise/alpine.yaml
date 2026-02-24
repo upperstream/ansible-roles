@@ -1,0 +1,4 @@
+- name: Ensure Mise is installed on Alpine hosts
+  package: name=mise
+  when: ansible_os_family == 'Alpine'
+  become: "{{ false_for_macos_and_windows }}"

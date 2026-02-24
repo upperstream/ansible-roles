@@ -1,0 +1,4 @@
+- name: Ensure Mise is installed on macOS hosts
+  package: name=mise
+  when: ansible_os_family == 'Darwin'
+  become: "{{ false_for_macos_and_windows }}"

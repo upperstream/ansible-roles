@@ -7,6 +7,8 @@
     hostname.
   * [desktop](desktop/README.md): Add support for installation of Chrome
     and Firebox browsers on Windows hosts.
+  * [development](development/README.md): Add support for installation
+    of [Mise][].
   * [docker_host](docker_host/README.md): Add support for Docker Engine
     installation on Ubuntu host.
   * Add [dropbox](dropbox/README.md) role, which installs the [Dropbox][]
@@ -32,6 +34,7 @@
 [Devuan]: https://www.devuan.org/
 [Dropbox]: https://www.dropbox.com/
 [Git Credential Manager]: https://github.com/git-ecosystem/git-credential-manager
+[Mise]: https://mise.jdx.dev/
 
 ## [20260102]
 

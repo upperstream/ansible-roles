@@ -1,0 +1,5 @@
+- name: Ensure curl is installed
+  package: name=curl
+  become: "{{ false_for_macos_and_windows }}"
+- name: Ensure Mise is installed using installer script
+  shell: curl -sL https://mise.run | sh

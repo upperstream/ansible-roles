@@ -1,0 +1,4 @@
+- name: Ensure Mise is installed on Artix Linux hosts
+  package: name=mise
+  when: ansible_os_family == 'Artix Linux'
+  become: "{{ false_for_macos_and_windows }}"

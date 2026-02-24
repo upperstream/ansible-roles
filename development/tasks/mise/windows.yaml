@@ -1,0 +1,4 @@
+- name: Ensure Mise is installed on Windows hosts
+  win_package: name=mise
+  when: ansible_os_family == 'Windows'
+  become: "{{ false_for_macos_and_windows }}"
