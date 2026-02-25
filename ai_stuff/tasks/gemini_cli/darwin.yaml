@@ -1,0 +1,3 @@
+- name: Install Gemini CLI on macOS hosts
+  package: name=gemini-cli
+  when: ansible_system == 'Darwin'

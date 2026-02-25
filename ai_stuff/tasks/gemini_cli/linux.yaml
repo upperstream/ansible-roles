@@ -1,0 +1,6 @@
+- name: Ensure node.js is installed as a dependency for Gemini CLI
+  package: name=npm
+  become: true
+- name: Ensure Gemini CLI is installed on Linux hosts
+  npm: name=@google/gemini-cli global=yes
+  become: true

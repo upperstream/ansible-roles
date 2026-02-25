@@ -22,6 +22,8 @@
       privilege escalation to install packages.
     * Use `ansible.builtin.package` module to install packages on
       Windows instead of `chocolatey.chocolatey.win_chocolatey` module.
+  * [ai_stuff](ai_stuff/README.md): Use Homebrew package of [Gemini CLI][]
+    on macOS hosts.
   * [development](development/README.md): introduce `gcm_version`
     variable to specify the [Git Credential Manager][] version to
 	install, which defaults to `2.7.0`.
@@ -33,6 +35,9 @@
 
 [Devuan]: https://www.devuan.org/
 [Dropbox]: https://www.dropbox.com/
+[Gemini CLI]: https://github.com/google-gemini/gemini-cli
+  "GitHub - google-gemini/gemini-cli: An open-source AI agent that
+  brings the power of Gemini directly into your terminal."
 [Git Credential Manager]: https://github.com/git-ecosystem/git-credential-manager
 [Mise]: https://mise.jdx.dev/
 
@@ -85,7 +90,6 @@
 [Beyond Compare]: https://www.scootersoftware.com/
 [Chocolatey]: https://chocolatey.org/
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
-[Gemini CLI]: https://github.com/google-gemini/gemini-cli
 [GitHub CLI]: https://cli.github.com/
 [Hyper-V]: https://learn.microsoft.com/windows-server/virtualization/hyper-v/
 [Node.js]: https://nodejs.org/
