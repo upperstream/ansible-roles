@@ -1,3 +1,2 @@
----
 charm_opencode_repo: "github.com/opencode-ai/opencode@latest"
-claude_code_package: "@anthropic-ai/claude-code"
+claude_code_version: "2.1.50"

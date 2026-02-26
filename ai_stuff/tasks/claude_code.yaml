@@ -1,0 +1,12 @@
+---
+- name: Ensure bash is installed as a dependency for the installer script
+  package: name=bash
+  become: true
+- name: Ensure installer script for Claude Code is downloaded
+  get_url: url="https://claude.ai/install.sh" dest="/tmp/install_claude_code.sh" mode=0755
+- name: Ensure Claude Code is installed
+  shell:
+    cmd: "cat /tmp/install_claude_code.sh | bash -s {{ claude_code_version }}"
+    creates: "/home/{{ target_user }}/.local/share/claude/versions/{{ claude_code_version }}"
+  become: true
+  become_user: "{{ target_user }}"
