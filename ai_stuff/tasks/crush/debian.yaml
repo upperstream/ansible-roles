@@ -1,0 +1,13 @@
+- block: # Debian hosts
+  - name: Ensure Charmbracelet repo is installed on Debian hosts
+    deb822_repository:
+      signed_by: https://repo.charm.sh/apt/gpg.key
+      uris: https://repo.charm.sh/apt/
+      suites: '*'
+      components: '*'
+      name: charm
+      enabled: true
+  - name: Ensure Crush is installed on Debian hosts
+    apt: name=crush update_cache=yes
+  when: ansible_os_family == 'Debian'
+  become: true

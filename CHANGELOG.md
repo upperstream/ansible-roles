@@ -25,6 +25,7 @@
   * [ai_stuff](ai_stuff/README.md): Use Homebrew package of [Gemini CLI][]
     on macOS hosts.
   * ai_stuff: Use official installation script for [Claude Code][].
+  * ai_stuff: Charmbracelet's OpenCode is now called [Crush][].
   * [development](development/README.md): introduce `gcm_version`
     variable to specify the [Git Credential Manager][] version to
 	install, which defaults to `2.7.0`.
@@ -35,6 +36,8 @@
     Devuan hosts.
 
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
+[Crush]: https://github.com/charmbracelet/crush
+  "GitHub - charmbracelet/crush: Glamourous agentic coding for all 💘"
 [Devuan]: https://www.devuan.org/
 [Dropbox]: https://www.dropbox.com/
 [Gemini CLI]: https://github.com/google-gemini/gemini-cli

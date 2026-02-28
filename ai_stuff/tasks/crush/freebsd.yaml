@@ -1,0 +1,4 @@
+- name: Ensure Crush is installed on FreeBSD hosts
+  package: name=crush
+  when: ansible_os_family == 'FreeBSD'
+  become: true

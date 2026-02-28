@@ -1,0 +1,3 @@
+- name: Ensure Crush is installed on macOS hosts
+  package: name=charmbracelet/tap/crush
+  when: ansible_os_family == 'Darwin'

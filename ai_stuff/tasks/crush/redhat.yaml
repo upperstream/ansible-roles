@@ -1,0 +1,12 @@
+- block: # RedHat-based Linux hosts
+  - name: Ensure Charmbracelet repo is installed in RedHat-based Linux hosts
+    yum_repository:
+      name: Charm
+      description: Charmbracelet Software Repository
+      baseurl: https://repo.charm.sh/yum/
+      gpgcheck: 1
+      gpgkey: https://repo.charm.sh/yum/gpg.key
+  - name: Ensure Crush is installed on RedHat-based Linux hosts
+    package: name=crush
+  when: ansible_os_family == 'RedHat'
+  become: true

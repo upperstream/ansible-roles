@@ -1,7 +1,7 @@
 ---
 - name: Determine Go tarball name
   set_fact:
-    go_tarball: "go1.24.4.{{ ansible_system | lower }}-{{ ansible_machine | regex_replace('^x86_64$', 'amd64') }}.tar.gz"
+    go_tarball: "go{{ golang_version }}.{{ ansible_system | lower }}-{{ ansible_machine | regex_replace('^x86_64$', 'amd64') }}.tar.gz"
 - name: Download Go tarball
   get_url:
     dest: "/tmp/{{ go_tarball }}"
@@ -15,12 +15,9 @@
   become: true
   notify:
     - Go is installed
-- name: Ensure OpenCode is installed
+- name: Ensure Crush is installed
   command:
-    cmd: "/usr/local/go/bin/go install {{ charm_opencode_repo }}"
-    creates: "/home/{{ target_user }}/go/bin/opencode"
+    cmd: "/usr/local/go/bin/go install github.com/charmbracelet/crush@{{ crush_version }}"
+    creates: "/home/{{ target_user }}/go/bin/crush"
   become: true
   become_user: "{{ target_user }}"
-- name: Ensure Ripgrep and FZF are installed
-  package: "name={{ ['fzf', 'ripgrep'] }}"
-  become: true

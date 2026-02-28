@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "agentic",
         "aosp",
         "AOSP",
         "archlinux",
@@ -8,6 +9,7 @@
         "aurman",
         "bcompare",
         "buildx",
+        "charmbracelet",
         "chdir",
         "chrony",
         "cmdline",
@@ -27,9 +29,12 @@
         "firewalld",
         "forky",
         "genkey",
+        "Glamourous",
         "gnupg",
         "gotd",
         "gotwebd",
+        "gpgcheck",
+        "gpgkey",
         "gtar",
         "insertafter",
         "kewlfft",
@@ -77,6 +82,7 @@
         "vmware",
         "wgkey",
         "wgport",
+        "winget",
         "xrdp"
     ],
     "markdownlint.config": {

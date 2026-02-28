@@ -1,2 +1,3 @@
-charm_opencode_repo: "github.com/opencode-ai/opencode@latest"
+crush_version: "latest"
 claude_code_version: "2.1.50"
+golang_version: "1.26.0"

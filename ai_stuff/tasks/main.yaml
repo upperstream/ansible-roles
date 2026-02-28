@@ -1,6 +1,23 @@
-- name: Set up OpenCode from Charm
-  include_tasks: charm_opencode.yml
-  when: ai_stuff is defined and 'charm_opencode' in ai_stuff
+- block: # Set up Crush
+  - name: Determine tasks filename
+    vars:
+      tasks_names: "{{ [
+        {'os_family': 'ArchLinux', 'tasks': 'archlinux.yaml'},
+        {'os_family': 'Artix Linux', 'tasks': 'archlinux.yaml'},
+        {'os_family': 'Darwin', 'tasks': 'darwin.yaml'},
+        {'os_family': 'Debian', 'tasks': 'debian.yaml'},
+        {'os_family': 'RedHat', 'tasks': 'redhat.yaml'},
+       ] | items2dict(key_name='os_family', value_name='tasks') }}"
+    set_fact:
+      tasks_filename: "{{ tasks_names.get(ansible_os_family, '') }}"
+    changed_when: false
+  - name: Install Crush
+    include_tasks: "crush/{{ tasks_filename }}"
+    when: tasks_filename != ''
+  - name: Install Crush on unsupported OS families using Go installation
+    include_tasks: "crush/go.yaml"
+    when: tasks_filename == ''
+  when: ai_stuff is defined and ('crush' in ai_stuff or 'charm_opencode' in ai_stuff)
 - name: Set up Claude Code
   include_tasks: claude_code.yaml
   when: ai_stuff is defined and 'claude_code' in ai_stuff

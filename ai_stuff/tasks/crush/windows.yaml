@@ -1,0 +1,7 @@
+- name: Install Crush using WinGet
+  ansible.windows.win_command:
+    cmd: winget install charmbracelet.crush --source winget --accept-package-agreements --accept-source-agreements
+  args:
+    chdir: C:\
+  register: winget_install_result
+  changed_when: winget_install_result.rc != 0
