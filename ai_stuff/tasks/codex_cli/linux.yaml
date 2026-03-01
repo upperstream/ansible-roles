@@ -1,0 +1,7 @@
+- block: # Linux hosts
+  - name: Ensure node.js is installed as a dependency for OpenAI Codex CLI
+    package: name=npm
+  - name: Ensure OpenAI Codex CLI is installed on Linux hosts
+    npm: name=@openai/codex global=yes
+  when: ansible_system == 'Linux'
+  become: true

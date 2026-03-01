@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 * Added
+  * [ai_stuff](ai_stuff/README.md): Add support for installation of
+    [Codex CLI][].
   * [base](base/README.md): Add support for Windows hosts to set
     hostname.
   * [desktop](desktop/README.md): Add support for installation of Chrome
@@ -22,8 +24,7 @@
       privilege escalation to install packages.
     * Use `ansible.builtin.package` module to install packages on
       Windows instead of `chocolatey.chocolatey.win_chocolatey` module.
-  * [ai_stuff](ai_stuff/README.md): Use Homebrew package of [Gemini CLI][]
-    on macOS hosts.
+  * ai_stuff: Use Homebrew package of [Gemini CLI][] on macOS hosts.
   * ai_stuff: Use official installation script for [Claude Code][].
   * ai_stuff: Charmbracelet's OpenCode is now called [Crush][].
   * [development](development/README.md): introduce `gcm_version`
@@ -36,6 +37,7 @@
     Devuan hosts.
 
 [Claude Code]: https://docs.anthropic.com/en/docs/claude-code/overview
+[Codex CLI]: https://developers.openai.com/codex/cli/ "Codex CLI"
 [Crush]: https://github.com/charmbracelet/crush
   "GitHub - charmbracelet/crush: Glamourous agentic coding for all 💘"
 [Devuan]: https://www.devuan.org/

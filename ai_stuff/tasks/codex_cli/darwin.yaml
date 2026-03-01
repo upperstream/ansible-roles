@@ -1,0 +1,3 @@
+- name: Ensure Codex CLI in installed on macOS
+  package: name=codex
+  when: ansible_system == 'Darwin'
