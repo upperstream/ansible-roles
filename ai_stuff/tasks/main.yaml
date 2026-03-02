@@ -24,6 +24,9 @@
 - name: Install Gemini CLI
   include_tasks: "gemini_cli/{{ ansible_system | lower }}.yaml"
   when: ai_stuff is defined and 'gemini_cli' in ai_stuff and ansible_system in ['Darwin', 'Linux']
+- name: Install GitHub Copilot CLI
+  include_tasks: github_copilot_cli.yaml
+  when: ai_stuff is defined and 'github_copilot_cli' in ai_stuff
 - name: Install OpenAI Codex CLI
   include_tasks: "codex_cli/{{ ansible_system | lower }}.yaml"
   when: ai_stuff is defined and 'codex_cli' in ai_stuff and ansible_system in ['Darwin', 'Linux']

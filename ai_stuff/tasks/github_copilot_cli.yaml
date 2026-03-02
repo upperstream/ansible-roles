@@ -1,0 +1,12 @@
+- name: Ensure bash and curl are installed as the installation dependencies
+  package: name="{{ item }}"
+  with_items:
+    - bash
+    - curl
+  become: "{{ false_for_macos_and_windows }}"
+- name: Ensure GitHub Copilot CLI is installed on Windows
+  shell:
+    cmd: curl -fsSL https://gh.io/copilot-install | bash
+    creates: "/home/{{ target_user }}/.local/bin/copilot"
+  become: true
+  become_user: "{{ target_user }}"

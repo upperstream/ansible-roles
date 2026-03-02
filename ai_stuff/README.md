@@ -28,6 +28,7 @@ installation by setting:
   - `codex_cli`: [Codex CLI][] and its dependencies
   - `crush`: [Crush][] and its dependencies
   - `gemini_cli`: [Gemini CLI][] and its dependencies
+  - `github_copilot_cli`: [GitHub Copilot CLI][] and its dependencies
 
 ## Example Playbook
 
@@ -38,7 +39,8 @@ Here's an example playbook to use this role:
 	  roles:
 	    - ai_stuff
 
-If you want to install Claude Code, Codex CLI, Crush, and Gemini CLI:
+If you want to install Claude Code, Codex CLI, Crush, Gemini CLI, and
+GitHub Copilot CLI:
 
 	- hosts: server
 	  become: yes
@@ -48,8 +50,8 @@ If you want to install Claude Code, Codex CLI, Crush, and Gemini CLI:
 		  - codex_cli
 	      - crush
 		  - gemini_cli
-	    roles:
-	      - ai_stuff
+	  roles:
+	    - ai_stuff
 
 ## Notes
 
@@ -62,3 +64,4 @@ If you want to install Claude Code, Codex CLI, Crush, and Gemini CLI:
 [Codex CLI]: https://developers.openai.com/codex/cli/
 [Crush]: https://github.com/charmbracelet/crush
 [Gemini CLI]: https://github.com/google-gemini/gemini-cli
+[GitHub Copilot CLI]: https://github.com/features/copilot/cli/
