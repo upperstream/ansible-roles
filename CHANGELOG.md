@@ -6,6 +6,7 @@
   * [ai_stuff](ai_stuff/README.md): Add support for installation of
     [Codex CLI][].
   * ai_stuff: Add support for installing [GitHub Copilot CLI][].
+  * ai_stuff: Add support for installing [opencode][].
   * [base](base/README.md): Add support for Windows hosts to set
     hostname.
   * [desktop](desktop/README.md): Add support for installation of Chrome
@@ -49,6 +50,8 @@
 [Git Credential Manager]: https://github.com/git-ecosystem/git-credential-manager
 [GitHub Copilot CLI]: https://github.com/features/copilot/cli/
 [Mise]: https://mise.jdx.dev/
+[opencode]: https://opencode.ai/
+   "OpenCode | The open source AI coding agent"
 
 ## [20260102]
 

@@ -30,3 +30,6 @@
 - name: Install OpenAI Codex CLI
   include_tasks: "codex_cli/{{ ansible_system | lower }}.yaml"
   when: ai_stuff is defined and 'codex_cli' in ai_stuff and ansible_system in ['Darwin', 'Linux']
+- name: Install opencode
+  include_tasks: opencode.yaml
+  when: ai_stuff is defined and 'opencode' in ai_stuff and ansible_system in ['Darwin', 'Linux']

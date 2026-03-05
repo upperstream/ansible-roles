@@ -1,0 +1,22 @@
+- name: Ensure opencode is installed on Windows
+  win_package: name=opencode
+  when: ansible_os_family == 'Windows'
+- name: Ensure opencode is installed on Arch Linux hosts
+  package: name=opencode
+  when: ansible_os_family in ['ArchLinux', 'Artix Linux']
+- name: Ensure opencode is installed on macOS
+  package: name=anomalyco/tap/opencode
+  when: ansible_os_family == 'Darwin'
+- block:
+  - name: Ensure bash and curl are installed as installation dependency
+    package: name="{{ item }}"
+    with_items:
+      - bash
+      - curl
+  - name: Ensure opencode is installed
+    shell:
+      cmd: curl -fsSL https://opencode.ai/install | bash
+      creates: "/home/{{ target_user }}/.opencode/bin/opencode"
+    become: true
+    become_user: "{{ target_user }}"
+  when: ansible_os_family not in ['ArchLinux', 'Artix Linux', 'Darwin', 'Windows']
