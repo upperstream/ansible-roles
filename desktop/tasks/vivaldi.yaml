@@ -1,0 +1,4 @@
+- name: Ensure Vivaldi is installed on Debian hosts
+  apt: deb="https://downloads.vivaldi.com/stable/vivaldi-stable_{{ vivaldi_version}}_{{ ansible_machine | replace('x86_64', 'amd64') }}.deb"
+  when: ansible_pkg_mgr == 'apt'
+  become: true

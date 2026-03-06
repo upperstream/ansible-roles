@@ -32,6 +32,7 @@ install, or specific browsers in the following list:
 * `edge` - [Microsoft Edge][]
 * `firefox` - [Firefox][]
 * `firefox` - Firefox without Snap
+* `vivaldi` - [Vivaldi][] browser
 
 ## Font
 
@@ -48,4 +49,5 @@ Set the variable `fonts` to contain package names of fonts to install.
 [KDE Plasma]: https://kde.org/plasma-desktop/
 [Microsoft Edge]: https://www.microsoft.com/edge/
 [st]: https://st.suckless.org/
+[Vivaldi]: https://vivaldi.com/
 [xfce]: https://www.xfce.org/

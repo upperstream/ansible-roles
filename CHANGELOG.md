@@ -11,6 +11,8 @@
     hostname.
   * [desktop](desktop/README.md): Add support for installation of Chrome
     and Firebox browsers on Windows hosts.
+  * desktop: Add support for installation of [Vivaldi][] browser on
+    Debian hosts
   * [development](development/README.md): Add support for installation
     of [Mise][].
   * [docker_host](docker_host/README.md): Add support for Docker Engine
@@ -52,6 +54,8 @@
 [Mise]: https://mise.jdx.dev/
 [opencode]: https://opencode.ai/
    "OpenCode | The open source AI coding agent"
+[Vivaldi]: https://vivaldi.com
+    "Vivaldi Browser | Powerful, Personal and Private web browser"
 
 ## [20260102]
 

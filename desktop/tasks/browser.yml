@@ -9,7 +9,7 @@
   - name: Ensure web browser is installed
     package: name={{ item }} state=present
     with_items:
-      "{{ browsers | difference(['chrome', 'chromium', 'edge', 'firefox']) | list }}"
+      "{{ browsers | difference(['chrome', 'chromium', 'edge', 'firefox', 'vivaldi']) | list }}"
     become: "{{ false_for_macos_and_windows }}"
   - name: Install non snap version of Firefox
     include_tasks: firefox.yml
@@ -19,4 +19,7 @@
       name: microsoft-edge
       sudo_password: "{{ ansible_become_pass }}"
     when: "'edge' in browsers and ansible_system == 'Darwin'"
+  - name: Install Vivaldi
+    include_tasks: vivaldi.yaml
+    when: "'vivaldi' in browsers"
   when: browsers is defined
