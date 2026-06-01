@@ -13,8 +13,9 @@
     and Firebox browsers on Windows hosts.
   * desktop: Add support for installation of [Vivaldi][] browser on
     Debian hosts
-  * [development](development/README.md): Add support for installation
-    of [Mise][].
+  * [development](development/README.md):
+    * Add support for installation of [Mise][].
+    * Add support for [Beyond Compare][] on [Red Hat][] hosts.
   * [docker_host](docker_host/README.md): Add support for Docker Engine
     installation on Ubuntu host.
   * Add [dropbox](dropbox/README.md) role, which installs the [Dropbox][]
@@ -54,6 +55,7 @@
 [Mise]: https://mise.jdx.dev/
 [opencode]: https://opencode.ai/
    "OpenCode | The open source AI coding agent"
+[Red Hat]: https://www.redhat.com/en/topics/linux "Understanding Linux"
 [Vivaldi]: https://vivaldi.com
     "Vivaldi Browser | Powerful, Personal and Private web browser"
 
@@ -104,6 +106,7 @@
     to install [Hyper-V][], [Vagrant][] and [VirtualBox][]
 
 [Beyond Compare]: https://www.scootersoftware.com/
+  "Scooter Software - Home of Beyond Compare"
 [Chocolatey]: https://chocolatey.org/
 [GitHub CLI]: https://cli.github.com/
 [Hyper-V]: https://learn.microsoft.com/windows-server/virtualization/hyper-v/

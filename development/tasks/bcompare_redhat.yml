@@ -1,0 +1,9 @@
+---
+- block: # On Red Hat hosts
+  - name: Ensure Scooter Software repo is registered
+    get_url:
+      url: https://www.scootersoftware.com/scootersoftware.repo
+      dest: /etc/yum.repos.d/scootersoftware.repo
+      mode: og+r
+  when: ansible_os_family == "RedHat"
+  become: true

@@ -4,6 +4,7 @@
     package_names: "{{ [
       {'os_family': 'Darwin', 'package': 'beyond-compare'},
       {'os_family': 'Debian', 'package': 'bcompare'},
+      {'os_family': 'RedHat', 'package': 'bcompare'},
       {'os_family': 'Windows', 'package': 'beyondcompare'},
      ] | items2dict(key_name='os_family', value_name='package') }}"
   set_fact:
