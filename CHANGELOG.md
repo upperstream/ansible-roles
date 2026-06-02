@@ -35,6 +35,7 @@
   * [development](development/README.md): introduce `gcm_version`
     variable to specify the [Git Credential Manager][] version to
 	install, which defaults to `2.7.0`.
+  * [packer](packer/README.md): Update support for Fedora host.
 * Fixed
   * [docker_host](docker_host/README.md): Correct package name for
     Docker on macOS.

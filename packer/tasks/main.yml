@@ -41,9 +41,10 @@
     - name: Ensure dnf plugins is installed on Fedora
       package: name=dnf-plugins-core
     - name: Ensure HashiCorp repository is installed on Fedora
-      command:
-        cmd: dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
-        creates: /etc/yum.repos.d/hashicorp.repo
+      get_url:
+        url: https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+        dest: /etc/yum.repos.d/hashicorp.repo
+        mode: og+r
     when: ansible_distribution == 'Fedora'
   - name: Ensure Packer is installed except on Arch Linux hosts
     package: name=packer
