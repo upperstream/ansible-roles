@@ -21,7 +21,7 @@
   * Add [dropbox](dropbox/README.md) role, which installs the [Dropbox][]
     client.  Currently Debian and Ubuntu target hosts are supported.
   * [wireguard](wireguard/README.md): Add support for installation on
-    systems adopting SysV Init, such as [Devuan][].
+    systems adopting SysV Init, such as [Devuan][] and Red Hat.
 * Changed
   * Generalise role definitions between Windows hosts and other OS hosts:
     * Rename `false_for_macos` variable to `false_for_macos_and_windows`,

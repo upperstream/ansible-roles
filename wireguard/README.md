@@ -11,6 +11,7 @@ This role has been tested and supports the following operating systems:
 * FreeBSD
 * macOS (Darwin)
 * OpenBSD
+* Red Hat
 
 ## Role Variables
 

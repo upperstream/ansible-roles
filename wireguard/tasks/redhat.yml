@@ -1,0 +1,6 @@
+---
+# Red Hat specific WireGuard configuration tasks
+# Add any WireGuard setup steps specific to Red hat host
+- name: WireGuard setup steps specific to Red Hat
+  meta: noop
+  when: ansible_os_family == 'RedHat'
