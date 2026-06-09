@@ -1,10 +1,15 @@
 - name: Fail if OS is not supported
   fail:
-    msg: "Dropbox Desktop installation is only supported on Debian and Ubuntu.  Current OS family: {{ ansible_os_family }}"
-  when: ansible_os_family not in ['Debian', 'Ubuntu']
+    msg: "Dropbox Desktop installation is only supported on Debian, Ubuntu, and Red Hat.  Current OS family: {{ ansible_os_family }}"
+  when: ansible_os_family not in ['Debian', 'RedHat', 'Ubuntu']
 
-- name: Ensure Dropbox Desktop is installed on Debian or Ubuntu
-  apt:
-    deb: "https://linux.dropbox.com/packages/{{ ansible_os_family | lower }}/dropbox_{{ dropbox_desktop_version}}_{{ ansible_machine | replace('x86_64', 'amd64') }}.deb"
-  when: ansible_os_family in ['Debian', 'Ubuntu']
+- block: # Need previleged operations
+  - name: Ensure Dropbox Desktop is installed on Debian or Ubuntu
+    apt:
+      deb: "https://linux.dropbox.com/packages/{{ ansible_os_family | lower }}/dropbox_{{ dropbox_desktop_version}}_{{ ansible_machine | replace('x86_64', 'amd64') }}.deb"
+    when: ansible_os_family in ['Debian', 'Ubuntu']
+  - name: Ensure Dropbox Desktop is installed on Red Hat hosts
+    dnf:
+      name: https://www.dropbox.com/download?dl=packages/fedora/nautilus-dropbox-{{ dropbox_desktop_version }}-1.fc44.{{ ansible_machine }}.rpm
+    when: ansible_distribution == 'Fedora'
   become: true

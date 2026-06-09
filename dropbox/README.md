@@ -46,7 +46,7 @@ When `dropbox_desktop` is set to `true`, this role will:
 ## Requirements
 
 * Target host must be running a Debian-based Linux distribution (Debian
-  or Ubuntu)
+  or Ubuntu) or Fedora distribution
 * Target host must have internet connectivity to download the package
   from `linux.dropbox.com`
 * Elevated privileges (become/sudo) are required for package
@@ -56,4 +56,4 @@ When `dropbox_desktop` is set to `true`, this role will:
 
 * The role automatically detects the OS family and architecture to
   download the correct package
-* Only Debian and Ubuntu distributions are currently supported
+* Only Debian, Ubuntu, and Fedora distributions are currently supported
