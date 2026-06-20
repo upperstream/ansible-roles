@@ -5,8 +5,8 @@
   - name: Ensure KDE is installed
     vars:
       kde_package: "{{ [
-        {'os_family': 'FreeBSD', 'package': 'kde5'},
-      ] | items2dict(key_name='os_family', value_name='package') }}"
+        {'os_family': 'FreeBSD', 'package': 'kde'},
+       ] | items2dict(key_name='os_family', value_name='package') }}"
     package: name="{{ item }}"
     with_items: "{{ kde_package[ansible_os_family] | default('kde') }}"
   - block: # FreeBSD specific tasks
