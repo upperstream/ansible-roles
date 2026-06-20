@@ -15,6 +15,10 @@
       when: chrome_install_test.rc != 0 and "'chrome' in browsers"
     when: ansible_os_family == 'Debian'
     become: true
+  - name: Ensure Chrome is installed on Fedora host
+    yum: name=https://dl.google.com/linux/direct/google-chrome-stable_current_{{ ansible_machine }}.rpm
+    when: ansible_distribution == 'Fedora'
+    become: true
   - name: Ensure Chrome is installed on macOS hosts
     homebrew_cask:
       name: google-chrome

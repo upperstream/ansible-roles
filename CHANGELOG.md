@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [20260621]
 
 * Added
   * [ai_stuff](ai_stuff/README.md): Add support for installation of
@@ -9,8 +9,11 @@
   * ai_stuff: Add support for installing [opencode][].
   * [base](base/README.md): Add support for Windows hosts to set
     hostname.
-  * [desktop](desktop/README.md): Add support for installation of Chrome
-    and Firebox browsers on Windows hosts.
+  * [desktop](desktop/README.md):
+    * Add support for installation of Chrome and Firebox browsers on
+      Windows hosts.
+    * Add support for installation of Chrome and Firefox browsers on
+      Fedora host
   * desktop: Add support for installation of [Vivaldi][] browser on
     Debian hosts
   * [development](development/README.md):
@@ -254,8 +257,8 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
-[Unreleased]:
-  https://github.com/upperstream/ansible-roles/compare/20260102...HEAD
+[20260621]:
+  https://github.com/upperstream/ansible-roles/compare/20260102...20260621
 [20260102]:
   https://github.com/upperstream/ansible-roles/compare/20251024...20260102
 [20251024]:

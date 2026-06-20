@@ -29,6 +29,10 @@
         dest: /etc/apt/apt.conf.d/51unattended-upgrades-firefox
     when: ansible_os_family == 'Debian'
     become: true
+  - name: Ensure Firefox is installed on Fedora host
+    package: name=firefox
+    when: ansible_distribution == 'Fedora'
+    become: true
   - name: Ensure Firefox is installed on macOS hosts
     homebrew_cask:
       name: firefox@esr
