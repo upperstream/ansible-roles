@@ -1,6 +1,13 @@
 # Changelog
 
-## [20260621]
+## [Unreleased][]
+
+* Changed
+  * [wireguard](wireguard/README.md): Corrected the problem that an
+    empty line was inserted into the configuration file everytime
+    ansible-playbook is executed.
+
+## [20260621][]
 
 * Added
   * [ai_stuff](ai_stuff/README.md): Add support for installation of
@@ -257,6 +264,8 @@
     of Visual Studio Code on Red Hat hosts
   * [packer](packer/README.md): Add support for Fedora host
 
+[Unreleased]:
+  https://github.com/upperstream/ansible-roles/compare/20260621...HEAD
 [20260621]:
   https://github.com/upperstream/ansible-roles/compare/20260102...20260621
 [20260102]:
