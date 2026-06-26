@@ -4,6 +4,8 @@
   when: ansible_os_family not in ['Debian', 'RedHat', 'Ubuntu']
 
 - block: # Need previleged operations
+  - name: Ensure prerequisites for Dropbox Desktop are satisfied
+    package: name=python3-gpg
   - name: Ensure Dropbox Desktop is installed on Debian or Ubuntu
     apt:
       deb: "https://linux.dropbox.com/packages/{{ ansible_os_family | lower }}/dropbox_{{ dropbox_desktop_version}}_{{ ansible_machine | replace('x86_64', 'amd64') }}.deb"
