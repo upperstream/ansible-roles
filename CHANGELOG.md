@@ -3,6 +3,8 @@
 ## [Unreleased][]
 
 * Changed
+  * [base](base/README.md): Add new property `password_lock` to
+    `users_to_create`, which locks the user if set to `true`.
   * [dropbox](dropbox/README.md): Dropbox Desktop dependencies are
     installed.
   * [wireguard](wireguard/README.md): Corrected the problem that an

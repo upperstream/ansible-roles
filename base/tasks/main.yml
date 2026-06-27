@@ -16,7 +16,8 @@
     - name: Ensure users exist on the target host
       user:
         name: "{{ item.name }}"
-        password: "{{ item.password }}"
+        password: "{{ item.password | default(omit) }}"
+        password_lock: "{{ item.password_lock | default(false) }}"
         group: "{{ item.group | default(omit) }}"
         groups: "{{ item.groups }}"
         append: "{{ item.append }}"

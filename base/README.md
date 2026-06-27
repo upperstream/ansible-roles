@@ -27,7 +27,9 @@ The `base` role configures the basic features of the target host.
   * `password` - Login password of this user, which must be encrypted
     in accordance to the remote host's password specification.  See
     _[How do I generate encrypted passwords for the user module][]_ for
-    details.
+    details.  Password is left unchanged if absent.
+  * `password_lock` - If `true`, this user is locked.  Defaults to
+    `false`, where the user is unlocked.
   * `authorized_keys` - Optional list of SSH public keys to authenticate
     the user.  Authorized keys for only users who have this list will be
     set.
