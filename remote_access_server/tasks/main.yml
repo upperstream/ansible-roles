@@ -8,10 +8,7 @@
     when: "ansible_os_family not in ['Archlinux', 'Artix Linux']"
     become: true
   - name: Ensure xrdp is enabled and started
-    service: name="{{ item }}" state=started enabled=true
-    with_items:
-      - xrdp
-      - xrdp-sesman
+    service: name='xrdp' state=started enabled=true
     become: true
   - name: Ensure startwm.sh is installed if supplied for the target hosts
     copy:
