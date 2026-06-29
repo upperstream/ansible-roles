@@ -7,6 +7,8 @@
     `users_to_create`, which locks the user if set to `true`.
   * [dropbox](dropbox/README.md): Dropbox Desktop dependencies are
     installed.
+  * [packer](packer/README.md): Update repository cache after
+    installing HashiCorp repository.
   * [remote_access_server](remote_access_server/README.md): Removed
     monexistent dependency.
   * [wireguard](wireguard/README.md): Corrected the problem that an

@@ -26,6 +26,7 @@
             {'devuan_codename': 'ascii', 'debian_codename': 'stretch'},
             {'devuan_codename': 'jessie', 'debian_codename': 'jessie'}
            ]| items2dict(key_name='devuan_codename', value_name='debian_codename')}}"
+        register: repo_install
       when: ansible_distribution == 'Devuan'
     - name: Ensure Packer repo is registered on Debian family except Devuan
       deb822_repository:
@@ -35,7 +36,11 @@
         components: [ main ]
         name: hashicorp
         enabled: true
+      register: repo_install
       when: ansible_distribution != 'Devuan'
+    - name: Ensure repository cache is updated on Debian hosts
+      apt: update_cache=true
+      when: repo_install is defined and repo_install.changed == true
     when: ansible_os_family == 'Debian'
   - block: # Add Packer repository on Fedora
     - name: Ensure dnf plugins is installed on Fedora
