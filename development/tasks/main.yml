@@ -12,10 +12,10 @@
       when: ansible_os_family == 'Debian'
     - block: # development_tools is defined and 'gcm' in development_tools
       - name: Check whether Git Credential Manager is installed
-        shell: apt list --installed | grep -q gcm
+        package: name=gcm state=present
         ignore_errors: true
+        check_mode: false
         register: gcm_install_test
-        changed_when: false
       - name: Ensure Git Credential Manager dependencies are satisfied
         package:
           name:
@@ -26,8 +26,8 @@
         when: ansible_system == "Linux"
       - name: Optionally install Git Credential Manager
         apt:
-          deb: "https://github.com/git-ecosystem/git-credential-manager/releases/download/v{{ gcm_version }}/gcm-linux_{{ ansible_machine | replace('x86_64', 'amd64') }}.{{ gcm_version }}.deb"
-        when: gcm_install_test.rc != 0
+          deb: "https://github.com/git-ecosystem/git-credential-manager/releases/download/v{{ gcm_version }}/gcm-linux-{{ ansible_machine | replace('x86_64', 'x64') }}-{{ gcm_version }}.deb"
+        when: gcm_install_test.failed == true
       when: development_tools is defined and 'gcm' in development_tools
     when: ansible_os_family == "Debian"
   - name: Optionally install OpenJDK

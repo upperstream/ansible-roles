@@ -5,6 +5,8 @@
 * Changed
   * [base](base/README.md): Add new property `password_lock` to
     `users_to_create`, which locks the user if set to `true`.
+  * [development](development/README.md): Follow new naming
+    convention of GCM precompiled package.
   * [dropbox](dropbox/README.md): Dropbox Desktop dependencies are
     installed.
   * [packer](packer/README.md): Update repository cache after
