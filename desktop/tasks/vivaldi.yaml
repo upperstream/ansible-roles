@@ -1,4 +1,9 @@
+- name: Test if Vivaldi is installed or not
+  package: name='vivaldi-stable' state='present'
+  check_mode: true
+  register: vivaldi_status
+  ignore_errors: true
 - name: Ensure Vivaldi is installed on Debian hosts
   apt: deb="https://downloads.vivaldi.com/stable/vivaldi-stable_{{ vivaldi_version}}_{{ ansible_machine | replace('x86_64', 'amd64') }}.deb"
-  when: ansible_pkg_mgr == 'apt'
+  when: ansible_pkg_mgr == 'apt' and vivaldi_status.failed == true
   become: true

@@ -5,6 +5,8 @@
 * Changed
   * [base](base/README.md): Add new property `password_lock` to
     `users_to_create`, which locks the user if set to `true`.
+  * [desktop](desktop/README.md): Check installation status of Vivaldi
+    before installation.
   * [development](development/README.md): Follow new naming
     convention of GCM precompiled package.
   * [dropbox](dropbox/README.md): Dropbox Desktop dependencies are
