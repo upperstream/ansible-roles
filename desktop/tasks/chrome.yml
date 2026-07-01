@@ -8,6 +8,8 @@
       shell: apt list --installed | grep -q google-chrome-stable
       register: chrome_install_test
       ignore_errors: true
+      check_mode: false
+      changed_when: false
     - name: Ensure Chrome is installed on Debian family hosts
       apt:
         deb: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb

@@ -3,16 +3,26 @@
 ## [Unreleased][]
 
 * Changed
+  * Prevent false positive signal of `changed` when checking status of:
+    * [desktop](desktop/README.md):
+      * Chrome
+    * [development](development/README.md):
+      * GitHub CLI
+    * [docker_host](docker_host/README.md):
+      * Docker on Debian
+    * [packer](packer/README.md):
+      * Packer
+    * [virtualisation](virtualisation/README.md):
+      * KVM
+      * Vagrant
   * [base](base/README.md): Add new property `password_lock` to
     `users_to_create`, which locks the user if set to `true`.
-  * [desktop](desktop/README.md): Check installation status of Vivaldi
-    before installation.
-  * [development](development/README.md): Follow new naming
-    convention of GCM precompiled package.
+  * desktop: Check installation status of Vivaldi before installation.
+  * development: Follow new naming convention of GCM precompiled package.
   * [dropbox](dropbox/README.md): Dropbox Desktop dependencies are
     installed.
-  * [packer](packer/README.md): Update repository cache after
-    installing HashiCorp repository.
+  * packer: Update repository cache after installing HashiCorp
+    repository.
   * [remote_access_server](remote_access_server/README.md): Removed
     monexistent dependency.
   * [wireguard](wireguard/README.md): Corrected the problem that an

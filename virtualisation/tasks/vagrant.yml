@@ -6,7 +6,8 @@
   - name: Test if Vagrant is installed on non- macOS hosts
     set_fact:
       vagrant_installed: true
-    changed_when: vagrant_install_test.failed is defined and vagrant_install_test.failed == false
+    when: vagrant_install_test.failed is defined and vagrant_install_test.changed == true
+    changed_when: false
   - name: Ensure Vagrant Libvirt provider in installed on non- Arch Linux hosts
     package: name=vagrant-libvirt state=present
     when: "ansible_system == 'Linux' and ansible_os_family not in ['Archlinux', 'Artix Linux']"

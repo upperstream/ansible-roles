@@ -6,6 +6,8 @@
 - name: Ensure hardware virtualisation is supported
   shell:
     cmd: test $(egrep -c '(vmx|svm)' /proc/cpuinfo) -gt 0
+  check_mode: false
+  changed_when: false
 - block: # Need privileged operation
   - block: # Debian hosts
     - name: Ensure KVM is installed on Debian hosts

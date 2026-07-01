@@ -9,6 +9,7 @@
         register: debian_version
         when: ansible_distribution_file_variety == "Debian"
         check_mode: false
+        changed_when: false
       - name: Ensure Packer repo is registered on Devuan
         deb822_repository:
           signed_by: https://apt.releases.hashicorp.com/gpg
