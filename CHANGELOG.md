@@ -15,8 +15,12 @@
     * [virtualisation](virtualisation/README.md):
       * KVM
       * Vagrant
-  * [base](base/README.md): Add new property `password_lock` to
-    `users_to_create`, which locks the user if set to `true`.
+  * [base](base/README.md):
+    * Following changes are added to `users_to_create`:
+      * new property `password_lock` to `users_to_create`, which locks
+        the user if set to `true`.
+      * `append` defaults to `false`.
+      * `groups` defaults to empty.
   * desktop: Check installation status of Vivaldi before installation.
   * development: Follow new naming convention of GCM precompiled package.
   * [dropbox](dropbox/README.md): Dropbox Desktop dependencies are

@@ -20,10 +20,12 @@ The `base` role configures the basic features of the target host.
   * `name` - Login name of this user.
   * `group` - Primary group of this user.  The default group will be
     assigned if this value is lacked.
-  * `groups` - Additional groups that this user is invited to.
+  * `groups` - Additional groups that this user is invited to.  No
+    groups to add if this value is not given.
   * `append` - If `true`, this user will be invited to `groups` in
     addition to current groups, otherwise this user will be a member of
     only groups in `groups` and will be excluded from current groups.
+    The default value is `false`.
   * `password` - Login password of this user, which must be encrypted
     in accordance to the remote host's password specification.  See
     _[How do I generate encrypted passwords for the user module][]_ for
