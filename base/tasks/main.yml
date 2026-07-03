@@ -21,6 +21,12 @@
         group: "{{ item.group | default(omit) }}"
         groups: "{{ item.groups | default(omit) }}"
         append: "{{ item.append | default(false) }}"
+        generate_ssh_key: "{{ item.ssh_key.generate | default(false) }}"
+        ssh_key_bits: "{{ item.ssh_key.bits | default(omit) }}"
+        ssh_key_comment: "{{ item.ssh_key.comment | default(omit) }}"
+        ssh_key_passphrase: "{{ item.ssh_key.passphrase | default(omit) }}"
+        ssh_key_type: "{{ item.ssh_key.type | default(omit) }}"
+        force: "{{ item.ssh_key.replace | default(false) }}"
         shell: "{{ item.shell | default(omit) }}"
       with_items:
         - "{{ users_to_create }}"

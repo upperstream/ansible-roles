@@ -36,6 +36,18 @@ The `base` role configures the basic features of the target host.
     the user.  Authorized keys for only users who have this list will be
     set.
   * `shell` - Optionally set the user's shell.
+  * `ssh_key` - SSH key generation with the following options:
+    * `generate` - Generata an SSH key for this user when set to `true`.
+      Default value is `false`.
+    * `type` - Key type.  Default value is `rsa`.
+    * `bits` - The number of bits of the key to create.  Default value
+      depends on underlying `ssh-keygen` command.
+    * `passphrase` - The passphrase of the key to generate.  No
+      passphrase is set if not provided.
+    * `comment` - The comment of the key to generate.  Default value is
+      `ansible-generated on $HOSTNAME` as ansible automatically sets.
+    * `replace` - Replace the existing key with a new one to generate.
+      Defalt value is `false`.
 * `zfs_load_keys`- List of ZFS dataset to load encryption keys for
   at boot.  On FreeBSD host, this variable is a dictionary of dataset
   to key location pairs.  On Linux host, this variable is a list of

@@ -21,6 +21,14 @@
         the user if set to `true`.
       * `append` defaults to `false`.
       * `groups` defaults to empty.
+      * `ssh_key` is added to generate an SSH key for the user with the
+        following options:
+        * `generate` - Generata an SSH key.
+        * `type` - Key type.
+        * `bits` - The number of bits of the key to create.
+        * `passphrase` - The passphrase of the key to generate.
+        * `comment` - The comment of the key to generate.
+        * `replace` - Replace the existing key with a new one.
   * desktop: Check installation status of Vivaldi before installation.
   * development: Follow new naming convention of GCM precompiled package.
   * [dropbox](dropbox/README.md): Dropbox Desktop dependencies are
