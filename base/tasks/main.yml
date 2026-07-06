@@ -30,15 +30,26 @@
         shell: "{{ item.shell | default(omit) }}"
       with_items:
         - "{{ users_to_create }}"
-    - name: Ensure authorized keys are set for existing users
+    - name: Prepare authorized keys for each user
+      set_fact:
+        # This creates a list of strings where each string is "[options] key] [comment]"
+        user_key_list: "{% for k in item.authorized_keys['keys'] -%}{{ [k.options | default(''), k.key, k.comment | default('')] | select('string') | select('ne', '') | join(' ') }}{% if not loop.last %}{% raw %}\n{% endraw %}{% endif %}{%- endfor %}"
+      loop: "{{ users_to_create }}"
+      loop_control:
+        loop_var: item  # Use a custom loop variable to avoid conflict if needed
+      when:
+        - item.authorized_keys is defined
+        - item.authorized_keys.keys is defined
+    - name: Apply authorized keys
       ansible.posix.authorized_key:
-        user: "{{ item.0.name }}"
-        key: "{{ item.1 }}"
-      loop: "{{ users_to_create
-        | selectattr('authorized_keys', 'defined')
-        | list
-        | subelements('authorized_keys') }}"
-    when: users_to_create is defined
+        user: "{{ item.name }}"
+        key: "{{ user_key_list }}"  # keys concatenated with '\n' delimiter
+        exclusive: "{{ item.authorized_keys.exclusive | default(false) }}"
+        state: present
+      loop: "{{ users_to_create }}"
+      when:
+        - item.authorized_keys is defined
+        - item.authorized_keys.keys is defined
   become: true
 - name: Set up ZFS on FreeBSD
   include_tasks: zfs_on_freebsd.yml

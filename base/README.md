@@ -32,9 +32,17 @@ The `base` role configures the basic features of the target host.
     details.  Password is left unchanged if absent.
   * `password_lock` - If `true`, this user is locked.  Defaults to
     `false`, where the user is unlocked.
-  * `authorized_keys` - Optional list of SSH public keys to authenticate
-    the user.  Authorized keys for only users who have this list will be
-    set.
+  * `authorized_keys` - Optional dictionary to manage SSH public keys
+    for the user.  This feature updates the user's authorized keys file.
+    * `keys` - List of SSH public key objects to authenticate the user.
+      Each key object has the following attributes:
+      * `key` - The SSH public key string (required).
+      * `options` - Optional string of SSH key options (e.g.,
+        "no-agent-forwarding").
+      * `comment` - Optional comment for the key.
+    * `exclusive` - If `true`, remove all other authorized keys and only
+      use the keys specified in `keys`. If `false` (default), add the
+      keys to existing authorized keys.
   * `shell` - Optionally set the user's shell.
   * `ssh_key` - SSH key generation with the following options:
     * `generate` - Generata an SSH key for this user when set to `true`.

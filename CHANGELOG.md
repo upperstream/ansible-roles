@@ -29,6 +29,12 @@
         * `passphrase` - The passphrase of the key to generate.
         * `comment` - The comment of the key to generate.
         * `replace` - Replace the existing key with a new one.
+      * `authorized_keys` is changed from a simple list to a dictionary
+        with the following properties:
+        * `keys` - List of SSH public key objects with optional options
+          and comments for each key.
+        * `exclusive` - Boolean flag to replace all authorized keys or
+          add to existing ones.
   * desktop: Check installation status of Vivaldi before installation.
   * development: Follow new naming convention of GCM precompiled package.
   * [dropbox](dropbox/README.md): Dropbox Desktop dependencies are
