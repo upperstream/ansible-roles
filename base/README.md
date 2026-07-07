@@ -43,6 +43,23 @@ The `base` role configures the basic features of the target host.
     * `exclusive` - If `true`, remove all other authorized keys and only
       use the keys specified in `keys`. If `false` (default), add the
       keys to existing authorized keys.
+  * `cron` - Optional dictionary to manage cron jobs and environment
+    variables for the user.
+    * `jobs` - Optional list of cron jobs with the following attributes:
+      * `name` - Name/description of the cron job.
+      * `minute` - Minute field of the cron schedule (`0-59`, `*`, `*/N`,
+        etc).
+      * `hour` - Hour field of the cron schedule (`0-23`, `*`, `*/N`,
+        etc).
+      * `day` - Day of month field of the cron schedule (`1-31`, `*`,
+        `*/N`, etc).
+      * `month` - Month field of the cron schedule (`1-12`, `*`, `*/N`,
+        etc).
+      * `day_of_week` - Day of week field of the cron schedule (`0-6`,
+        `*`, `*/N`, etc).
+      * `job` - The command to execute.
+    * `environment_vars` - Optional list of environment variable strings
+      in the format "KEY=VALUE" to be set for cron jobs.
   * `shell` - Optionally set the user's shell.
   * `ssh_key` - SSH key generation with the following options:
     * `generate` - Generata an SSH key for this user when set to `true`.

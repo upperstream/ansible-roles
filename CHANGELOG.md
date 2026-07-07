@@ -35,6 +35,13 @@
           and comments for each key.
         * `exclusive` - Boolean flag to replace all authorized keys or
           add to existing ones.
+      * `cron` is added to manage cron jobs and environment variables
+        for the user with the following properties:
+        * `jobs` - Optional list of cron jobs with scheduling fields
+          (minute, hour, day, month, day_of_week) and the command to
+          execute.
+        * `environment_vars` - Optional list of environment variable
+          assignments in the format "KEY=VALUE" to be set for cron jobs.
   * desktop: Check installation status of Vivaldi before installation.
   * development: Follow new naming convention of GCM precompiled package.
   * [dropbox](dropbox/README.md): Dropbox Desktop dependencies are

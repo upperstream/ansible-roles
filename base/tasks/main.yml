@@ -50,6 +50,34 @@
       when:
         - item.authorized_keys is defined
         - item.authorized_keys.keys is defined
+    - name: Install cron jobs
+      cron:
+        user: "{{ item[0].name }}"
+        name: "{{ item[1].name }}"
+        minute: "{{ item[1].minute }}"
+        hour: "{{ item[1].hour }}"
+        day: "{{ item[1].day }}"
+        month: "{{ item[1].month }}"
+        weekday: "{{ item[1].day_of_week }}"
+        job: "{{ item[1].job }}"
+      loop: "{{ users_to_create | subelements('cron.jobs', skip_missing=true) }}"
+      loop_control:
+        label: "{{ item[0].name }} -> {{ item[1].name }}"
+      when:
+        - item[0].cron is defined
+        - item[0].cron.jobs is defined
+    - name: Set environmet for cron jobs
+      cron:
+        user: "{{ item[0].name }}"
+        env: true
+        name: "{{ item[1] | split('=', 1) | first }}"
+        job: "{{ item[1] | split('=', 1) | last }}"
+      loop: "{{ users_to_create | subelements('cron.environment_vars', skip_missing=true) }}"
+      loop_control:
+        label: "{{ item[0].name }} -> {{ item[1] }}"
+      when:
+        - item[0].cron is defined
+        - item[0].cron.environment_vars is defined
   become: true
 - name: Set up ZFS on FreeBSD
   include_tasks: zfs_on_freebsd.yml
