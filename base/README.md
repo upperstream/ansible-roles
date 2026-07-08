@@ -81,6 +81,37 @@ The `base` role configures the basic features of the target host.
 * `misc_gui_tools` - List of miscellaneous GUI packages to install with
   `brew install --cask`, for macOS hosts only.
 * `shell_profile` - See next section.
+* `privilege_escalation` - Optional dictionary to configure sudo or doas
+  privilege escalation rules on non-Windows hosts.  Note that this does
+  not install `sudo` or `doas`.  Either provider must be installed on
+  the target host separately.
+  * `provider` - Privilege escalation provider to use: `'sudo'` or
+    `'doas'`.  Default value is `'sudo'`.
+  * `config_file` - Override the default configuration file path.
+    Defaults to `/etc/sudoers` for sudo and `/etc/doas.conf` for doas.
+    The file's write permission is temporarily added before modification
+    and restored afterwards.
+  * `backup` - Create a timestamped backup of the configuration file
+    before modification. Default value is `false`.
+  * `append` - If `true`, append rules to the existing configuration
+    file (useful for preserving non-managed rules).  If `false` (default),
+    completely replace the configuration file with only the provided
+    rules.  When using the default `/etc/sudoers` file, `append: true`
+    is recommended to avoid erasing unmanaged rules.
+  * `rules` - List of privilege escalation rules. Each rule is a
+    dictionary with the following attributes:
+    * `identity` - Username or group name to grant privileges to
+      (required).
+    * `group` - If `true`, `identity` refers to a group name (prefixed
+      with `%` for sudo, `:` for doas). Default value is `false`.
+    * `as` - Target user/role to run commands as (default: `'root'` or
+      `'ALL'` depending on provider).
+    * `nopass` - If `true`, no password is required for the command.
+      Default value is `false`.
+    * `cmd` - Specific command path to restrict (e.g., `/usr/bin/pacman`).
+      If omitted, any command is allowed (default).
+    * `args` - Optional list of allowed command-line arguments or
+      argument patterns for the specified command.
 
 ## Bootstrap for macOS hosts
 

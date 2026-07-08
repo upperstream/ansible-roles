@@ -1,0 +1,87 @@
+---
+- name: Determine privilege escalation configuration file path and validation command
+  set_fact:
+    pe_config_file: "{% if privilege_escalation.config_file is defined %}{{ privilege_escalation.config_file }}{% elif privilege_escalation.provider | default('sudo') == 'doas' %}/etc/doas.conf{% else %}/etc/sudoers{% endif %}"
+    pe_config_mode: "{% if privilege_escalation.provider | default('sudo') == 'doas' %}0600{% else %}0440{% endif %}"
+    pe_validate_cmd: "{% if privilege_escalation.provider | default('sudo') == 'doas' %}doas -C %s{% else %}visudo -cf %s{% endif %}"
+
+- name: Generate privilege escalation rules (sudo format)
+  set_fact:
+    pe_rules: |
+      {% for rule in privilege_escalation.rules %}
+      {% set identity = ('%%' if rule.group | default(false) else '') + rule.identity %}
+      {% set as_clause = '(' + rule.as | default('ALL') + ')' %}
+      {% set nopass_clause = 'NOPASSWD' if rule.nopass | default(false) else '' %}
+      {% set cmd_clause = (rule.cmd | default('ALL')) + (' ' + rule.args | join(' ') if rule.args is defined else '') %}
+      {{ identity }} ALL={{ as_clause }} {% if nopass_clause %}{{ nopass_clause }}:{% endif %}{{ cmd_clause }}
+      {% endfor %}
+  when: privilege_escalation.provider | default('sudo') == 'sudo'
+
+- name: Generate privilege escalation rules (doas format)
+  set_fact:
+    pe_rules: |
+      {% for rule in privilege_escalation.rules %}
+      {% set identity = (':' if rule.group | default(false) else '') + rule.identity %}
+      {% set nopass_clause = 'nopass ' if rule.nopass | default(false) else '' %}
+      {% set as_clause = ' as ' + rule.as if rule.as is defined else '' %}
+      {% set cmd_clause = ' cmd ' + rule.cmd if rule.cmd is defined else '' %}
+      {% set args_clause = ' args ' + rule.args | join(' ') if rule.args is defined else '' %}
+      permit {{ nopass_clause }}{{ identity }}{{ as_clause }}{{ cmd_clause }}{{ args_clause }}
+      {% endfor %}
+  when: privilege_escalation.provider | default('sudo') == 'doas'
+
+- name: Temporarily make privilege escalation config file writable
+  ansible.builtin.file:
+    path: "{{ pe_config_file }}"
+    mode: "u+w"
+  become: true
+  when:
+    - ansible_os_family != 'Windows'
+    - privilege_escalation.rules is defined
+
+- name: Replace entire privilege escalation configuration file
+  block:
+    - name: Write privilege escalation configuration (full replacement)
+      copy:
+        content: "{{ pe_rules }}"
+        dest: "{{ pe_config_file }}"
+        mode: "{{ pe_config_mode }}"
+        validate: "{{ pe_validate_cmd }}"
+        backup: "{{ privilege_escalation.backup | default(false) }}"
+      become: true
+  when: not (privilege_escalation.append | default(false))
+
+- name: Append privilege escalation rules to existing configuration file
+  block:
+    - name: Check if privilege escalation rules block needs updating
+      ansible.builtin.blockinfile:
+        path: "{{ pe_config_file }}"
+        block: "{{ pe_rules }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - privilege escalation"
+        validate: "{{ pe_validate_cmd }}"
+      become: true
+      check_mode: true
+      register: pe_blockinfile_check
+
+    - name: Create backup of configuration file before modification
+      copy:
+        src: "{{ pe_config_file }}"
+        dest: "{{ pe_config_file }}.{{ ansible_date_time.iso8601_basic_short }}.bak"
+        remote_src: true
+      become: true
+      when: (privilege_escalation.backup | default(false)) and pe_blockinfile_check.changed
+
+    - name: Insert/update privilege escalation rules block
+      ansible.builtin.blockinfile:
+        path: "{{ pe_config_file }}"
+        block: "{{ pe_rules }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - privilege escalation"
+        validate: "{{ pe_validate_cmd }}"
+      become: true
+
+    - name: Restore privilege escalation config file mode
+      ansible.builtin.file:
+        path: "{{ pe_config_file }}"
+        mode: "{{ pe_config_mode }}"
+      become: true
+  when: privilege_escalation.append | default(false)

@@ -2,6 +2,17 @@
 
 ## [Unreleased][]
 
+* Added
+  * [base](base/README.md): Add support for configuring privilege
+    escalation (sudo or doas) rules on non-Windows hosts with the
+    following features:
+    * Provider selection (sudo or doas).
+    * Single configuration file management with validation.
+    * Option to backup configuration before modification.
+    * Option to append rules to existing configuration or completely
+      replace it.
+    * Fine-grained rule configuration with support for restricting
+      commands, arguments, target user, and password requirements.
 * Changed
   * Prevent false positive signal of `changed` when checking status of:
     * [desktop](desktop/README.md):
@@ -15,7 +26,7 @@
     * [virtualisation](virtualisation/README.md):
       * KVM
       * Vagrant
-  * [base](base/README.md):
+  * base:
     * Following changes are added to `users_to_create`:
       * new property `password_lock` to `users_to_create`, which locks
         the user if set to `true`.

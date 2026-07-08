@@ -106,6 +106,9 @@
 - name: Ensure basic configuration is made on Arch Linux
   include_tasks: archlinux.yml
   when: "ansible_os_family in ['Archlinux', 'Artix Linux']"
+- name: Configure privilege escalation (sudo/doas)
+  include_tasks: privilege_escalation.yml
+  when: privilege_escalation is defined
 - block: # Set hostname
   - name: Ensure hostname is set
     hostname: name="{{ base.hostname }}"
