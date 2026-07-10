@@ -1,0 +1,5 @@
+# source	destination	rsh	rsync_path
+{% for entry in backup_entries %}
+{{ entry.source }}	{{ entry.dest }}	{{ entry.ssh }}{% if entry.rsync is defined %}	{{ entry.rsync }}{% endif %}
+
+{% endfor %}

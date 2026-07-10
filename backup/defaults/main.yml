@@ -1,0 +1,5 @@
+---
+backup_user: backup
+backup_home: /home/backup
+backup_manage_user: false
+backup_config: false

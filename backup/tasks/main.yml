@@ -1,0 +1,91 @@
+---
+- name: Create backup group
+  group:
+    name: "{{ backup_user }}"
+    state: present
+  when: backup_manage_user | bool
+  become: true
+
+- name: Create backup user
+  user:
+    name: "{{ backup_user }}"
+    group: "{{ backup_user }}"
+    home: "{{ backup_home }}"
+    shell: /bin/bash
+    state: present
+  when: backup_manage_user | bool
+  become: true
+
+- name: Ensure backup home directory exists
+  file:
+    path: "{{ backup_home }}"
+    state: directory
+    owner: "{{ backup_user }}"
+    group: "{{ backup_user }}"
+    mode: '0755'
+  become: true
+
+- name: Install backup.sh script
+  template:
+    src: backup.sh.j2
+    dest: "{{ backup_home }}/backup.sh"
+    owner: "{{ backup_user }}"
+    group: "{{ backup_user }}"
+    mode: '0755'
+  become: true
+
+- name: Install backup.awk script
+  copy:
+    src: backup.awk
+    dest: "{{ backup_home }}/backup.awk"
+    owner: "{{ backup_user }}"
+    group: "{{ backup_user }}"
+    mode: '0755'
+  become: true
+
+- name: Check if backup.conf would be changed
+  template:
+    src: backup.conf.j2
+    dest: "{{ backup_home }}/backup.conf"
+    owner: "{{ backup_user }}"
+    group: "{{ backup_user }}"
+    mode: '0644'
+  when: backup_entries is defined
+  check_mode: true
+  register: backup_conf_check
+  become: true
+
+- name: Create backup of backup.conf before modification
+  copy:
+    src: "{{ backup_home }}/backup.conf"
+    dest: "{{ backup_home }}/backup.conf.{{ ansible_date_time.iso8601_basic_short }}.bak"
+    owner: "{{ backup_user }}"
+    remote_src: true
+  when:
+    - backup_entries is defined
+    - backup_config | bool
+    - backup_conf_check.changed
+  become: true
+
+- name: Generate backup.conf from template
+  template:
+    src: backup.conf.j2
+    dest: "{{ backup_home }}/backup.conf"
+    owner: "{{ backup_user }}"
+    group: "{{ backup_user }}"
+    mode: '0644'
+  when: backup_entries is defined
+  become: true
+
+- name: Install cron job for backup
+  cron:
+    user: "{{ backup_user }}"
+    name: "Run backup script"
+    minute: "{{ backup_cron.minute }}"
+    hour: "{{ backup_cron.hour }}"
+    day: "{{ backup_cron.day }}"
+    month: "{{ backup_cron.month }}"
+    weekday: "{{ backup_cron.day_of_week }}"
+    job: "{{ backup_home }}/backup.sh{% if backup_cron.config is defined %} -c {{ backup_cron.config }}{% endif %}"
+  when: backup_cron is defined
+  become: true

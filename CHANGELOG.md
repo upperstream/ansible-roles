@@ -3,6 +3,28 @@
 ## [Unreleased][]
 
 * Added
+  * [backup](backup/README.md): New role to install backup scripts and
+    manage backup configuration on target hosts with the following
+    features:
+    * Installs `backup.sh` and `backup.awk` scripts for rsync-based
+      backups of remote hosts.
+    * `backup.sh` supports command-line options (`-c`/`--config` to
+      specify config file, `-h`/`--help` for usage).
+    * `backup.sh` uses templating to support custom `backup_home`
+      paths.
+    * Optional management of `backup.conf` configuration file via
+      template.
+    * Optional creation of the `backup` user and group.
+    * Optional cron job setup for automated backups with optional
+      `config` parameter to specify alternate configuration files.
+    * Optional timestamped backup of `backup.conf` before modification
+      (only created if the file will actually be changed).
+    * Support for custom rsync paths on remote hosts (e.g., for macOS
+      with Homebrew).
+    * Support for comment lines (starting with `#`) and inline comments
+      in `backup.conf`.
+    * Empty lines in `backup.conf` are ignored (entire file is
+      processed).
   * [base](base/README.md): Add support for configuring privilege
     escalation (sudo or doas) rules on non-Windows hosts with the
     following features:
