@@ -45,9 +45,9 @@
     - name: Ensure Oracle GPG key is installed on Red Hat hosts
       rpm_key: key=https://www.virtualbox.org/download/oracle_vbox_2016.asc
     - name: Ensure VirtualBox repository is installed on Fedora
-      command:
-        cmd: dnf config-manager --add-repo https://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
-        creates: /etc/yum.repos.d/virtualbox.repo
+      get_url:
+        url: https://download.virtualbox.org/virtualbox/rpm/fedora/virtualbox.repo
+        dest: /etc/yum.repos.d/virtualbox.repo
     when: ansible_os_family == 'RedHat'
   - name: Ensure VirtualBox is installed
     package: name={{ virtualbox_package[ansible_os_family]}}
