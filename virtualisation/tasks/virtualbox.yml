@@ -53,8 +53,8 @@
     package: name={{ virtualbox_package[ansible_os_family]}}
     vars:
       virtualbox_package: "{{ [
-        {'os_family': 'Debian', 'package': 'virtualbox-7.0'},
-        {'os_family': 'RedHat', 'package': 'VirtualBox-7.0'},
+        {'os_family': 'Debian', 'package': 'virtualbox-' ~ virtualbox_version},
+        {'os_family': 'RedHat', 'package': 'VirtualBox-' ~ virtualbox_version},
         {'os_family': 'Archlinux', 'package': 'virtualbox'},
         {'os_family': 'Artix Linux', 'package': 'virtualbox'},
         {'os_family': 'FreeBSD', 'package': 'virtualbox-ose'}

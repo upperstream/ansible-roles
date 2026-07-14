@@ -48,6 +48,7 @@
     * [virtualisation](virtualisation/README.md):
       * KVM
       * Vagrant
+      * Update VirtualBox default version to 7.2.
   * base:
     * Following changes are added to `users_to_create`:
       * new property `password_lock` to `users_to_create`, which locks
